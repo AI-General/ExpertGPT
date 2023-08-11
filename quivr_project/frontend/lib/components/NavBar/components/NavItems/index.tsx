@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { Dispatch, HTMLAttributes, SetStateAction } from "react";
-import { useTranslation } from "react-i18next";
 import { MdPerson } from "react-icons/md";
 
 import { useSupabase } from "@/lib/context/SupabaseProvider";
@@ -11,7 +10,6 @@ import { AuthButtons } from "./components/AuthButtons";
 import { BrainManagementButton } from "./components/BrainManagementButton";
 import { BrainsDropDown } from "./components/BrainsDropDown";
 import { DarkModeToggle } from "./components/DarkModeToggle";
-import { LanguageDropDown } from "./components/LanguageDropDown";
 import { NavLink } from "./components/NavLink";
 
 interface NavItemsProps extends HTMLAttributes<HTMLUListElement> {
@@ -25,7 +23,6 @@ export const NavItems = ({
 }: NavItemsProps): JSX.Element => {
   const { session } = useSupabase();
   const isUserLoggedIn = session?.user !== undefined;
-  const {t} = useTranslation();
 
   return (
     <ul
@@ -38,13 +35,13 @@ export const NavItems = ({
       {isUserLoggedIn ? (
         <>
           <NavLink setOpen={setOpen} to="/upload">
-            {t("Upload")}
+            Upload
           </NavLink>
           <NavLink setOpen={setOpen} to="/chat">
-            {t("Chat")}
+            Chat
           </NavLink>
           <NavLink setOpen={setOpen} to="/explore">
-            {t("Explore")}
+            Explore
           </NavLink>
         </>
       ) : (
@@ -68,7 +65,7 @@ export const NavItems = ({
           </>
         )}
         {!isUserLoggedIn && <AuthButtons />}
-        <LanguageDropDown />
+
         <DarkModeToggle />
       </div>
     </ul>

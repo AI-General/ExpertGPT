@@ -7,11 +7,12 @@ describe("ChatMessage", () => {
   it("should render chat messages with correct speaker and text", () => {
     const speaker = "user";
     const text = "Test user message";
-    const { getByTestId } = render(
-      <ChatMessage speaker={speaker} text={text} />
-    );
+    const { getByText } = render(<ChatMessage speaker={speaker} text={text} />);
 
-    expect(getByTestId("chat-message-speaker")).toBeDefined();
-    expect(getByTestId("chat-message-text")).toBeDefined();
+    const speakerElement = getByText(speaker);
+    const textElement = getByText(text);
+
+    expect(speakerElement).toBeDefined();
+    expect(textElement).toBeDefined();
   });
 });

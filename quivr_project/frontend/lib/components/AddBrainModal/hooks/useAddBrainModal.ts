@@ -2,18 +2,16 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 
 import { useBrainApi } from "@/lib/api/brain/useBrainApi";
 import { usePromptApi } from "@/lib/api/prompt/usePromptApi";
 import { useBrainConfig } from "@/lib/context/BrainConfigProvider";
 import { useBrainContext } from "@/lib/context/BrainProvider/hooks/useBrainContext";
-import { defineMaxTokens } from "@/lib/helpers/defineMaxTokens";
+import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
 import { useToast } from "@/lib/hooks";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useAddBrainModal = () => {
-  const { t } = useTranslation(["translation", "brain", "config"]);
   const [isPending, setIsPending] = useState(false);
   const { publish } = useToast();
   const { createBrain, setActiveBrain } = useBrainContext();
@@ -80,7 +78,7 @@ export const useAddBrainModal = () => {
       if (createdBrainId === undefined) {
         publish({
           variant: "danger",
-          text: t("errorCreatingBrain",{ns:"brain"})
+          text: "Error occurred while creating a brain",
         });
 
         return;
@@ -99,7 +97,7 @@ export const useAddBrainModal = () => {
       reset(defaultValues);
       publish({
         variant: "success",
-        text: t("brainCreated",{ns:"brain"})
+        text: "Brain created successfully",
       });
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 429) {
@@ -145,7 +143,7 @@ export const useAddBrainModal = () => {
     setIsShareModalOpen,
     handleSubmit,
     register,
-    openAiKey: openAiKey === "" ? undefined : openAiKey,
+    openAiKey,
     model,
     temperature,
     maxTokens,

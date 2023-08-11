@@ -28,4 +28,4 @@ RUN yarn build
 EXPOSE 3000
 
 # Run yarn start, as we would via the command line 
-CMD ["yarn", "start", "-p", "3000"]
+CMD ["yarn", "start"]

@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { BrainConfigProvider } from "@/lib/context/BrainConfigProvider";
@@ -60,18 +60,20 @@ vi.mock("@/lib/hooks", async () => {
 });
 
 describe("DocumentData", () => {
-  it.skip("should render document data", () => {
+  it("should render document data", async () => {
     const documentName = "Test document";
-    const { getByTestId } = render(
+    render(
       <BrainConfigProvider>
         <DocumentData documentName={documentName} />
       </BrainConfigProvider>
     );
 
-    expect(getByTestId("document-name")).toBeDefined();
+    expect(screen.getByText(documentName)).toBeDefined();
 
-    expect(getByTestId("content")).toBeDefined();
-    expect(getByTestId("foo,bar", { exact: false })).toBeDefined();
-    expect(getByTestId("baz,bat", { exact: false })).toBeDefined();
+    await waitFor(() => {
+      expect(screen.getByText("content")).toBeDefined();
+      expect(screen.getByText("foo,bar", { exact: false })).toBeDefined();
+      expect(screen.getByText("baz,bat", { exact: false })).toBeDefined();
+    });
   });
 });

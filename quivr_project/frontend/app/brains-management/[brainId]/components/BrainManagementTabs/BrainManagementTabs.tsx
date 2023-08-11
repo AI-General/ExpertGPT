@@ -1,12 +1,10 @@
 import { Content, List, Root } from "@radix-ui/react-tabs";
-import { useTranslation } from "react-i18next";
 
 import { BrainTabTrigger, PeopleTab } from "./components";
 import { SettingsTab } from "./components/SettingsTab/SettingsTab";
 import { useBrainManagementTabs } from "./hooks/useBrainManagementTabs";
 
 export const BrainManagementTabs = (): JSX.Element => {
-  const { t } = useTranslation(["translation", "config"]);
   const { selectedTab, setSelectedTab, brainId } = useBrainManagementTabs();
 
   if (brainId === undefined) {
@@ -18,22 +16,22 @@ export const BrainManagementTabs = (): JSX.Element => {
       className="shadow-md min-h-[50%] dark:shadow-primary/25 hover:shadow-xl transition-shadow rounded-xl overflow-hidden bg-white dark:bg-black border border-black/10 dark:border-white/25 p-4 pt-10"
       defaultValue="settings"
     >
-      <List className="flex justify-between" aria-label={t("subtitle", { ns: "config" })}>
+      <List className="flex justify-between" aria-label="Manage your brain">
         <BrainTabTrigger
           selected={selectedTab === "settings"}
-          label={t("settings", { ns: "config" })}
+          label="Settings"
           value="settings"
           onChange={setSelectedTab}
         />
         <BrainTabTrigger
           selected={selectedTab === "people"}
-          label={t("people", { ns: "config" })}
+          label="People"
           value="people"
           onChange={setSelectedTab}
         />
         <BrainTabTrigger
           selected={selectedTab === "knowledge"}
-          label={t("knowledge", { ns: "config" })}
+          label="Knowledge"
           value="knowledge"
           onChange={setSelectedTab}
         />
@@ -47,7 +45,7 @@ export const BrainManagementTabs = (): JSX.Element => {
           <PeopleTab brainId={brainId} />
         </Content>
         <Content value="knowledge">
-          <p>{t("comingSoon")}</p>
+          <p>Coming soon</p>
         </Content>
       </div>
     </Root>

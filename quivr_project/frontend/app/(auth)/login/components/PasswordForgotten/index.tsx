@@ -3,7 +3,6 @@
 
 import Button from "@/lib/components/ui/Button";
 import { usePasswordForgotten } from "./hooks/usePasswordForgotten";
-import { useTranslation } from "react-i18next";
 
 type PasswordForgottenProps = {
   email: string;
@@ -18,8 +17,6 @@ export const PasswordForgotten = ({
     email,
     setEmail,
   });
-  const {t, i18n} = useTranslation(["login"]);
-
   return (
     <Button
       type="button"
@@ -27,7 +24,7 @@ export const PasswordForgotten = ({
       onClick={handleRecoverPassword}
       isLoading={isPending}
     >
-      {t("forgottenPassword",{ ns: 'login' })}
+      Password forgotten
     </Button>
   );
 };

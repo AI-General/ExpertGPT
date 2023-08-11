@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { MdOutlineRemoveCircle } from "react-icons/md";
 
 import Field from "@/lib/components/ui/Field";
@@ -23,7 +22,6 @@ export const UserToInvite = ({
   removeCurrentInvitation,
   roleAssignation,
 }: UserToInviteProps): JSX.Element => {
-  const { t } = useTranslation("translation");
   const [selectedRole, setSelectedRole] = useState<BrainRoleType>(
     roleAssignation.role
   );
@@ -42,13 +40,6 @@ export const UserToInvite = ({
     return <div />;
   }
 
-  const assignableRoles = userRoleToAssignableRoles[currentBrain.role];
-  const translatedOptions = assignableRoles.map(role => ({
-    value: role.value,
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    label: t(role.value)
-  }));
-
   return (
     <div
       data-testid="assignation-row"
@@ -62,7 +53,7 @@ export const UserToInvite = ({
           name="email"
           required
           type="email"
-          placeholder={t("email")}
+          placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           onBlur={() => email === "" && removeCurrentInvitation?.()}
@@ -72,7 +63,7 @@ export const UserToInvite = ({
       <Select
         onChange={setSelectedRole}
         value={selectedRole}
-        options={translatedOptions}
+        options={userRoleToAssignableRoles[currentBrain.role]}
       />
     </div>
   );

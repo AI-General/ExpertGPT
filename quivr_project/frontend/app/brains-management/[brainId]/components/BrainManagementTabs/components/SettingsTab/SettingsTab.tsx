@@ -1,22 +1,16 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable max-lines */
 
 import { UUID } from "crypto";
-import { useTranslation } from "react-i18next";
 import { FaSpinner } from "react-icons/fa";
 
 import Button from "@/lib/components/ui/Button";
 import { Divider } from "@/lib/components/ui/Divider";
 import Field from "@/lib/components/ui/Field";
 import { TextArea } from "@/lib/components/ui/TextArea";
-import {
-  freeModels,
-  paidModels,
-} from "@/lib/context/BrainConfigProvider/types";
-import { defineMaxTokens } from "@/lib/helpers/defineMaxTokens";
+import { models, paidModels } from "@/lib/context/BrainConfigProvider/types";
+import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
 
-import { PublicPrompts } from "./components/PublicPrompts/PublicPrompts";
+import { PublicPrompts } from "./components/PublicPrompts";
 import { useSettingsTab } from "./hooks/useSettingsTab";
 
 type SettingsTabProps = {
@@ -24,7 +18,6 @@ type SettingsTabProps = {
 };
 
 export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
-  const { t } = useTranslation(["translation", "brain", "config"]);
   const {
     handleSubmit,
     register,
@@ -54,8 +47,8 @@ export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
       <div className="flex flex-row flex-1 justify-between w-full">
         <div>
           <Field
-            label={ t("brainName", { ns: "brain" })}
-            placeholder={t("brainNamePlaceholder", { ns: "brain" })}
+            label="Name"
+            placeholder="E.g. History notes"
             autoComplete="off"
             className="flex-1"
             {...register("name")}
@@ -64,7 +57,7 @@ export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
         <div className="mt-4">
           {isDefaultBrain ? (
             <div className="border rounded-lg border-dashed border-black dark:border-white bg-white dark:bg-black text-black dark:text-white focus:bg-black dark:focus:bg-white dark dark focus:text-white dark:focus:text-black transition-colors py-2 px-4 shadow-none">
-              {t("defaultBrain", { ns: "brain" })}
+              Default brain
             </div>
           ) : (
             <Button
@@ -73,36 +66,36 @@ export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
               onClick={() => void setAsDefaultBrainHandler()}
               type="button"
             >
-              {t("setDefaultBrain", { ns: "brain" })}
+              Set as default brain
             </Button>
           )}
         </div>
       </div>
       <TextArea
-        label={t("brainDescription", { ns: "brain" })}
-        placeholder={t("brainDescriptionPlaceholder", { ns: "brain" })}
+        label="Description"
+        placeholder="My new brain is about..."
         autoComplete="off"
         className="flex-1 m-3"
         {...register("description")}
       />
-      <Divider text={t("modelSection", { ns: "config" })} />
+      <Divider text="Model config" />
       <Field
-        label={t("openAiKeyLabel", { ns: "config" })}
-        placeholder={t("openAiKeyPlaceholder", { ns: "config" })}
+        label="OpenAI API Key"
+        placeholder="sk-xxx"
         autoComplete="off"
         className="flex-1"
         {...register("openAiKey")}
       />
       <fieldset className="w-full flex flex-col mt-2">
         <label className="flex-1 text-sm" htmlFor="model">
-          {t("modelLabel", { ns: "config" })}
+          Model
         </label>
         <select
           id="model"
           {...register("model")}
           className="px-5 py-2 dark:bg-gray-700 bg-gray-200 rounded-md"
         >
-          {(openAiKey !== undefined ? paidModels : freeModels).map(
+          {(openAiKey !== undefined ? paidModels : models).map(
             (availableModel) => (
               <option value={availableModel} key={availableModel}>
                 {availableModel}
@@ -113,7 +106,7 @@ export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
       </fieldset>
       <fieldset className="w-full flex mt-4">
         <label className="flex-1" htmlFor="temp">
-          {t("temperature", { ns: "config" })}: {temperature}
+          Temperature: {temperature}
         </label>
         <input
           id="temp"
@@ -127,7 +120,7 @@ export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
       </fieldset>
       <fieldset className="w-full flex mt-4">
         <label className="flex-1" htmlFor="tokens">
-          {t("maxTokens", { ns: "config" })}: {maxTokens}
+          Max tokens: {maxTokens}
         </label>
         <input
           type="range"
@@ -137,33 +130,31 @@ export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
           {...register("maxTokens")}
         />
       </fieldset>
-      <Divider text={t("customPromptSection", { ns: "config" })} />
+      <Divider text="Custom prompt" />
       <PublicPrompts onSelect={pickPublicPrompt} />
       <Field
-        label={t("promptName", { ns: "config" })}
-        placeholder={t("promptNamePlaceholder", { ns: "config" })}
+        label="Prompt title"
+        placeholder="My awesome prompt name"
         autoComplete="off"
         className="flex-1"
         {...register("prompt.title")}
       />
       <TextArea
-        label={t("promptContent", { ns: "config" })}
-        placeholder={t("promptContentPlaceholder", { ns: "config" })}
+        label="Prompt content"
+        placeholder="As an AI, your..."
         autoComplete="off"
         className="flex-1"
         {...register("prompt.content")}
       />
       {promptId !== "" && (
         <Button disabled={isUpdating} onClick={() => void removeBrainPrompt()}>
-          {t("removePrompt", { ns: "config" })}
+          Remove prompt
         </Button>
       )}
       <div className="flex flex-row justify-end flex-1 w-full mt-8">
         {isUpdating && <FaSpinner className="animate-spin" />}
         {isUpdating && (
-          <span className="ml-2 text-sm">
-            {t("updatingBrainSettings", { ns: "config" })}
-          </span>
+          <span className="ml-2 text-sm">Updating brain settings...</span>
         )}
       </div>
     </form>

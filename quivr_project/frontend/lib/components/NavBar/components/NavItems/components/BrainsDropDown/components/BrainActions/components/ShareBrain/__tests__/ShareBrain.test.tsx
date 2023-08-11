@@ -82,7 +82,7 @@ describe("ShareBrain", () => {
   });
 
   it("should render open share modal when share button is clicked", () => {
-    const { getByTestId } = render(
+    const { getByText, getByTestId } = render(
       // Todo: add a custom render function that wraps the component with the providers
       <SupabaseProviderMock>
         <BrainProviderMock>
@@ -97,7 +97,7 @@ describe("ShareBrain", () => {
     );
     const shareButton = getByTestId("share-brain-button");
     fireEvent.click(shareButton);
-    expect(getByTestId("modal-title")).toBeDefined();
+    expect(getByText("Share brain test")).toBeDefined();
   });
 
   it('shoud add new user row when "Add new user" button is clicked and only where there is no empty field', async () => {

@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { useCallback, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 import { useAxios, useToast } from "@/lib/hooks";
@@ -22,9 +21,6 @@ export const useCrawler = () => {
     redirectToLogin();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {t, i18n} = useTranslation(["translation","upload"]);
-
   const crawlWebsite = useCallback(
     async (brainId: UUID | undefined) => {
       // Validate URL
@@ -35,7 +31,7 @@ export const useCrawler = () => {
 
         publish({
           variant: "danger",
-          text: t("invalidUrl",{ns:"upload"})
+          text: "Invalid URL",
         });
 
         return;
@@ -69,7 +65,7 @@ export const useCrawler = () => {
       } catch (error: unknown) {
         publish({
           variant: "danger",
-          text: t("crawlFailed",{ message: JSON.stringify(error),ns:"upload"})
+          text: "Failed to crawl website: " + JSON.stringify(error),
         });
       } finally {
         setCrawling(false);

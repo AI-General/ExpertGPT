@@ -105,7 +105,7 @@ Additionally, you'll need a [Supabase](https://supabase.com/) account for:
 
   > _Your `JWT_SECRET_KEY`can be found in your supabase settings under Project Settings -> API -> JWT Settings -> JWT Secret_
 
-  > _The `NEXT_PUBLIC_BACKEND_URL` is set to localhost:5000 for the docker. Update it if you are running the backend on a different machine._
+  > _The `NEXT_PUBLIC_BACKEND_URL` is set to localhost:5050 for the docker. Update it if you are running the backend on a different machine._
 
   > _To activate vertexAI with PaLM from GCP follow the instructions [here](https://python.langchain.com/en/latest/modules/models/llms/integrations/google_vertex_ai_palm.html) and update `backend/core/.env`- It is an advanced feature, please be expert in GCP before trying to use it_
 
@@ -135,7 +135,7 @@ Additionally, you'll need a [Supabase](https://supabase.com/) account for:
   docker compose -f docker-compose.yml up --build
   ```
 
-- **Step 6**: Navigate to `localhost:4000` in your browser
+- **Step 6**: Navigate to `localhost:3000` in your browser
 
 - **Step 7**: Want to contribute to the project?
 

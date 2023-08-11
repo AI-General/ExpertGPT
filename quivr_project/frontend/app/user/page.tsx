@@ -1,7 +1,6 @@
 /* eslint-disable */
 "use client";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import Spinner from "@/lib/components/ui/Spinner";
 import { useAxios } from "@/lib/hooks";
@@ -15,7 +14,6 @@ const UserPage = (): JSX.Element => {
   const [userStats, setUserStats] = useState<UserStats>();
   const { session } = useSupabase();
   const { axiosInstance } = useAxios();
-  const { t } = useTranslation(["translation","user"]);
 
   if (session === null) {
     redirectToLogin();
@@ -54,7 +52,7 @@ const UserPage = (): JSX.Element => {
             </>
           ) : (
             <div className="flex items-center justify-center">
-              <span>{t("fetching", {ns: "user"})}</span>
+              <span>Fetching your data...</span>
               <Spinner />
             </div>
           )}

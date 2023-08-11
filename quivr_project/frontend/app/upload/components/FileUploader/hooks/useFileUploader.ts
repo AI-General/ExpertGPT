@@ -9,7 +9,6 @@ import { redirectToLogin } from "@/lib/router/redirectToLogin";
 import { useEventTracking } from "@/services/analytics/useEventTracking";
 import axios from "axios";
 import { UUID } from "crypto";
-import { useTranslation } from "react-i18next";
 
 export const useFileUploader = () => {
   const { track } = useEventTracking();
@@ -24,9 +23,6 @@ export const useFileUploader = () => {
   if (session === null) {
     redirectToLogin();
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {t, i18n} = useTranslation(["upload"]);
 
   const upload = useCallback(
     async (file: File, brainId: UUID) => {
@@ -43,9 +39,8 @@ export const useFileUploader = () => {
           variant: response.data.type,
           text:
             (response.data.type === "success"
-              ? t("success",{ ns: "upload" })
-              : t("error",{ message: response.data.message,  ns: "upload" })
-            ) 
+              ? "File uploaded successfully: "
+              : "") + JSON.stringify(response.data.message),
         });
       } catch (e: unknown) {
         if (axios.isAxiosError(e) && e.response?.status === 403) {
@@ -62,7 +57,7 @@ export const useFileUploader = () => {
         } else {
           publish({
             variant: "danger",
-            text: t("error",{ message: e,  ns: "upload" })
+            text: "Failed to upload file: " + JSON.stringify(e),
           });
         }
       }
@@ -72,7 +67,7 @@ export const useFileUploader = () => {
 
   const onDrop = (acceptedFiles: File[], fileRejections: FileRejection[]) => {
     if (fileRejections.length > 0) {
-      publish({ variant: "danger", text: t("maxSizeError",{ ns: "upload" }) });
+      publish({ variant: "danger", text: "File too big." });
 
       return;
     }
@@ -85,7 +80,7 @@ export const useFileUploader = () => {
       if (isAlreadyInFiles) {
         publish({
           variant: "warning",
-          text:  t("alreadyAdded",{ fileName: file.name,  ns: "upload" }),
+          text: `${file.name} was already added`,
         });
         acceptedFiles.splice(i, 1);
       }
@@ -96,7 +91,7 @@ export const useFileUploader = () => {
   const uploadAllFiles = async () => {
     if (files.length === 0) {
       publish({
-        text: t("addFiles", { ns: "upload" }),
+        text: "Please, add files to upload",
         variant: "warning",
       });
 
@@ -108,7 +103,7 @@ export const useFileUploader = () => {
       setFiles([]);
     } else {
       publish({
-        text: t("selectBrain", { ns: "upload" }),
+        text: "Please, select or create a brain to upload a file",
         variant: "warning",
       });
     }

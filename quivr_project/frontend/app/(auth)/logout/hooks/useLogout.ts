@@ -1,6 +1,5 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { useSupabase } from "@/lib/context/SupabaseProvider";
 import { useToast } from "@/lib/hooks";
@@ -11,9 +10,6 @@ export const useLogout = () => {
   const { supabase } = useSupabase();
   const [isPending, setIsPending] = useState(false);
   const { track } = useEventTracking();
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const {t, i18n} = useTranslation(["translation","logout"]);
 
   const { publish } = useToast();
   const router = useRouter();
@@ -28,12 +24,12 @@ export const useLogout = () => {
       console.error("Error logging out:", error.message);
       publish({
         variant: "danger",
-        text: t("error", { errorMessage: error.message, ns: "logout"}),
+        text: `Error logging out: ${error.message}`,
       });
     } else {
       publish({
         variant: "success",
-        text: t("loggedOut", {ns : "logout"})
+        text: "Logged out successfully",
       });
       router.replace("/");
     }

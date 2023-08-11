@@ -1,7 +1,5 @@
 /* eslint-disable max-lines */
 
-import { useTranslation } from "react-i18next";
-
 import { useChatApi } from "@/lib/api/chat/useChatApi";
 import { useBrainContext } from "@/lib/context/BrainProvider/hooks/useBrainContext";
 import { useChatContext } from "@/lib/context/ChatProvider/hooks/useChatContext";
@@ -22,19 +20,14 @@ export const useQuestion = (): UseChatService => {
   const { updateHistory, updateStreamingHistory } = useChatContext();
   const { currentBrain } = useBrainContext();
   const { addQuestion } = useChatApi();
-  const { t } = useTranslation(['chat']);
 
   const addQuestionHandler = async (
     chatId: string,
     chatQuestion: ChatQuestion
   ): Promise<void> => {
-    if (currentBrain?.id === undefined) {
-      throw new Error(t("noCurrentBrain",{ns:'chat'}));
-    }
-
     const response = await addQuestion({
       chatId,
-      brainId: currentBrain.id,
+      brainId: currentBrain?.id ?? "",
       chatQuestion,
     });
 
@@ -64,7 +57,7 @@ export const useQuestion = (): UseChatService => {
           const parsedData = JSON.parse(data) as ChatHistory;
           updateStreamingHistory(parsedData);
         } catch (error) {
-          console.error(t("errorParsingData",{ns:'chat'}), error);
+          console.error("Error parsing data:", error);
         }
       });
 
@@ -79,7 +72,7 @@ export const useQuestion = (): UseChatService => {
     chatQuestion: ChatQuestion
   ): Promise<void> => {
     if (currentBrain?.id === undefined) {
-      throw new Error(t("noCurrentBrain",{ns:'chat'}));
+      throw new Error("No current brain");
     }
     const headers = {
       "Content-Type": "application/json",
@@ -95,13 +88,13 @@ export const useQuestion = (): UseChatService => {
       );
 
       if (response.body === null) {
-        throw new Error(t("resposeBodyNull",{ns:'chat'}));
+        throw new Error("Response body is null");
       }
 
-      console.log(t("receivedResponse"), response);
+      console.log("Received response. Starting to handle stream...");
       await handleStream(response.body.getReader());
     } catch (error) {
-      console.error(t("errorCallingAPI",{ns:"chat"}), error);
+      console.error("Error calling the API:", error);
     }
   };
 

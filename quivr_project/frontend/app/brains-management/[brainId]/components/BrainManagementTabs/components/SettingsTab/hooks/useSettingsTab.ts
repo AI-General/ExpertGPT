@@ -4,14 +4,13 @@ import axios from "axios";
 import { UUID } from "crypto";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 
 import { useBrainApi } from "@/lib/api/brain/useBrainApi";
 import { usePromptApi } from "@/lib/api/prompt/usePromptApi";
 import { useBrainConfig } from "@/lib/context/BrainConfigProvider";
 import { useBrainContext } from "@/lib/context/BrainProvider/hooks/useBrainContext";
 import { Brain } from "@/lib/context/BrainProvider/types";
-import { defineMaxTokens } from "@/lib/helpers/defineMaxTokens";
+import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
 import { useToast } from "@/lib/hooks";
 
 type UseSettingsTabProps = {
@@ -20,7 +19,6 @@ type UseSettingsTabProps = {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
-  const { t } = useTranslation(["translation", "brain", "config"]);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isSettingAsDefault, setIsSettingHasDefault] = useState(false);
   const { publish } = useToast();
@@ -135,7 +133,7 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
       await setAsDefaultBrain(brainId);
       publish({
         variant: "success",
-        text: t("defaultBrainSet",{ns:"config"}),
+        text: "Brain set as default successfully",
       });
       void fetchAllBrains();
       void fetchDefaultBrain();
@@ -173,12 +171,12 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
       void fetchBrain();
       publish({
         variant: "success",
-        text: t("promptRemoved",{ns:"config"}),
+        text: "Prompt removed successfully",
       });
     } catch (err) {
       publish({
         variant: "danger",
-        text: t("errorRemovingPrompt",{ns:"config"}),
+        text: "Error while removing prompt",
       });
     } finally {
       setIsUpdating(false);
@@ -207,7 +205,7 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
     if (isNameDirty !== undefined && isNameDirty && name.trim() === "") {
       publish({
         variant: "danger",
-        text: t("nameRequired",{ns:"config"}),
+        text: "Name is required",
       });
 
       return;
@@ -229,7 +227,7 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
       ) {
         publish({
           variant: "warning",
-          text: t("promptFieldsRequired",{ns:"config"}),
+          text: "Prompt title and content are required",
         });
 
         return;
@@ -273,7 +271,7 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
 
       publish({
         variant: "success",
-        text: t("brainUpdated",{ns:"config"}),
+        text: "Brain updated successfully",
       });
       void fetchAllBrains();
     } catch (err) {
@@ -312,12 +310,12 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
     setValue("prompt.content", content, {
       shouldDirty: true,
     });
-  }; 
+  };
 
   return {
     handleSubmit,
     register,
-    openAiKey: openAiKey === "" ? undefined : openAiKey,
+    openAiKey,
     model,
     temperature,
     maxTokens,

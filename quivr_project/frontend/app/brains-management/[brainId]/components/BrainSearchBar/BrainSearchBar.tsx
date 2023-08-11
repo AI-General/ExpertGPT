@@ -1,5 +1,3 @@
-import { useTranslation } from "react-i18next";
-
 import Field from "@/lib/components/ui/Field";
 
 type BrainSearchBarProps = {
@@ -11,13 +9,11 @@ export const BrainSearchBar = ({
   searchQuery,
   setSearchQuery,
 }: BrainSearchBarProps): JSX.Element => {
-  const { t } = useTranslation(["brain"]);
-
   return (
     <div className="m-2">
       <Field
         name="brainsearch"
-        placeholder={t("searchBrain")}
+        placeholder="Search for a brain"
         autoFocus
         autoComplete="off"
         value={searchQuery}

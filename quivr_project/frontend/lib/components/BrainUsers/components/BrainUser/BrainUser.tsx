@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { useTranslation } from 'react-i18next'
 
 import Field from "@/lib/components/ui/Field";
 import { Select } from "@/lib/components/ui/Select";
@@ -36,7 +35,6 @@ export const BrainUser = ({
     email,
   });
   const { currentBrain } = useBrainContext();
-  const { t } = useTranslation();
 
   return (
     <div
@@ -54,7 +52,7 @@ export const BrainUser = ({
           name="email"
           required
           type="email"
-          placeholder= {t('email')}
+          placeholder="Email"
           value={email}
           data-testid="role-assignation-email-input"
           readOnly

@@ -1,24 +1,18 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable max-lines */
-import { useTranslation } from "react-i18next";
 import { MdAdd } from "react-icons/md";
 
 import { PublicPrompts } from "@/app/brains-management/[brainId]/components/BrainManagementTabs/components/SettingsTab/components/PublicPrompts";
 import Button from "@/lib/components/ui/Button";
 import Field from "@/lib/components/ui/Field";
 import { Modal } from "@/lib/components/ui/Modal";
-import {
-  freeModels,
-  paidModels,
-} from "@/lib/context/BrainConfigProvider/types";
-import { defineMaxTokens } from "@/lib/helpers/defineMaxTokens";
+import { models, paidModels } from "@/lib/context/BrainConfigProvider/types";
+import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
 
 import { useAddBrainModal } from "./hooks/useAddBrainModal";
 import { Divider } from "../ui/Divider";
 import { TextArea } from "../ui/TextArea";
 
 export const AddBrainModal = (): JSX.Element => {
-  const { t } = useTranslation(["translation", "brain", "config"]);
   const {
     handleSubmit,
     isShareModalOpen,
@@ -36,12 +30,12 @@ export const AddBrainModal = (): JSX.Element => {
     <Modal
       Trigger={
         <Button variant={"secondary"}>
-          {t("newBrain", { ns: "brain" })}
+          Add New Brain
           <MdAdd className="text-xl" />
         </Button>
       }
-      title={t("newBrainTitle", { ns: "brain" })}
-      desc={t("newBrainSubtitle", { ns: "brain" })}
+      title="Add Brain"
+      desc="Create a new brain to start aggregating content"
       isOpen={isShareModalOpen}
       setOpen={setIsShareModalOpen}
       CloseTrigger={<div />}
@@ -54,25 +48,25 @@ export const AddBrainModal = (): JSX.Element => {
         className="my-10 flex flex-col items-center gap-2"
       >
         <Field
-          label={t("brainName", { ns: "brain" })}
+          label="Enter a brain name"
           autoFocus
-          placeholder={t("brainNamePlaceholder", { ns: "brain" })}
+          placeholder="E.g. History notes"
           autoComplete="off"
           className="flex-1"
           {...register("name")}
         />
 
         <TextArea
-          label={t("brainDescription", { ns: "brain" })}
-          placeholder={t("brainDescriptionPlaceholder", { ns: "brain" })}
+          label="Enter a brain description"
+          placeholder="My new brain is about..."
           autoComplete="off"
           className="flex-1 m-3"
           {...register("description")}
         />
 
         <Field
-          label={t("openAiKeyLabel", { ns: "config" })}
-          placeholder={t("openAiKeyPlaceholder", { ns: "config" })}
+          label="OpenAI API Key"
+          placeholder="sk-xxx"
           autoComplete="off"
           className="flex-1"
           {...register("openAiKey")}
@@ -80,14 +74,14 @@ export const AddBrainModal = (): JSX.Element => {
 
         <fieldset className="w-full flex flex-col">
           <label className="flex-1 text-sm" htmlFor="model">
-            {t("modelLabel", { ns: "config" })}
+            Model
           </label>
           <select
             id="model"
             {...register("model")}
             className="px-5 py-2 dark:bg-gray-700 bg-gray-200 rounded-md"
           >
-            {(openAiKey !== undefined ? paidModels : freeModels).map(
+            {(openAiKey !== undefined ? paidModels : models).map(
               (availableModel) => (
                 <option value={availableModel} key={availableModel}>
                   {availableModel}
@@ -99,7 +93,7 @@ export const AddBrainModal = (): JSX.Element => {
 
         <fieldset className="w-full flex mt-4">
           <label className="flex-1" htmlFor="temp">
-            {t("temperature", { ns: "config" })}: {temperature}
+            Temperature: {temperature}
           </label>
           <input
             id="temp"
@@ -113,7 +107,7 @@ export const AddBrainModal = (): JSX.Element => {
         </fieldset>
         <fieldset className="w-full flex mt-4">
           <label className="flex-1" htmlFor="tokens">
-            {t("maxTokens", { ns: "config" })}: {maxTokens}
+            Max tokens: {maxTokens}
           </label>
           <input
             type="range"
@@ -123,27 +117,25 @@ export const AddBrainModal = (): JSX.Element => {
             {...register("maxTokens")}
           />
         </fieldset>
-        <Divider text={t("customPromptSection", { ns: "config" })} />
+        <Divider text="Custom prompt" />
         <PublicPrompts onSelect={pickPublicPrompt} />
         <Field
-          label={t("promptName", { ns: "config" })}
-          placeholder={t("promptNamePlaceholder", { ns: "config" })}
+          label="Prompt title"
+          placeholder="My awesome prompt name"
           autoComplete="off"
           className="flex-1"
           {...register("prompt.title")}
         />
         <TextArea
-          label={t("promptContent", { ns: "config" })}
-          placeholder={t("promptContentPlaceholder", { ns: "config" })}
+          label="Prompt content"
+          placeholder="As an AI, your..."
           autoComplete="off"
           className="flex-1"
           {...register("prompt.content")}
         />
         <div className="flex flex-row justify-start w-full mt-4">
           <label className="flex items-center">
-            <span className="mr-2 text-gray-700">
-              {t("setDefaultBrain", { ns: "brain" })}
-            </span>
+            <span className="mr-2 text-gray-700">Set as default brain</span>
             <input
               type="checkbox"
               {...register("setDefault")}
@@ -153,7 +145,7 @@ export const AddBrainModal = (): JSX.Element => {
         </div>
 
         <Button isLoading={isPending} className="mt-12 self-end" type="submit">
-          {t("createButton")}
+          Create
           <MdAdd className="text-xl" />
         </Button>
       </form>

@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from "axios";
 import { useState } from "react";
-import { useTranslation } from 'react-i18next'
 
 import { useBrainApi } from "@/lib/api/brain/useBrainApi";
 import { useBrainContext } from "@/lib/context/BrainProvider/hooks/useBrainContext";
@@ -26,14 +25,13 @@ export const useBrainUser = ({
   const [selectedRole, setSelectedRole] = useState<BrainRoleType>(role);
   const [isRemovingAccess, setIsRemovingAccess] = useState(false);
   const { currentBrain } = useBrainContext();
-  const { t } = useTranslation(['translation','brain']);
   const updateSelectedRole = async (newRole: BrainRoleType) => {
     setSelectedRole(newRole);
     try {
       await updateBrainAccess(brainId, email, {
         role: newRole,
       });
-      publish({ variant: "success", text: t('userRoleUpdated', { email: email, role: newRole, ns: 'brain' }) });
+      publish({ variant: "success", text: `Updated ${email} to ${newRole}` });
       void fetchBrainUsers();
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.status === 403) {
@@ -50,7 +48,7 @@ export const useBrainUser = ({
       } else {
         publish({
           variant: "danger",
-          text: t('userRoleUpdateFailed', { email: email, role: newRole, ns: 'brain' })
+          text: `Failed to update ${email} to ${newRole}`,
         });
       }
     }
@@ -62,10 +60,7 @@ export const useBrainUser = ({
       await updateBrainAccess(brainId, email, {
         role: null,
       });
-      publish({ 
-        variant: "success", 
-        text: t('userRemoved', { email: email, ns: 'brain' })
-      });
+      publish({ variant: "success", text: `Removed ${email} from brain` });
       void fetchBrainUsers();
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.data !== undefined) {
@@ -80,7 +75,7 @@ export const useBrainUser = ({
       } else {
         publish({
           variant: "danger",
-          text: t('userRemoveFailed', { email: email, ns: 'brain' })
+          text: `Failed to remove ${email} from brain`,
         });
       }
     } finally {
@@ -94,6 +89,6 @@ export const useBrainUser = ({
     removeUserAccess,
     updateSelectedRole,
     selectedRole,
-    canRemoveAccess
+    canRemoveAccess,
   };
 };

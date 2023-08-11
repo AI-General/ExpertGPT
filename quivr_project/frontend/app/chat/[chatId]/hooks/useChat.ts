@@ -2,7 +2,6 @@
 import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { getChatConfigFromLocalStorage } from "@/lib/api/chat/chat.local";
 import { useChatApi } from "@/lib/api/chat/useChatApi";
@@ -27,7 +26,6 @@ export const useChat = () => {
   const { createChat, getHistory } = useChatApi();
 
   const { addStreamQuestion } = useQuestion();
-  const { t } = useTranslation(['chat']);
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -78,7 +76,7 @@ export const useChat = () => {
       if ((error as AxiosError).response?.status === 429) {
         publish({
           variant: "danger",
-          text: t('limit_reached',{ns: 'chat'}),
+          text: "You have reached the limit of requests, please try again later",
         });
 
         return;
@@ -86,7 +84,7 @@ export const useChat = () => {
 
       publish({
         variant: "danger",
-        text: t('error_occurred',{ns: 'chat'}),
+        text: "Error occurred while getting answer",
       });
     } finally {
       setGeneratingAnswer(false);

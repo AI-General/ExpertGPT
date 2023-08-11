@@ -1,7 +1,6 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { useTranslation } from "react-i18next";
 
 import Button from "@/lib/components/ui/Button";
 import Spinner from "@/lib/components/ui/Spinner";
@@ -13,7 +12,6 @@ import DocumentItem from "./DocumentItem";
 import { useExplore } from "./hooks/useExplore";
 
 const ExplorePage = (): JSX.Element => {
-  const {t} = useTranslation(["translation","explore"]);
   const { session } = useSupabase();
   const { documents, setDocuments, isPending } = useExplore();
   const { currentBrain } = useBrainContext();
@@ -35,10 +33,10 @@ const ExplorePage = (): JSX.Element => {
       <section className="w-full outline-none pt-10 flex flex-col gap-5 items-center justify-center p-6">
         <div className="flex flex-col items-center justify-center">
           <h1 className="text-3xl font-bold text-center">
-            {t("title",{ns:"explore"})}
+            Explore uploaded data in {currentBrain.name}
           </h1>
           <h2 className="opacity-50">
-            {t("subtitle",{ns:"explore"})}
+            View or delete stored data used by your brain
           </h2>
         </div>
         {isPending ? (
@@ -57,9 +55,9 @@ const ExplorePage = (): JSX.Element => {
               </AnimatePresence>
             ) : (
               <div className="flex flex-col items-center justify-center mt-10 gap-1">
-                <p className="text-center">{t("empty",{ns:"explore"})}</p>
+                <p className="text-center">Oh No, Your Brain is empty.</p>
                 <Link href="/upload">
-                  <Button>{t("uploadButton")}</Button>
+                  <Button>Upload</Button>
                 </Link>
               </div>
             )}

@@ -2,7 +2,6 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactNode, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { MdClose } from "react-icons/md";
 
 import Button from "./Button";
@@ -34,7 +33,6 @@ export const Modal = ({
   setOpen: customSetOpen,
 }: ModalProps): JSX.Element => {
   const [isOpen, setOpen] = useState(false);
-  const { t } = useTranslation(["translation"]);
 
   return (
     <Dialog.Root onOpenChange={customSetOpen ?? setOpen}>
@@ -57,25 +55,26 @@ export const Modal = ({
                     exit={{ opacity: 0, y: "40%" }}
                     className="w-[90vw] my-auto flex flex-col h-fit max-w-2xl rounded-xl bg-white dark:bg-black border border-black/10 dark:border-white/25 p-10 shadow-xl dark:shadow-primary/50 focus:outline-none cursor-auto"
                   >
-                    <Dialog.Title
-                      className="m-0 text-2xl font-bold"
-                      data-testid="modal-title"
-                    >
+                    <Dialog.Title className="m-0 text-2xl font-bold">
                       {title}
                     </Dialog.Title>
+
                     <Dialog.Description className="opacity-50">
                       {desc}
                     </Dialog.Description>
+
                     {children}
+
                     <Dialog.Close asChild>
                       {CloseTrigger !== undefined ? (
                         CloseTrigger
                       ) : (
                         <Button variant={"secondary"} className="self-end">
-                          {t("doneButton")}
+                          Done
                         </Button>
                       )}
                     </Dialog.Close>
+
                     <Dialog.Close asChild>
                       <button
                         className="absolute top-0 p-5 right-0 inline-flex appearance-none items-center justify-center rounded-full focus:shadow-sm focus:outline-none"
