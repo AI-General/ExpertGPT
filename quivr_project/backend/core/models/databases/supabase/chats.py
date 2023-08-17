@@ -29,6 +29,17 @@ class Chats(Repository):
 
         return reponse
 
+    def get_brain_history(self, brain_id: str):
+        reponse = (
+            self.db.from_("chat_history")
+            .select("*")
+            .filter("brain_id", "eq", brain_id)
+            .order("message_time", desc=False)  # Add the ORDER BY clause
+            .execute()
+        )
+
+        return reponse
+
     def get_user_chats(self, user_id: str):
         response = (
             self.db.from_("chats")
