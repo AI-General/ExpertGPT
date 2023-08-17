@@ -38,12 +38,13 @@ class Chats(Repository):
         )
         return response
 
-    def update_chat_history(self, chat_id: str, user_message: str, assistant: str):
+    def update_chat_history(self, chat_id: str, brain_id: str, user_message: str, assistant: str):
         response = (
             self.db.table("chat_history")
             .insert(
                 {
                     "chat_id": str(chat_id),
+                    "brain_id": str(brain_id),
                     "user_message": user_message,
                     "assistant": assistant,
                 }
