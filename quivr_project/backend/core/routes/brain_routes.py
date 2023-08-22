@@ -110,6 +110,9 @@ async def create_brain_endpoint(
         model
         max_tokens
         temperature
+        extraversion
+        neuroticism
+        conscientiousness
     In the brains table & in the brains_users table and put the creator user as 'Owner'
     """
 

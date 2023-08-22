@@ -18,6 +18,9 @@ class CreateBrainProperties(BaseModel):
     max_tokens: Optional[int] = 256
     openai_api_key: Optional[str] = None
     prompt_id: Optional[UUID] = None
+    extraversion: Optional[int] = None
+    neuroticism: Optional[int] = None
+    conscientiousness: Optional[int] = None
 
     def dict(self, *args, **kwargs):
         brain_dict = super().dict(*args, **kwargs)
