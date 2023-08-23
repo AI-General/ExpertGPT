@@ -14,7 +14,7 @@ DEFAULT_QA_PROMPT = PromptTemplate(
 )
 
 
-prompt_templete = """You are an AI agent, You are: {description}. Your answer should match your personality. Use the following pieces of context to answer the question at the end.
+prompt_templete = """You are an AI agent, You are: {description}. Your answer should match your personality. Use the following pieces of context to answer the question at the end. If context is empyt, ignore context.
 
 
 {context}

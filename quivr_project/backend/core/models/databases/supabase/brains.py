@@ -73,6 +73,24 @@ class Brain(Repository):
             user_brains[-1].rights = item["rights"]
         return user_brains
 
+    def get_all_brains(self) -> list[MinimalBrainEntity]:
+        response = (
+            self.db.from_("brains_users")
+            .select("id:brain_id, rights, brains (id: brain_id, name)")
+            .execute()
+        )
+        user_brains: list[MinimalBrainEntity] = []
+        for item in response.data:
+            user_brains.append(
+                MinimalBrainEntity(
+                    id=item["brains"]["id"],
+                    name=item["brains"]["name"],
+                    rights=item["rights"],
+                )
+            )
+            user_brains[-1].rights = item["rights"]
+        return user_brains
+
     def get_brain_for_user(self, user_id, brain_id) -> MinimalBrainEntity | None:
         response = (
             self.db.from_("brains_users")
