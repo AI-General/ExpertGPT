@@ -229,3 +229,48 @@ Example Scenarios:
    - Endpoint: `/chat/{chat_id}/history`
    - Description: This endpoint retrieves the chat history for a specific chat identified by its chat ID.
 
+## Personality
+1. **Get personality test questions**
+   - HTTP method: GET
+   - Endpoint: `/personality/question`
+   - Description: This endpoint generate questions for personality test.
+    ```json
+        headers = {
+            "Authorization": "Bearer {token}",
+            "Content-Type": "application/json"
+        }
+        params = {
+            "question_number": int
+        }
+    ```
+
+2. **Get personality from test result**
+   - HTTP method: POST
+   - Endpoint: `/personality`
+   - Description: This endpoint return personality from personality test result.
+    ```json
+        headers = {
+            "Authorization": "Bearer {token}",
+            "Content-Type": "application/json"
+        }
+        requestbody = {
+            "result": [string]
+        }
+    
+        Following is example of result:
+        [
+            {
+                "trait": "Extraversion",
+                "positive": true,
+                "question": "Do you frequently enjoy social activities?",
+                "answer": 4
+            },
+            {
+                "trait": "Extraversion",
+                "positive": true,
+                "question": "Do you prefer to work in teams?",
+                "answer": 3
+            },
+            ...
+        ]
+    ```
