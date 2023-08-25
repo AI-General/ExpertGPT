@@ -5,10 +5,15 @@
  - Assess personality from Test Results
 
 ## Brain
+ - Creat new brain
+ - Get all brains
 
-### Creat new brain
- - remove prompt id
+## Upload
+ - File Upload
 
-### Get all brains
+## Crawl
+ - Website crawl
 
+## Chat
+ - create new chat room
 
