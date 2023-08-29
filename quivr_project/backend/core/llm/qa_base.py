@@ -169,7 +169,7 @@ class QABaseBrainPicking(BaseBrainPicking):
             }
         )
 
-    async def generate_stream(self, question: str) -> AsyncIterable:
+    async def generate_stream(self, question: str, memory=None) -> AsyncIterable:
         """
         Generate a streaming answer to a given question by interacting with the language model.
         :param question: The question
@@ -188,7 +188,7 @@ class QABaseBrainPicking(BaseBrainPicking):
         standalone_question_llm = self._create_llm(model=self.model)
 
         # The Chain that generates the standalone question
-        standalone_question_generator = LLMChain(llm=standalone_question_llm, prompt=CONDENSE_QUESTION_PROMPT)
+        standalone_question_generator = LLMChain(llm=standalone_question_llm, prompt=CONDENSE_QUESTION_PROMPT, memory=memory)
 
         QA_PROMPT = qa_prompt(personality=self.personality)
         # The Chain that generates the answer to the question

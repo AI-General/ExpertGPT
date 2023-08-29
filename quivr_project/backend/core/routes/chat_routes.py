@@ -26,6 +26,16 @@ from repository.chat.get_user_chats import get_user_chats
 from repository.chat.update_chat import ChatUpdatableProperties, update_chat
 from repository.user_identity.get_user_identity import get_user_identity
 
+from langchain.memory import ZepMemory
+import uuid
+ZEP_API_URL = "http://localhost:8000"
+session_id = str(uuid.uuid4())
+memory = ZepMemory(
+    session_id=session_id,
+    url=ZEP_API_URL,
+    memory_key="chat_history",
+)
+
 chat_router = APIRouter()
 
 
@@ -287,7 +297,8 @@ async def create_stream_question_handler(
         print("streaming")
         return StreamingResponse(
             gpt_answer_generator.generate_stream(  # pyright: ignore reportPrivateUsage=none
-                chat_question.question
+                chat_question.question,
+                memory=memory
             ),
             media_type="text/event-stream",
         )
