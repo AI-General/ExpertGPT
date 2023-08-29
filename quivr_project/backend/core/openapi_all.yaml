@@ -1494,6 +1494,9 @@ components:
           title: Prompt Id
           type: string
           format: uuid
+        linkedin:
+          title: Linkedin Path
+          type: string
         extraversion:
           title: Extraversion level
           type: integer
