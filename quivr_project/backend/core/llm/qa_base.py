@@ -188,7 +188,7 @@ class QABaseBrainPicking(BaseBrainPicking):
         standalone_question_llm = self._create_llm(model=self.model)
 
         # The Chain that generates the standalone question
-        standalone_question_generator = LLMChain(llm=standalone_question_llm, prompt=CONDENSE_QUESTION_PROMPT, memory=memory)
+        standalone_question_generator = LLMChain(llm=standalone_question_llm, prompt=CONDENSE_QUESTION_PROMPT)
 
         QA_PROMPT = qa_prompt(personality=self.personality)
         # The Chain that generates the answer to the question
@@ -196,7 +196,7 @@ class QABaseBrainPicking(BaseBrainPicking):
 
         # The Chain that combines the question and answer
         qa = ConversationalRetrievalChain(
-            retriever=self.vector_store.as_retriever(), combine_docs_chain=doc_chain, question_generator=standalone_question_generator)
+            retriever=self.vector_store.as_retriever(), combine_docs_chain=doc_chain, question_generator=standalone_question_generator, memory=memory)
         
         transformed_history = []
 

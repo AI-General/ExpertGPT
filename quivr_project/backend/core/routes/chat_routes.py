@@ -2,8 +2,10 @@ import os
 import time
 from typing import List
 from uuid import UUID
+from uuid import uuid4
 from venv import logger
 
+from langchain.memory import ZepMemory
 from auth import AuthBearer, get_current_user
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
@@ -26,14 +28,14 @@ from repository.chat.get_user_chats import get_user_chats
 from repository.chat.update_chat import ChatUpdatableProperties, update_chat
 from repository.user_identity.get_user_identity import get_user_identity
 
-from langchain.memory import ZepMemory
-import uuid
-ZEP_API_URL = "http://localhost:8000"
-session_id = str(uuid.uuid4())
+ZEP_API_URL = os.getenv("ZEP_API_URL")
+
+session_id = str(uuid4())
 memory = ZepMemory(
     session_id=session_id,
     url=ZEP_API_URL,
     memory_key="chat_history",
+    return_messages=True
 )
 
 chat_router = APIRouter()
