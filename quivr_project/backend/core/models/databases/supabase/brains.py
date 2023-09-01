@@ -184,6 +184,19 @@ class Brain(Repository):
             .execute()
         )
         return response.data
+    
+    def create_brain_data(self, brain_id, data_sha1):
+        response = (
+            self.db.table("brains_data")
+            .insert(
+                {
+                    "brain_id": str(brain_id),
+                    "data_sha1": data_sha1,
+                }
+            )
+            .execute()
+        )
+        return response.data
 
     def get_vector_ids_from_file_sha1(self, file_sha1: str):
         # move to vectors class

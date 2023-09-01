@@ -98,8 +98,8 @@ if __name__ == "__main__":
     hongyu_token = "7067d4393182f1a06e3d6628cd492168"
 
     ## Create experts
-    andrew_data = {
-        'name': 'Andrew NG',
+    elonmusk_data = {
+        'name': 'Elon Musk',
         'description': "Andrew NG, cofounder of Coursera, AI Expert",
         'model': 'gpt-3.5-turbo-0613',
         'max_tokens': 256,
@@ -112,7 +112,7 @@ if __name__ == "__main__":
         'conscientiousness': 3
     }
 
-    jeffBezos_data = {
+    ben_data = {
         'name': 'Jeff Bezos',
         'description': "Jeff Bezos, businessman and founder of Amazon.com",
         'model': 'gpt-3.5-turbo-0613',
