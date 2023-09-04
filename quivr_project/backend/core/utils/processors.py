@@ -100,11 +100,11 @@ async def filter_data(
     data: Data,
     brain_id,
 ):
-    await data.compute_file_sha1()
+    await data.compute_data_sha1()
 
     print("data sha1", data.data_sha1)
     data_exists = data.data_already_exists()
-    data_exists_in_brain = data.file_already_exists_in_brain(brain_id)
+    data_exists_in_brain = data.data_already_exists_in_brain(brain_id)
 
     if data_exists_in_brain:
         return create_response(

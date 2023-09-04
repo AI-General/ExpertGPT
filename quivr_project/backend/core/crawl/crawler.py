@@ -1,5 +1,6 @@
 import os
 import re
+import json
 import tempfile
 import unicodedata
 
@@ -38,6 +39,8 @@ class CrawlWebsite(BaseModel):
             return None
     
     def process_linkedin(self, apikey):
+        # Zenrows
+        """
         params = {
             'url': self.url,
             'apikey': apikey,
@@ -45,6 +48,7 @@ class CrawlWebsite(BaseModel):
             'premium_proxy': 'true',
         }
         response = requests.get('https://api.zenrows.com/v1/', params=params)
+        # TODO: Exception process
         soup = BeautifulSoup(response.content, 'html.parser')
         
         data = ""
@@ -85,6 +89,17 @@ class CrawlWebsite(BaseModel):
             except:
                 continue
         return data
+        """
+        
+        # ProxyCurl
+
+        # Test
+        with open('/root/hongyu/customersupportgpt/quivr_project/backend/core/tests/test_files/test_linkedin_proxycurl.txt', 'r') as f:
+            response_text = f.read()
+        return response_text
+        # response_parse = json.load(response_text)
+
+    
 
     def checkGithub(self):
         if "github.com" in self.url:

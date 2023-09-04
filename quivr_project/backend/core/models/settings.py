@@ -40,7 +40,7 @@ def get_supabase_client() -> Client:
 def get_qdrant_client() -> QdrantClient:
     settings = DatabaseSettings()  # pyright: ignore reportPrivateUsage=none
     qdrant_client: QdrantClient = QdrantClient(
-        settings.qdrant_location, settings.qdrant_port
+        settings.qdrant_location, port=settings.qdrant_port
     )
     return qdrant_client
 

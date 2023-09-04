@@ -47,7 +47,7 @@ class Data(BaseModel):
             #     self.file.filename  # pyright: ignore reportPrivateUsage=none
             # )[-1].lower()
 
-    async def compute_file_sha1(self):
+    async def compute_data_sha1(self):
         """
         Compute the sha1 of the data
         """
@@ -97,7 +97,7 @@ class Data(BaseModel):
         """
         self.payloads = self.qdrant_db.get_payloads_data_sha1(
             self.data_sha1
-        ).data
+        )[0]
 
     def data_already_exists(self):
         """
@@ -118,24 +118,24 @@ class Data(BaseModel):
 
         return True
 
-    def file_already_exists_qdrant(self):
-        """
-        Check if file already exists in vectors table
-        """
-        self.set_file_vectors_ids()
+    # def file_already_exists_qdrant(self):
+    #     """
+    #     Check if file already exists in vectors table
+    #     """
+    #     self.set_file_vectors_ids()
 
-        print("file_sha1", self.file_sha1)
-        print("vectors_ids", self.vectors_ids)
-        print(
-            "len(vectors_ids)",
-            len(self.vectors_ids),  # pyright: ignore reportPrivateUsage=none
-        )
+    #     print("file_sha1", self.file_sha1)
+    #     print("vectors_ids", self.vectors_ids)
+    #     print(
+    #         "len(vectors_ids)",
+    #         len(self.vectors_ids),  # pyright: ignore reportPrivateUsage=none
+    #     )
 
-        # if the file does not exist in vectors then no need to go check in brains_vectors
-        if len(self.vectors_ids) == 0:  # pyright: ignore reportPrivateUsage=none
-            return False
+    #     # if the file does not exist in vectors then no need to go check in brains_vectors
+    #     if len(self.vectors_ids) == 0:  # pyright: ignore reportPrivateUsage=none
+    #         return False
 
-        return True
+    #     return True
 
     def data_already_exists_in_brain(self, brain_id):
         """
@@ -166,5 +166,5 @@ class Data(BaseModel):
         brain.create_brain_data(self.data_sha1)
         print(f"Successfully linked file {self.data_sha1} to brain {brain.id}")
 
-    def upload_records(self, records):
+    def upload_records_qdrant(self, records):
         self.qdrant_db.upload_records(records)

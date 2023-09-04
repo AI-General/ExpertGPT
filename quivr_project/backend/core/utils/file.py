@@ -35,6 +35,6 @@ def compute_sha1_from_file(file_path):
     return readable_hash
 
 
-def compute_sha1_from_content(content):
-    readable_hash = hashlib.sha1(content).hexdigest()
+def compute_sha1_from_content(content:str):
+    readable_hash = hashlib.sha1(content.encode()).hexdigest()
     return readable_hash

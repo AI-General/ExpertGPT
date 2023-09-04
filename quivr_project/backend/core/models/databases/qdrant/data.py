@@ -2,7 +2,7 @@ from qdrant_client import QdrantClient
 from models.databases.repository import Repository
 
 
-class Data(Repository):
+class Data():
     def __init__(self, qdrant_client:QdrantClient):
         self.db: QdrantClient = qdrant_client
 

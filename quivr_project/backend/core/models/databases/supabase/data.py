@@ -17,7 +17,7 @@ class Data(Repository):
     def get_brain_data_by_brain_id_and_data_sha1(self, brain_id, data_sha1):
         # Check if file exists in that brain
         response = (
-            self.db.table("brains_vectors")
+            self.db.table("brains_data")
             .select("brain_id, data_sha1")
             .filter("brain_id", "eq", brain_id)
             .filter("data_sha1", "eq", data_sha1)

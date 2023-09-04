@@ -96,37 +96,36 @@ async def crawl_endpoint(
     brain = Brain(id=brain_id)
     brain_details = get_brain_details(brain_id)
     crawl_website = CrawlWebsite(url=brain_details.linkedin)
-    if request.headers.get("Openai-Api-Key"):
-        brain.max_brain_size = os.getenv(
-            "MAX_BRAIN_SIZE_WITH_KEY", 209715200
-        )  # pyright: ignore reportPrivateUsage=none
+    # if request.headers.get("Openai-Api-Key"):
+    #     brain.max_brain_size = os.getenv(
+    #         "MAX_BRAIN_SIZE_WITH_KEY", 209715200
+    #     )  # pyright: ignore reportPrivateUsage=none
 
-    file_size = 1000000
-    remaining_free_space = brain.remaining_brain_size
+    # file_size = 1000000
+    # remaining_free_space = brain.remaining_brain_size
 
-    if remaining_free_space - file_size < 0:
+    # if remaining_free_space - file_size < 0:
+    #     message = {
+    #         "message": f"❌ User's brain will exceed maximum capacity with this upload. Maximum file allowed is : {convert_bytes(remaining_free_space)}",
+    #         "type": "error",
+    #     }
+    # else:
+    if crawl_website.checkLinkedIn():
+        # zenrows_apikey = os.getenv("ZENROWS_API_KEY")
+        proxycurl_apikey = os.getenv("PROXYCURL_API_KEY")
+        scraped_data = crawl_website.process_linkedin(apikey=proxycurl_apikey)  # pyright: ignore reportPrivateUsage=none
+
+        #  check remaining free space here !!
+        data = Data(data=scraped_data)
+        message = await filter_data(
+            data=data,
+            brain_id=brain.id,
+        )
+        return message
+    else:
+        #  check remaining free space here !!
         message = {
-            "message": f"❌ User's brain will exceed maximum capacity with this upload. Maximum file allowed is : {convert_bytes(remaining_free_space)}",
+            "message": f"❌ This is not linkedin link.",
             "type": "error",
         }
-    else:
-        if crawl_website.checkLinkedIn():
-            zenrows_apikey = os.getenv("ZENROWS_API_KEY")
-            scraped_data = crawl_website.process_linkedin(apikey=zenrows_apikey)  # pyright: ignore reportPrivateUsage=none
-
-            #  check remaining free space here !!
-            data = Data(scraped_data)
-            message = await filter_data(
-                data=data,
-                enable_summarization=enable_summarization,
-                brain_id=brain.id,
-                openai_api_key=request.headers.get("Openai-Api-Key", None),
-            )
-            return message
-        else:
-            #  check remaining free space here !!
-            message = {
-                "message": f"❌ This is not linkedin link.",
-                "type": "error",
-            }
     return message

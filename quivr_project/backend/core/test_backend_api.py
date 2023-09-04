@@ -95,7 +95,7 @@ if __name__ == "__main__":
     chat_id = "6b14af62-608a-4787-b21c-3a48a0352897"
     question = "How about your personality?"
 
-    hongyu_token = "7067d4393182f1a06e3d6628cd492168"
+    hongyu_token = "091113066d5725238656d784c71c2f22"
 
     ## Create experts
     elonmusk_data = {

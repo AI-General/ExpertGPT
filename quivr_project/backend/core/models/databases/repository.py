@@ -226,5 +226,5 @@ class Repository(ABC):
 
     # Qdrant
     @abstractmethod
-    def get_payloads_data_sha1(self):
+    def get_payloads_data_sha1(self, data_sha1:str):
         pass

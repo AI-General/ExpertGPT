@@ -1,4 +1,5 @@
 import time
+from uuid import uuid4
 
 from langchain.schema import Document
 from models.brains import Brain
@@ -65,16 +66,16 @@ async def process_data(
 
         # created_vector_id = created_vector[0]  # pyright: ignore reportPrivateUsage=none
         record = models.Record(
-			id=compute_sha1_from_content(doc),
+			id=str(uuid4()),
 			vector=encoder.encode(doc).tolist(),
 			payload={
-                "data_sh1": data.data_sha1,
+                "data_sha1": data.data_sha1,
                 "content": doc
             }
 		)
         records.append(record)
     
-    data.upload_records(record)
+    data.upload_records_qdrant(records)
     
     brain = Brain(id=brain_id)
     brain.create_brain_data(data.data_sha1)
