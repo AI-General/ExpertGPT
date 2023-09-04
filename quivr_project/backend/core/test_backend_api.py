@@ -65,7 +65,7 @@ def test_retrieve_brain(token, brain_id):
     logger.info('test_chat')
     logger.info(f"status_code: {response.status_code}, \ttext: {response.text}")
 
-#LinkedIn 
+# LinkedIn 
 def test_linkedin_scraping(token, brain_id):
     headers = {'Authorization': f'Bearer {token}'}
     params = {'brain_id': brain_id}
@@ -74,6 +74,14 @@ def test_linkedin_scraping(token, brain_id):
     logger.info('test_linkedin_scraping')
     logger.info(f"status_code: {response.status_code}, \ttext: {response.text}")
 
+# Delete data
+def test_delete_data(token, brain_id, data_sha1):
+    headers = {'Authorization': f'Bearer {token}'}
+    params = {'brain_id': brain_id}
+    response = requests.delete(ENDPOINT+f'/explore/data/{data_sha1}/', params=params, headers=headers)
+
+    logger.info('test_delete_data')
+    logger.info(f"status_code: {response.status_code}, \ttext: {response.text}")
 
 if __name__ == "__main__":
     create_brain_data = {
@@ -132,4 +140,6 @@ if __name__ == "__main__":
     andrew_brain_id = "7b78d424-4d17-4ef1-bcea-f28de168c5d9"
     jeff_brain_id = "18c768d5-6096-447a-b5e5-0f8a267bc09a"
 
-    test_linkedin_scraping(token=hongyu_token, brain_id=andrew_brain_id)
+    # test_linkedin_scraping(token=hongyu_token, brain_id=andrew_brain_id)
+
+    test_delete_data(token=hongyu_token, brain_id=andrew_brain_id, data_sha1='5908b0137643d9f431bcc0848e7dea4fdc33d905')

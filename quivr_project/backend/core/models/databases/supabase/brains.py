@@ -278,6 +278,48 @@ class Brain(Repository):
 
         return {"message": f"File {file_name} in brain {brain_id} has been deleted."}
 
+    def delete_data_from_brain(self, brain_id, data_sha1):
+        # First, get the vector_ids associated with the file_name
+        self.db.table("brains_data").delete().filter(
+            "brain_id", "eq", brain_id
+        ).filter(
+            "data_sha1", "eq", data_sha1
+        ).execute()
+
+        return {"message": f"Data {data_sha1} in brain {brain_id} has been deleted."}
+        # vector_response = (
+        #     self.db.table("brains_data")
+        #     .select("id")
+        #     .filter("metadata->>file_name", "eq", file_name)
+        #     .execute()
+        # )
+        # vector_ids = [item["id"] for item in vector_response.data]
+
+        # # For each vector_id, delete the corresponding entry from the 'brains_vectors' table
+        # for vector_id in vector_ids:
+        #     self.db.table("brains_vectors").delete().filter(
+        #         "vector_id", "eq", vector_id
+        #     ).filter("brain_id", "eq", brain_id).execute()
+
+        #     # Check if the vector is still associated with any other brains
+        #     associated_brains_response = (
+        #         self.db.table("brains_vectors")
+        #         .select("brain_id")
+        #         .filter("vector_id", "eq", vector_id)
+        #         .execute()
+        #     )
+        #     associated_brains = [
+        #         item["brain_id"] for item in associated_brains_response.data
+        #     ]
+
+        #     # If the vector is not associated with any other brains, delete it from 'vectors' table
+        #     if not associated_brains:
+        #         self.db.table("vectors").delete().filter(
+        #             "id", "eq", vector_id
+        #         ).execute()
+
+        # return {"message": f"File {file_name} in brain {brain_id} has been deleted."}
+
     def get_default_user_brain_id(self, user_id: UUID) -> UUID | None:
         response = (
             (
