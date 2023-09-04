@@ -1,6 +1,7 @@
 import os
 import tempfile
 from typing import Any, Optional
+import uuid
 from uuid import UUID
 
 from fastapi import UploadFile
@@ -163,7 +164,8 @@ class Data(BaseModel):
         )
 
     def link_data_to_brain(self, brain: Brain):
-        brain.create_brain_data(self.data_sha1)
+        self.id = uuid.uuid5(namespace=uuid.NAMESPACE_DNS, name=self.data_sha1)
+        brain.create_brain_data(data_id=self.id, data_sha1=self.data_sha1)
         print(f"Successfully linked file {self.data_sha1} to brain {brain.id}")
 
     def upload_records_qdrant(self, records):

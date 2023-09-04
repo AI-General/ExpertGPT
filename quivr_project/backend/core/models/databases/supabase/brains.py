@@ -185,12 +185,13 @@ class Brain(Repository):
         )
         return response.data
     
-    def create_brain_data(self, brain_id, data_sha1):
+    def create_brain_data(self, brain_id, data_id, data_sha1):
         response = (
             self.db.table("brains_data")
             .insert(
                 {
                     "brain_id": str(brain_id),
+                    "data_id": str(data_id),
                     "data_sha1": data_sha1,
                 }
             )
