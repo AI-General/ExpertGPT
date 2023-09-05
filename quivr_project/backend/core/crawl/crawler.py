@@ -92,14 +92,36 @@ class CrawlWebsite(BaseModel):
         """
         
         # ProxyCurl
+        headers = {'Authorization': 'Bearer ' + apikey}
+        api_endpoint = 'https://nubela.co/proxycurl/api/v2/linkedin'
+        params = {
+            'linkedin_profile_url': self.url,
+            'fallback_to_cache': 'on-error',
+            'use_cache': 'if-present',
+            'skills': 'include',
+            'inferred_salary': 'include',
+            'personal_email': 'include',
+            'personal_contact_number': 'include',
+            'twitter_profile_id': 'include',
+            'facebook_profile_id': 'include',
+            'github_profile_id': 'include',
+            'extra': 'include',
+        }
+        response = requests.get(api_endpoint,
+                                params=params,
+                                headers=headers)
+        json_string = json.dumps(json.loads(response.text), indent=4)
+        return {
+            "status_code": response.status_code,
+            "message": response.text,
+            "json_string": json_string
+        }
 
         # Test
-        with open('/root/hongyu/customersupportgpt/quivr_project/backend/core/tests/test_files/test_linkedin_proxycurl.txt', 'r') as f:
-            response_text = f.read()
-        return response_text
+        # with open('/root/hongyu/customersupportgpt/quivr_project/backend/core/tests/test_files/test_linkedin_proxycurl.txt', 'r') as f:
+        #     response_text = f.read()
+        # return response_text
         # response_parse = json.load(response_text)
-
-    
 
     def checkGithub(self):
         if "github.com" in self.url:

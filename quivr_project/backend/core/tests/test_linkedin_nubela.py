@@ -16,8 +16,14 @@ params = {
     'github_profile_id': 'include',
     'extra': 'include',
 }
-response = requests.get(api_endpoint,
-                        params=params,
-                        headers=headers)
+# response = requests.get(api_endpoint,
+#                         params=params,
+#                         headers=headers)
 
-print(response)
+with open ("/root/hongyu/customersupportgpt/quivr_project/backend/core/tests/test_files/test_linkedin_proxycurl.txt", 'r') as f:
+    response_text = f.read()
+# print(response.text)
+
+# import json
+# res_dict = json.loads(response_text)
+# print(res_dict)

@@ -165,7 +165,7 @@ class Data(BaseModel):
 
     def link_data_to_brain(self, brain: Brain):
         self.id = uuid.uuid5(namespace=uuid.NAMESPACE_DNS, name=self.data_sha1)
-        brain.create_brain_data(data_id=self.id, data_sha1=self.data_sha1)
+        brain.create_brain_data(data_sha1=self.data_sha1)
         print(f"Successfully linked file {self.data_sha1} to brain {brain.id}")
 
     def upload_records_qdrant(self, records):

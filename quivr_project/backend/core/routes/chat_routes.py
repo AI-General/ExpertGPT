@@ -5,6 +5,8 @@ from uuid import UUID
 from uuid import uuid4
 from venv import logger
 
+from qdrant_client import models, QdrantClient
+from sentence_transformers import SentenceTransformer
 from langchain.memory import ZepMemory
 from auth import AuthBearer, get_current_user
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -14,7 +16,7 @@ from models.brains import Brain, Personality
 from models.chat import Chat, ChatHistory
 from models.chats import ChatQuestion
 from models.databases.supabase.supabase import SupabaseDB
-from models.settings import LLMSettings, get_supabase_db
+from models.settings import LLMSettings, DatabaseSettings, get_supabase_db
 from models.users import User
 from repository.brain.get_brain_details import get_brain_details
 from repository.brain.get_default_user_brain_or_create_new import (
@@ -399,3 +401,34 @@ async def get_brain_history_handler(
 ) -> List[ChatHistory]:
     # TODO: RBAC with current_user
     return get_brain_history(brain_id)  # pyright: ignore reportPrivateUsage=none
+
+# choose nearest experts
+@chat_router.post(
+    "/chat/choose",
+    dependencies=[
+        Depends(
+            AuthBearer(),
+        ),
+    ],
+    tags=["Chat"],
+)
+async def choose_nearest_experts(
+    request: Request,
+    chat_question: ChatQuestion,
+    current_user: User = Depends(get_current_user),    
+) -> []:
+    query = chat_question.question
+    settings = DatabaseSettings()
+    encoder = SentenceTransformer('all-MiniLM-L6-v2')
+    qdrant_client = QdrantClient(
+        settings.qdrant_location, port=settings.qdrant_port
+    )
+    hits = qdrant_client.search_groups(
+        collection_name="vectors",
+        query_vector=encoder.encode(query).tolist(),
+        group_by="data_sha1",
+        with_payload=["data_sha1"],
+        limit=5
+    )
+    for hit in hits:
+        print(hit.payload, "score:", hit.score)

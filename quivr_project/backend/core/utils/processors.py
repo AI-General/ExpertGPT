@@ -136,7 +136,7 @@ async def filter_data(
         # Add more specific exceptions as needed.
         print(f"Error processing file: {e}")
         return create_response(
-            f"⚠️ An error occurred while processing {file.file.filename}.",  # pyright: ignore reportPrivateUsage=none
+            f"⚠️ An error occurred while processing",  # pyright: ignore reportPrivateUsage=none
             "error",
         )
 
