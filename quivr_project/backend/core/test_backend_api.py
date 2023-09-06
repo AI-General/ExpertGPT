@@ -277,18 +277,18 @@ if __name__ == "__main__":
 
     ##### Delete data
     # data_sha1_list = [
-    #     "8f44412e0c385be2e9e83208b95c843da74bc2eb",
+    #     # "8f44412e0c385be2e9e83208b95c843da74bc2eb",
     #     "6e4aaa9f582543826b3f96696a118356a2fa1413",
-    #     "02ff618c780b5900051766876b00efc496de0146"
+    #     # "02ff618c780b5900051766876b00efc496de0146"
     # ]
-    # for data_sha1 in data_sha1_list:
-    #     test_delete_data(hongyu_token, brain_ids[0], data_sha1)
+    # # for data_sha1 in data_sha1_list:
+    # #     test_delete_data(hongyu_token, brain_ids[0], data_sha1)
 
     # for brain_id in brain_ids:
     #     test_delete_data(hongyu_token, brain_id, "6e4aaa9f582543826b3f96696a118356a2fa1413")
 
     ##### Choose nearest experts
-    test_choose_nearest_experts(hongyu_token, query="hello world!")
+    # test_choose_nearest_experts(hongyu_token, query="hello world!")
 
     # andrew_brain_id = "7b78d424-4d17-4ef1-bcea-f28de168c5d9"
     # jeff_brain_id = "18c768d5-6096-447a-b5e5-0f8a267bc09a"

@@ -1,11 +1,13 @@
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
+from sentence_transformers import SentenceTransformer
 from models.databases.repository import Repository
 
 
 class Vector_qdrant():
-    def __init__(self, qdrant_client:QdrantClient):
+    def __init__(self, qdrant_client: QdrantClient, encoder_model: str = 'all-MiniLM-L6-v2'):
         self.db: QdrantClient = qdrant_client
+        self.encoder = SentenceTransformer(encoder_model)
 
     def get_payloads_data_sha1(self, data_sha1):
         response = self.db.scroll(
@@ -36,3 +38,15 @@ class Vector_qdrant():
             ),
         )
         return response
+    
+    def get_nearest_brain_list(self, query:str, limit:int=5):
+        groups = self.db.search_groups(
+            collection_name="vectors",
+            query_vector=self.encoder.encode(query).tolist(),
+            group_by="brain_id",
+            with_payload=["brain_id"],
+            limit=limit
+        )
+        brain_ids = [group.hits[0].payload['data_sha1'] for group in groups]
+        return brain_ids
+    

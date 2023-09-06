@@ -16,7 +16,7 @@ from models.brains import Brain, Personality
 from models.chat import Chat, ChatHistory
 from models.chats import ChatQuestion
 from models.databases.supabase.supabase import SupabaseDB
-from models.settings import LLMSettings, DatabaseSettings, get_supabase_db
+from models.settings import LLMSettings, DatabaseSettings, get_supabase_db, get_qdrant_db
 from models.users import User
 from repository.brain.get_brain_details import get_brain_details
 from repository.brain.get_default_user_brain_or_create_new import (
@@ -418,17 +418,6 @@ async def choose_nearest_experts(
     current_user: User = Depends(get_current_user),    
 ) -> []:
     query = chat_question.question
-    settings = DatabaseSettings()
-    encoder = SentenceTransformer('all-MiniLM-L6-v2')
-    qdrant_client = QdrantClient(
-        settings.qdrant_location, port=settings.qdrant_port
-    )
-    hits = qdrant_client.search_groups(
-        collection_name="vectors",
-        query_vector=encoder.encode(query).tolist(),
-        group_by="data_sha1",
-        with_payload=["data_sha1"],
-        limit=5
-    )
-    for hit in hits:
-        print(hit.payload, "score:", hit.score)
+    qdrant_db = get_qdrant_db()
+    brain_ids = qdrant_db.get_nearest_brain_list(query=query, limit=5)
+    return brain_ids
