@@ -24,6 +24,7 @@ class BrainSettings(BaseSettings):
 class DatabaseSettings(BaseSettings):
     qdrant_location: str
     qdrant_port: int
+    encoder_model: str
 
 class LLMSettings(BaseSettings):
     private: bool = False

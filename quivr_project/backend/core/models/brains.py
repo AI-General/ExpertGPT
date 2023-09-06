@@ -131,17 +131,17 @@ class Brain(BaseModel):
     
     def delete_data_from_brain(self, data_sha1: str):
         self.supabase_db.delete_data_from_brain(self.id, data_sha1)
-        associated_brains_response = (
-            self.supabase_client.table("brains_data")
-            .select("brain_id")
-            .filter("data_sha1", "eq", data_sha1)
-            .execute()
-        )
-        associated_brains = [
-            item["brain_id"] for item in associated_brains_response.data
-        ]
-        if not associated_brains:
-            self.qdrant_db.delete_vectors_from_brain(data_sha1)
+        # associated_brains_response = (
+        #     self.supabase_client.table("brains_data")
+        #     .select("brain_id")
+        #     .filter("data_sha1", "eq", data_sha1)
+        #     .execute()
+        # )
+        # associated_brains = [
+        #     item["brain_id"] for item in associated_brains_response.data
+        # ]
+        # if not associated_brains:
+        self.qdrant_db.delete_vectors_from_brain(self.id, data_sha1)
 
 
 class Personality:

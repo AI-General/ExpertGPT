@@ -269,7 +269,7 @@ if __name__ == "__main__":
         "1e87cafa-9f6c-40f5-8d3f-0e8b7ef7488b",
         "2ca5281f-c8e4-44c0-bca0-f2bc23d22660"
     ]
-    # for brain_id in brain_ids:
+    # for brain_id in brain_ids[:1]:
     #     test_linkedin_scraping(token=hongyu_token, brain_id=brain_id)
 
     ##### Get all data
@@ -277,15 +277,16 @@ if __name__ == "__main__":
 
     ##### Delete data
     # data_sha1_list = [
-    #     # "8f44412e0c385be2e9e83208b95c843da74bc2eb",
-    #     "6e4aaa9f582543826b3f96696a118356a2fa1413",
-    #     # "02ff618c780b5900051766876b00efc496de0146"
+    #     "13ccc461bb34d02f78b94d7afe05735e17577732",
+    #     "67bbbbdb8ea5bfa4846b3a0864f140d2f5f4be7e",
+    #     "a43a0ea4aadcb12417e30543cb1bacba4f12e542"
     # ]
-    # # for data_sha1 in data_sha1_list:
-    # #     test_delete_data(hongyu_token, brain_ids[0], data_sha1)
+    # for data_sha1 in data_sha1_list:
+    #     test_delete_data(hongyu_token, brain_ids[0], data_sha1)
 
-    # for brain_id in brain_ids:
-    #     test_delete_data(hongyu_token, brain_id, "6e4aaa9f582543826b3f96696a118356a2fa1413")
+    # for i, brain_id in enumerate(brain_ids):
+    test_delete_data(hongyu_token, "fdcce4d8-fba7-4276-b9f6-53c5e8a3a3b0", "76c454cb6f828971fd3168a0d4cc0445e7cababe")
+    # test_delete_data(hongyu_token, "fdcce4d8-fba7-4276-b9f6-53c5e8a3a3b0", "7a1bec116ac29b982b71b4312fdbd717634c3a95")
 
     ##### Choose nearest experts
     # test_choose_nearest_experts(hongyu_token, query="hello world!")

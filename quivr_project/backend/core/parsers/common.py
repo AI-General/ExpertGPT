@@ -70,6 +70,7 @@ async def process_data(
 			vector=encoder.encode(doc).tolist(),
 			payload={
                 "data_sha1": data.data_sha1,
+                "brain_id": brain_id,
                 "content": doc
             }
 		)

@@ -103,7 +103,7 @@ async def filter_data(
     await data.compute_data_sha1()
 
     print("data sha1", data.data_sha1)
-    data_exists = data.data_already_exists()
+    # data_exists = data.data_already_exists()
     data_exists_in_brain = data.data_already_exists_in_brain(brain_id)
 
     if data_exists_in_brain:
@@ -116,12 +116,12 @@ async def filter_data(
             f"❌ data is empty.",  # pyright: ignore reportPrivateUsage=none
             "error",  # pyright: ignore reportPrivateUsage=none
         )
-    elif data_exists:
-        data.link_data_to_brain(brain=Brain(id=brain_id))
-        return create_response(
-            f"✅ data has been uploaded to brain {brain_id}.",  # pyright: ignore reportPrivateUsage=none
-            "success",
-        )
+    # elif data_exists:
+    #     data.link_data_to_brain(brain=Brain(id=brain_id))
+    #     return create_response(
+    #         f"✅ data has been uploaded to brain {brain_id}.",  # pyright: ignore reportPrivateUsage=none
+    #         "success",
+    #     )
 
     try:
         await process_data(

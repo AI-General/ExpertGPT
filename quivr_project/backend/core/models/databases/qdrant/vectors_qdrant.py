@@ -23,7 +23,7 @@ class Vector_qdrant():
         )
         return response
     
-    def delete_vectors_from_brain(self, data_sha1):
+    def delete_vectors_from_brain(self, brain_id, data_sha1):
         response = self.db.delete(
             collection_name="vectors",
                 points_selector=models.FilterSelector(
@@ -32,6 +32,10 @@ class Vector_qdrant():
                         models.FieldCondition(
                             key="data_sha1",
                             match=models.MatchValue(value=data_sha1),
+                        ),
+                        models.FieldCondition(
+                            key="brain_id",
+                            match=models.MatchValue(value=str(brain_id)),
                         ),
                     ],
                 )
