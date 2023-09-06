@@ -51,7 +51,7 @@ async def filter_file(
     await file.compute_file_sha1()
 
     print("file sha1", file.file_sha1)
-    file_exists = file.file_already_exists()
+    # file_exists = file.file_already_exists()
     file_exists_in_brain = file.file_already_exists_in_brain(brain_id)
 
     if file_exists_in_brain:
@@ -64,12 +64,12 @@ async def filter_file(
             f"❌ {file.file.filename} is empty.",  # pyright: ignore reportPrivateUsage=none
             "error",  # pyright: ignore reportPrivateUsage=none
         )
-    elif file_exists:
-        file.link_file_to_brain(brain=Brain(id=brain_id))
-        return create_response(
-            f"✅ {file.file.filename} has been uploaded to brain {brain_id}.",  # pyright: ignore reportPrivateUsage=none
-            "success",
-        )
+    # elif file_exists:
+    #     file.link_file_to_brain(brain=Brain(id=brain_id))
+    #     return create_response(
+    #         f"✅ {file.file.filename} has been uploaded to brain {brain_id}.",  # pyright: ignore reportPrivateUsage=none
+    #         "success",
+    #     )
 
     if file.file_extension in file_processors:
         try:

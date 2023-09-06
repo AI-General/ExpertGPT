@@ -44,13 +44,13 @@ class Vector_qdrant():
         return response
     
     def get_nearest_brain_list(self, query:str, limit:int=5):
-        groups = self.db.search_groups(
+        respond = self.db.search_groups(
             collection_name="vectors",
             query_vector=self.encoder.encode(query).tolist(),
             group_by="brain_id",
             with_payload=["brain_id"],
             limit=limit
         )
-        brain_ids = [group.hits[0].payload['data_sha1'] for group in groups]
-        return brain_ids
+        brain_id_scores = [{"brain_id": group.hits[0].payload['brain_id'], "score": group.hits[0].score} for group in respond.groups]
+        return brain_id_scores
     

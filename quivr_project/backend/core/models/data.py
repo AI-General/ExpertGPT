@@ -12,7 +12,7 @@ from models.databases.supabase.supabase import SupabaseDB
 from models.databases.qdrant.qdrant import QdrantDB
 from models.settings import get_supabase_db, get_qdrant_db
 from pydantic import BaseModel
-from utils.file import compute_sha1_from_file, compute_sha1_from_content
+from utils.file import compute_sha1_from_file, compute_sha1_from_string
 
 logger = get_logger(__name__)
 
@@ -52,7 +52,7 @@ class Data(BaseModel):
         """
         Compute the sha1 of the data
         """
-        self.data_sha1 = compute_sha1_from_content(self.data)
+        self.data_sha1 = compute_sha1_from_string(self.data)
 
     def compute_documents(self):
         """

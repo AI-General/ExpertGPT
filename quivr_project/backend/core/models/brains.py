@@ -104,8 +104,8 @@ class Brain(BaseModel):
     def create_brain_vector(self, vector_id, file_sha1):
         return self.supabase_db.create_brain_vector(self.id, vector_id, file_sha1)
 
-    def create_brain_data(self, data_sha1:str):
-        return self.supabase_db.create_brain_data(self.id, data_sha1) 
+    def create_brain_data(self, data_sha1:str, meatdata=None):
+        return self.supabase_db.create_brain_data(self.id, data_sha1, meatdata) 
 
     def get_vector_ids_from_file_sha1(self, file_sha1: str):
         return self.supabase_db.get_vector_ids_from_file_sha1(file_sha1)

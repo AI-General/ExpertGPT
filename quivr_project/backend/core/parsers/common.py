@@ -23,6 +23,8 @@ async def process_file(
 
     file.compute_documents(loader_class)
 
+    encoder = SentenceTransformer('all-MiniLM-L6-v2') 
+    records = []
     for doc in file.documents:  # pyright: ignore reportPrivateUsage=none
         metadata = {
             "file_sha1": file.file_sha1,
@@ -33,16 +35,31 @@ async def process_file(
             "date": dateshort,
             "summarization": "true" if enable_summarization else "false",
         }
-        doc_with_metadata = Document(page_content=doc.page_content, metadata=metadata)
+        record = models.Record(
+			id=str(uuid4()),
+			vector=encoder.encode(doc.page_content).tolist(),
+			payload={
+                "data_sha1": file.file_sha1,
+                "brain_id": brain_id,
+                "content": doc.page_content
+            }
+		)
+        records.append(record)
 
-        neurons = Neurons()
-        created_vector = neurons.create_vector(doc_with_metadata, user_openai_api_key)
-        # add_usage(stats_db, "embedding", "audio", metadata={"file_name": file_meta_name,"file_type": ".txt", "chunk_size": chunk_size, "chunk_overlap": chunk_overlap})
+        # doc_with_metadata = Document(page_content=doc.page_content, metadata=metadata)
 
-        created_vector_id = created_vector[0]  # pyright: ignore reportPrivateUsage=none
+        # neurons = Neurons()
+        # created_vector = neurons.create_vector(doc_with_metadata, user_openai_api_key)
+        # # add_usage(stats_db, "embedding", "audio", metadata={"file_name": file_meta_name,"file_type": ".txt", "chunk_size": chunk_size, "chunk_overlap": chunk_overlap})
 
-        brain = Brain(id=brain_id)
-        brain.create_brain_vector(created_vector_id, file.file_sha1)
+        # created_vector_id = created_vector[0]  # pyright: ignore reportPrivateUsage=none
+
+        # brain = Brain(id=brain_id)
+        # brain.create_brain_vector(created_vector_id, file.file_sha1)
+    file.upload_records_qdrant(records)
+    
+    brain = Brain(id=brain_id)
+    brain.create_brain_data(file.file_sha1, metadata)
 
     return
 

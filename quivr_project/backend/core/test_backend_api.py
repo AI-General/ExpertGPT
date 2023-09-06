@@ -285,8 +285,8 @@ if __name__ == "__main__":
     #     test_delete_data(hongyu_token, brain_ids[0], data_sha1)
 
     # for i, brain_id in enumerate(brain_ids):
-    test_delete_data(hongyu_token, "fdcce4d8-fba7-4276-b9f6-53c5e8a3a3b0", "76c454cb6f828971fd3168a0d4cc0445e7cababe")
-    # test_delete_data(hongyu_token, "fdcce4d8-fba7-4276-b9f6-53c5e8a3a3b0", "7a1bec116ac29b982b71b4312fdbd717634c3a95")
+    # test_delete_data(hongyu_token, "fdcce4d8-fba7-4276-b9f6-53c5e8a3a3b0", "49cd7b669e2bba99a6c52893bc9e68976b189103")
+    # test_delete_data(hongyu_token, brain_ids[0], "4f1ec981a2578811130ab328def0b848c567c306")
 
     ##### Choose nearest experts
     # test_choose_nearest_experts(hongyu_token, query="hello world!")
@@ -297,3 +297,6 @@ if __name__ == "__main__":
     # test_linkedin_scraping(token=hongyu_token, brain_id=andrew_brain_id)
 
     # test_delete_data(token=hongyu_token, brain_id=andrew_brain_id, data_sha1='5908b0137643d9f431bcc0848e7dea4fdc33d905')
+
+    ##### Upload file
+    test_post_upload(token=hongyu_token, brain_id=brain_ids[0], file_path="/root/hongyu/customersupportgpt/quivr_project/backend/core/tests/test_files/test.pdf")

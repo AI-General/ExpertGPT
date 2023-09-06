@@ -419,5 +419,5 @@ async def choose_nearest_experts(
 ) -> []:
     query = chat_question.question
     qdrant_db = get_qdrant_db()
-    brain_ids = qdrant_db.get_nearest_brain_list(query=query, limit=5)
-    return brain_ids
+    brain_id_scores = qdrant_db.get_nearest_brain_list(query=query, limit=5)
+    return brain_id_scores
