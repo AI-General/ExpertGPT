@@ -6,6 +6,7 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.llms.base import BaseLLM
 from langchain.callbacks.streaming_aiter import AsyncIteratorCallbackHandler
+from langchain.vectorstores import Qdrant
 from logger import get_logger
 from models.chat import ChatHistory
 from models.brains import Personality
@@ -14,7 +15,10 @@ from repository.chat.get_chat_history import get_chat_history
 from repository.chat.get_brain_history import get_brain_history
 from repository.chat.update_chat_history import update_chat_history
 from supabase.client import Client, create_client
+from qdrant_client import QdrantClient
+from sentence_transformers import SentenceTransformer
 from vectorstore.supabase import CustomSupabaseVectorStore
+from vectorstore.qdrant import CustomQdrantVectorStore
 from repository.chat.update_message_by_id import update_message_by_id
 import json
 
@@ -62,16 +66,32 @@ class QABaseBrainPicking(BaseBrainPicking):
         return create_client(
             self.brain_settings.supabase_url, self.brain_settings.supabase_service_key
         )
+    
+    @property
+    def qdrant_client(self) -> QdrantClient:
+        return QdrantClient(self.database_settings.qdrant_location, port=self.database_settings.qdrant_port)
 
     @property
-    def vector_store(self) -> CustomSupabaseVectorStore:
-       
+    def vector_store(self) -> CustomSupabaseVectorStore:       
         return CustomSupabaseVectorStore(
             self.supabase_client,
             self.embeddings,
             table_name="vectors",
             brain_id=self.brain_id,
         )
+    
+    @property
+    def qdrant_vector_store(self) -> CustomQdrantVectorStore:
+        encoder = SentenceTransformer(self.database_settings.encoder_model)       
+        return CustomQdrantVectorStore(
+            client=self.qdrant_client,
+            collection_name="vectors",
+            content_payload_key="content",
+            embeddings=self.embeddings,
+            brain_id=self.brain_id,
+            encoder=encoder
+        )
+    
     @property
     def question_llm(self):
         return self._create_llm(model=self.model, streaming=False)
@@ -196,7 +216,7 @@ class QABaseBrainPicking(BaseBrainPicking):
 
         # The Chain that combines the question and answer
         qa = ConversationalRetrievalChain(
-            retriever=self.vector_store.as_retriever(), combine_docs_chain=doc_chain, question_generator=standalone_question_generator, memory=memory)
+            retriever=self.qdrant_vector_store.as_retriever(), combine_docs_chain=doc_chain, question_generator=standalone_question_generator, memory=memory)
         
         transformed_history = []
 

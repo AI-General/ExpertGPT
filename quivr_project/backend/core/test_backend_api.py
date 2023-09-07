@@ -91,6 +91,20 @@ def test_delete_data(token, brain_id, data_sha1):
 
 
 ########## CHAT ##########
+# Create new chat
+def test_post_create_chat(token, name:str):
+    headers = {'Authorization': f'Bearer {token}',  "Content-Type": "application/json"}
+    data = {'name': name}
+
+    response = requests.post(
+        url=ENDPOINT+f'/chat', 
+        headers=headers,
+        json=data
+    )
+
+    logger.info('test_post_create_chat')
+    logger.info(f"status_code: {response.status_code}, \ttext: {response.text}")
+
 # Chat with Brain
 def test_post_chat(token, chat_id, brain_id, question):
     headers = {'Authorization': f'Bearer {token}',  "Content-Type": "application/json"}
@@ -279,8 +293,8 @@ if __name__ == "__main__":
         "1e87cafa-9f6c-40f5-8d3f-0e8b7ef7488b",
         "2ca5281f-c8e4-44c0-bca0-f2bc23d22660"
     ]
-    # for brain_id in brain_ids[:1]:
-    # test_linkedin_scraping(token=hongyu_token, brain_id=brain_ids[7])
+    # for brain_id in brain_ids:
+        # test_linkedin_scraping(token=hongyu_token, brain_id=brain_id)
 
     #################### Get all data ####################
 
@@ -295,10 +309,10 @@ if __name__ == "__main__":
     #     test_delete_data(hongyu_token, brain_ids[0], data_sha1)
 
     # for i, brain_id in enumerate(brain_ids):
-    test_delete_data(hongyu_token, "ab2fcf67-3651-43ca-9326-fbc964eb7315", "354cb9871cffd4ef5bd6b27bd4eb456796f5232e")
-    test_delete_data(hongyu_token, "725687d5-8b99-45bf-9612-c6cfa3dc7e7b", "a43a0ea4aadcb12417e30543cb1bacba4f12e542")
-    test_delete_data(hongyu_token, "fdcce4d8-fba7-4276-b9f6-53c5e8a3a3b0", "4f1ec981a2578811130ab328def0b848c567c306")
-    test_delete_data(hongyu_token, "9be9ad3e-4bcc-4c8e-95f0-fe2286bb40e8", "61c7ed47787c5c8b90ce2953748a192c2bcc8cce")
+    # test_delete_data(hongyu_token, "ab2fcf67-3651-43ca-9326-fbc964eb7315", "354cb9871cffd4ef5bd6b27bd4eb456796f5232e")
+    # test_delete_data(hongyu_token, "725687d5-8b99-45bf-9612-c6cfa3dc7e7b", "a43a0ea4aadcb12417e30543cb1bacba4f12e542")
+    # test_delete_data(hongyu_token, "fdcce4d8-fba7-4276-b9f6-53c5e8a3a3b0", "4f1ec981a2578811130ab328def0b848c567c306")
+    # test_delete_data(hongyu_token, "9be9ad3e-4bcc-4c8e-95f0-fe2286bb40e8", "61c7ed47787c5c8b90ce2953748a192c2bcc8cce")
     # test_delete_data(hongyu_token, brain_ids[5], "4f1ec981a2578811130ab328def0b848c567c306")
 
     #################### Choose nearest experts ####################
@@ -323,3 +337,10 @@ if __name__ == "__main__":
     #     "max_time": 60
     # }
     # test_crawl(token=hongyu_token, brain_id=brain_ids[5], crawl_website=crawl_website)
+
+    #################### Create Chat ####################
+    # test_post_create_chat(token=hongyu_token, name="api test chat")
+
+    #################### stream new question response from chat ####################
+    test_post_chat(token=hongyu_token, chat_id="0b566e14-dc11-4c71-a4ac-34f0daf72970", brain_id=brain_ids[0], question="What is your favorate?")
+    

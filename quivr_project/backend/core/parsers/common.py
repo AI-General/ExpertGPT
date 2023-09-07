@@ -56,10 +56,10 @@ async def process_file(
 
         # brain = Brain(id=brain_id)
         # brain.create_brain_vector(created_vector_id, file.file_sha1)
-    file.upload_records_qdrant(records)
     
     brain = Brain(id=brain_id)
     brain.create_brain_data(file.file_sha1, metadata)
+    file.upload_records_qdrant(records)
 
     return
 
@@ -102,9 +102,8 @@ async def process_data(
 		)
         records.append(record)
     
-    data.upload_records_qdrant(records)
-    
     brain = Brain(id=brain_id)
     brain.create_brain_data(data.data_sha1, metadata)
+    data.upload_records_qdrant(records)
 
     return
