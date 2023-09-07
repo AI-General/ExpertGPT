@@ -20,7 +20,7 @@ logger = get_logger(__name__)
 class Data(BaseModel):
     id: Optional[UUID] = None
     data: Optional[str]
-    # file_name: Optional[str] = ""
+    data_name: Optional[str] = ""
     data_size: Optional[int] = None
     data_sha1: Optional[str] = ""
     vectors_ids: Optional[list] = []

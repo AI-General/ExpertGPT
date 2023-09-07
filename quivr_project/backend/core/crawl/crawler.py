@@ -39,6 +39,7 @@ class CrawlWebsite(BaseModel):
             return None
     
     def process_linkedin(self, apikey):
+        data_name = slugify(self.url) + ".html"
         # Zenrows
         """
         params = {
@@ -114,7 +115,8 @@ class CrawlWebsite(BaseModel):
         return {
             "status_code": response.status_code,
             "message": response.text,
-            "json_string": json_string
+            "json_string": json_string,
+            "data_name": data_name
         }
 
         # Test

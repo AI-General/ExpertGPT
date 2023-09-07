@@ -25,16 +25,16 @@ async def process_file(
 
     encoder = SentenceTransformer('all-MiniLM-L6-v2') 
     records = []
+    metadata = {
+        "data_sha1": file.file_sha1,
+        "data_size": file.file_size,
+        "data_name": file.file_name,
+        "chunk_size": file.chunk_size,
+        "chunk_overlap": file.chunk_overlap,
+        "date": dateshort,
+        # "summarization": "true" if enable_summarization else "false",
+    }
     for doc in file.documents:  # pyright: ignore reportPrivateUsage=none
-        metadata = {
-            "file_sha1": file.file_sha1,
-            "file_size": file.file_size,
-            "file_name": file.file_name,
-            "chunk_size": file.chunk_size,
-            "chunk_overlap": file.chunk_overlap,
-            "date": dateshort,
-            "summarization": "true" if enable_summarization else "false",
-        }
         record = models.Record(
 			id=str(uuid4()),
 			vector=encoder.encode(doc.page_content).tolist(),
@@ -68,11 +68,20 @@ async def process_data(
     data: Data,
     brain_id,
 ):
-    # dateshort = time.strftime("%Y%m%d")
+    dateshort = time.strftime("%Y%m%d")
 
     data.compute_documents()
     encoder = SentenceTransformer('all-MiniLM-L6-v2') 
 
+    metadata = {
+        "data_sha1": data.data_sha1,
+        "data_size": data.data_size,
+        "data_name": data.data_name,
+        "chunk_size": data.chunk_size,
+        "chunk_overlap": data.chunk_overlap,
+        "date": dateshort,
+        # "summarization": "true" if enable_summarization else "false",
+    }
     records = []
     for doc in data.documents:  # pyright: ignore reportPrivateUsage=none
         # doc_with_metadata = Document(page_content=doc.page_content, metadata=metadata)
@@ -96,6 +105,6 @@ async def process_data(
     data.upload_records_qdrant(records)
     
     brain = Brain(id=brain_id)
-    brain.create_brain_data(data.data_sha1)
+    brain.create_brain_data(data.data_sha1, metadata)
 
     return

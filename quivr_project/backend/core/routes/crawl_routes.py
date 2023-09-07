@@ -116,7 +116,7 @@ async def crawl_endpoint(
         response = crawl_website.process_linkedin(apikey=proxycurl_apikey)  # pyright: ignore reportPrivateUsage=none
         if response["status_code"] == 200:
             #  check remaining free space here !!
-            data = Data(data=response["json_string"])
+            data = Data(data=response["json_string"], data_name=response["data_name"])
             message = await filter_data(
                 data=data,
                 brain_id=brain.id,

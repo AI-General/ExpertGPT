@@ -53,6 +53,16 @@ def test_post_upload(token, brain_id, file_path):
         logger.info(f"status_code: {response.status_code}, \ttext: {response.text}")
 
 ########## CRAWL ##########
+# Crawl website 
+def test_crawl(token, brain_id, crawl_website):
+    headers = {'Authorization': f'Bearer {token}'}
+    params = {'brain_id': brain_id}
+    response = requests.post(ENDPOINT+'/crawl', params=params, headers=headers, json=crawl_website)
+
+    logger.info('test_crawl')
+    logger.info(f"status_code: {response.status_code}, \ttext: {response.text}")
+
+
 # LinkedIn 
 def test_linkedin_scraping(token, brain_id):
     headers = {'Authorization': f'Bearer {token}'}
@@ -134,7 +144,7 @@ if __name__ == "__main__":
 
     hongyu_token = "091113066d5725238656d784c71c2f22"
 
-    ##### Create experts
+    #################### Create experts ####################
     # experts = [
     #     {
     #     'name': 'expert1',
@@ -254,10 +264,10 @@ if __name__ == "__main__":
     # test_post_brains(hongyu_token, andrew_data)
     # test_post_brains(hongyu_token, jeffBezos_data)
     
-    ##### Get All brains
+    #################### Get All brains ####################
     # test_get_brains(hongyu_token)
 
-    ##### Linkedin scraping
+    #################### Linkedin scraping ####################
     brain_ids = [
         "fdcce4d8-fba7-4276-b9f6-53c5e8a3a3b0",
         "ab2fcf67-3651-43ca-9326-fbc964eb7315",
@@ -270,12 +280,12 @@ if __name__ == "__main__":
         "2ca5281f-c8e4-44c0-bca0-f2bc23d22660"
     ]
     # for brain_id in brain_ids[:1]:
-    #     test_linkedin_scraping(token=hongyu_token, brain_id=brain_id)
+    # test_linkedin_scraping(token=hongyu_token, brain_id=brain_ids[7])
 
-    ##### Get all data
+    #################### Get all data ####################
 
 
-    ##### Delete data
+    #################### Delete data ####################
     # data_sha1_list = [
     #     "13ccc461bb34d02f78b94d7afe05735e17577732",
     #     "67bbbbdb8ea5bfa4846b3a0864f140d2f5f4be7e",
@@ -285,10 +295,13 @@ if __name__ == "__main__":
     #     test_delete_data(hongyu_token, brain_ids[0], data_sha1)
 
     # for i, brain_id in enumerate(brain_ids):
-    # test_delete_data(hongyu_token, "fdcce4d8-fba7-4276-b9f6-53c5e8a3a3b0", "49cd7b669e2bba99a6c52893bc9e68976b189103")
-    # test_delete_data(hongyu_token, brain_ids[0], "4f1ec981a2578811130ab328def0b848c567c306")
+    test_delete_data(hongyu_token, "ab2fcf67-3651-43ca-9326-fbc964eb7315", "354cb9871cffd4ef5bd6b27bd4eb456796f5232e")
+    test_delete_data(hongyu_token, "725687d5-8b99-45bf-9612-c6cfa3dc7e7b", "a43a0ea4aadcb12417e30543cb1bacba4f12e542")
+    test_delete_data(hongyu_token, "fdcce4d8-fba7-4276-b9f6-53c5e8a3a3b0", "4f1ec981a2578811130ab328def0b848c567c306")
+    test_delete_data(hongyu_token, "9be9ad3e-4bcc-4c8e-95f0-fe2286bb40e8", "61c7ed47787c5c8b90ce2953748a192c2bcc8cce")
+    # test_delete_data(hongyu_token, brain_ids[5], "4f1ec981a2578811130ab328def0b848c567c306")
 
-    ##### Choose nearest experts
+    #################### Choose nearest experts ####################
     # test_choose_nearest_experts(hongyu_token, query="hello world!")
 
     # andrew_brain_id = "7b78d424-4d17-4ef1-bcea-f28de168c5d9"
@@ -298,5 +311,15 @@ if __name__ == "__main__":
 
     # test_delete_data(token=hongyu_token, brain_id=andrew_brain_id, data_sha1='5908b0137643d9f431bcc0848e7dea4fdc33d905')
 
-    ##### Upload file
-    test_post_upload(token=hongyu_token, brain_id=brain_ids[0], file_path="/root/hongyu/customersupportgpt/quivr_project/backend/core/tests/test_files/test.pdf")
+    #################### Upload file ####################
+    # test_post_upload(token=hongyu_token, brain_id=brain_ids[0], file_path="/root/hongyu/customersupportgpt/quivr_project/backend/core/tests/test_files/test.pdf")
+
+    #################### Crawl Website ####################
+    # crawl_website = {
+    #     "url": "https://www.crediful.com/top-personal-finance-blogs/",
+    #     "js": False,
+    #     "depth": 1,
+    #     "max_pages": 100,
+    #     "max_time": 60
+    # }
+    # test_crawl(token=hongyu_token, brain_id=brain_ids[5], crawl_website=crawl_website)
