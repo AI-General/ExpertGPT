@@ -230,47 +230,14 @@ class QABaseBrainPicking(BaseBrainPicking):
         # The Chain that generates the answer to the question
         doc_chain = load_qa_chain(answering_llm, chain_type="stuff", prompt=QA_PROMPT)
 
-        ######################################################################################################################
-        # from langchain.vectorstores import Qdrant
-        # from langchain.embeddings import HuggingFaceEmbeddings
-        # from langchain import VectorDBQA  # OpenAI#
-        # from langchain.chat_models import ChatOpenAI
-        # from langchain.chains import RetrievalQA
-        # import qdrant_client
-        
-        # # llm = ChatOpenAI(temperature=0.0, model_name="gpt-3.5-turbo")
-
-        # embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/msmarco-MiniLM-L-6-v3")
-
-        # client = qdrant_client.QdrantClient(
-        #     host="localhost",
-        #     prefer_grpc=False,
-        # )
-
-        # #
-        # qdrant = Qdrant(
-        #     client=client,
-        #     collection_name="vectors",
-        #     embeddings=embeddings,
-        #     metadata_payload_key="payload",
-        #     content_payload_key="content"
-        # )
-        # # LangChain parts
-        # retriever = qdrant.as_retriever()
-        # qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
-        # # question = 'What color is the rabbit and what does it look like?" \
-        # #     "Answer with key value pairs, example: {"color":"red","wearing":" blue trousers"}'
-        # question = "what color is the Cheshire cat?"
-        # answer = qa.run(question)
-        # print(answer)
-        ######################################################################################################################
         # The Chain that combines the question and answer
-        # retriever = qdrant.as_retriever()
         qa = ConversationalRetrievalChain(
             # retriever=self.vector_store.as_retriever(),
-            retriever=self.vector_store.as_retriever(),
+            retriever=self.qdrant_vector_store.as_retriever(),
             combine_docs_chain=doc_chain, 
-            question_generator=standalone_question_generator)  # , memory=memory)
+            question_generator=standalone_question_generator,
+            # memory=memory
+        )
         
         transformed_history = []
 

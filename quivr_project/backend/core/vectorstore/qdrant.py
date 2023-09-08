@@ -1,4 +1,4 @@
-from typing import Any, List, Optional, Callable
+from typing import Any, Coroutine, List, Optional, Callable, Tuple
 
 from qdrant_client import QdrantClient, models
 from sentence_transformers import SentenceTransformer
@@ -93,4 +93,12 @@ class CustomQdrantVectorStore(Qdrant):
 
         return documents
 
-
+    # @sync_call_fallback
+    async def asimilarity_search(
+        self,
+        query: str,
+        k: int = 6,
+        threshold: float = 0.5,
+        **kwargs: Any
+    ) -> List[Document]:
+        return self.similarity_search(query=query, k=k, threshold=threshold, **kwargs)

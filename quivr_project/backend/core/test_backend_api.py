@@ -358,5 +358,5 @@ if __name__ == "__main__":
     # test_post_create_chat(token=hongyu_token, name="api test chat")
 
     #################### stream new question response from chat ####################
-    test_post_chat(token=hongyu_token, chat_id="0b566e14-dc11-4c71-a4ac-34f0daf72970", brain_id=brain_ids[0], question="What is your favorate?")
+    test_post_chat_stream(token=hongyu_token, chat_id="0b566e14-dc11-4c71-a4ac-34f0daf72970", brain_id=brain_ids[0], question="What is your favorate?")
     
