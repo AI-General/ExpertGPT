@@ -3,6 +3,7 @@ from typing import AsyncIterable, List
 
 from langchain.callbacks.streaming_aiter import AsyncIteratorCallbackHandler
 from langchain.chains import ConversationalRetrievalChain, LLMChain
+from langchain.memory import ConversationBufferMemory
 from langchain.llms.base import LLM
 from logger import get_logger
 from models.settings import BrainSettings, DatabaseSettings  # Importing settings related to the 'brain'
@@ -30,6 +31,7 @@ class BaseBrainPicking(BaseModel):
     max_tokens: int = 256
     user_openai_api_key: str = None  # pyright: ignore reportPrivateUsage=none
     personality: Personality = None
+    memory:ConversationBufferMemory = None
     streaming: bool = False
 
     openai_api_key: str = None  # pyright: ignore reportPrivateUsage=none

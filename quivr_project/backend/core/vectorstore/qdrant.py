@@ -17,12 +17,19 @@ class CustomQdrantVectorStore(Qdrant):
         client: QdrantClient,
         collection_name: str,
         embeddings: OpenAIEmbeddings,
-        encoder: SentenceTransformer,
+        encoder: SentenceTransformer = None,
         content_payload_key: str = "content",
+        metadata_payload_key: str ="payload",
         brain_id: str = "none",
         # embedding_function: Optional[Callable] = None
     ):
-        super().__init__(client=client, collection_name=collection_name, content_payload_key=content_payload_key, embeddings=embeddings)
+        super().__init__(
+            client=client, 
+            collection_name=collection_name, 
+            embeddings=embeddings,
+            content_payload_key=content_payload_key, 
+            metadata_payload_key=metadata_payload_key, 
+        )
         self.brain_id = brain_id
         self.encoder = encoder
 
@@ -64,7 +71,7 @@ class CustomQdrantVectorStore(Qdrant):
                 hnsw_ef=128,
                 exact=False
             ),
-            with_payload=[self.content_payload_key],
+            with_payload=["content", "brain_id"],
             query_vector=query_vector,
             limit=k,
         )
@@ -72,18 +79,17 @@ class CustomQdrantVectorStore(Qdrant):
         match_result = [
             (
                 Document(
-                    metadata=search.get("metadata", {}),  # type: ignore
-                    page_content=search.get("content", ""),
+                    metadata=search.payload,  # type: ignore
+                    page_content=search.payload["content"]
                 ),
-                search.get("similarity", 0.0),
+                search.score,
             )
-            for search in res.data
-            if search.get("content")
+            for search in res
         ]
 
         documents = [doc for doc, _ in match_result]
-        print("####################################################################")
-        print(documents)
+        # print("####################################################################")
+        # print(documents)
 
         return documents
 

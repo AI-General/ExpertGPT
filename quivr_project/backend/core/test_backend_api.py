@@ -112,6 +112,22 @@ def test_post_chat(token, chat_id, brain_id, question):
     data = {'question': question}
 
     response = requests.post(
+        url=ENDPOINT+f'/chat/{chat_id}/question', 
+        headers=headers,
+        params=params,
+        json=data
+    )
+
+    logger.info('test_post_chat')
+    logger.info(f"status_code: {response.status_code}, \ttext: {response.text}")
+
+# Chat with Brain
+def test_post_chat_stream(token, chat_id, brain_id, question):
+    headers = {'Authorization': f'Bearer {token}',  "Content-Type": "application/json"}
+    params = {'brain_id': brain_id}
+    data = {'question': question}
+
+    response = requests.post(
         url=ENDPOINT+f'/chat/{chat_id}/question/stream', 
         headers=headers,
         params=params,

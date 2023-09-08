@@ -4,6 +4,7 @@ from typing import AsyncIterable, Awaitable
 from langchain.chains import ConversationalRetrievalChain, LLMChain
 from langchain.chains.question_answering import load_qa_chain
 from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.llms.base import BaseLLM
 from langchain.callbacks.streaming_aiter import AsyncIteratorCallbackHandler
 from langchain.vectorstores import Qdrant
@@ -41,6 +42,7 @@ class QABaseBrainPicking(BaseBrainPicking):
         brain_id: str,
         chat_id: str,
         personality: Personality = None,
+        memory=None,
         streaming: bool = False,
         **kwargs,
     ) -> "QABaseBrainPicking":  # pyright: ignore reportPrivateUsage=none
@@ -53,6 +55,7 @@ class QABaseBrainPicking(BaseBrainPicking):
             brain_id=brain_id,
             chat_id=chat_id,
             personality=personality,
+            memory=memory,
             streaming=streaming,
             **kwargs,
         )
@@ -68,10 +71,6 @@ class QABaseBrainPicking(BaseBrainPicking):
         )
     
     @property
-    def qdrant_client(self) -> QdrantClient:
-        return QdrantClient(self.database_settings.qdrant_location, port=self.database_settings.qdrant_port)
-
-    @property
     def vector_store(self) -> CustomSupabaseVectorStore:       
         return CustomSupabaseVectorStore(
             self.supabase_client,
@@ -79,15 +78,21 @@ class QABaseBrainPicking(BaseBrainPicking):
             table_name="vectors",
             brain_id=self.brain_id,
         )
+
+    @property
+    def qdrant_client(self) -> QdrantClient:
+        return QdrantClient(self.database_settings.qdrant_location, port=self.database_settings.qdrant_port, prefer_grpc=False)
     
     @property
     def qdrant_vector_store(self) -> CustomQdrantVectorStore:
-        encoder = SentenceTransformer(self.database_settings.encoder_model)       
+        encoder = SentenceTransformer(self.database_settings.encoder_model)  
+        # embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/msmarco-MiniLM-L-6-v3")     
         return CustomQdrantVectorStore(
             client=self.qdrant_client,
             collection_name="vectors",
             content_payload_key="content",
-            embeddings=self.embeddings,
+            metadata_payload_key="payload",
+            embeddings=OpenAIEmbeddings,
             brain_id=self.brain_id,
             encoder=encoder
         )
@@ -108,18 +113,28 @@ class QABaseBrainPicking(BaseBrainPicking):
 
     @property
     def doc_chain(self) -> LLMChain:
+        QA_PROMPT = qa_prompt(personality=self.personality)
         return load_qa_chain(
-            llm=self.doc_llm, chain_type="stuff", verbose=True
+            llm=self.doc_llm, chain_type="stuff", verbose=True, prompt=QA_PROMPT
         )  # pyright: ignore reportPrivateUsage=none
 
     @property
     def qa(self) -> ConversationalRetrievalChain:
-        return ConversationalRetrievalChain(
-            retriever=self.vector_store.as_retriever(),
-            question_generator=self.question_generator,
-            combine_docs_chain=self.doc_chain,  # pyright: ignore reportPrivateUsage=none
-            verbose=True,
-        )
+        if self.memory:
+            return ConversationalRetrievalChain(
+                retriever=self.qdrant_vector_store.as_retriever(),
+                question_generator=self.question_generator,
+                combine_docs_chain=self.doc_chain,  # pyright: ignore reportPrivateUsage=none
+                verbose=True,
+                memory=self.memory
+            )
+        else:
+            return ConversationalRetrievalChain(
+                retriever=self.qdrant_vector_store.as_retriever(),
+                question_generator=self.question_generator,
+                combine_docs_chain=self.doc_chain,  # pyright: ignore reportPrivateUsage=none
+                verbose=True,
+            )
 
     @abstractmethod
     def _create_llm(self, model, streaming=False, callbacks=None) -> BaseLLM:
@@ -146,7 +161,7 @@ class QABaseBrainPicking(BaseBrainPicking):
             }
         )
 
-    def generate_answer(self, question: str) -> ChatHistory:
+    def generate_answer(self, question: str, momory=None) -> ChatHistory:
         """
         Generate an answer to a given question by interacting with the language model.
         :param question: The question
@@ -167,6 +182,7 @@ class QABaseBrainPicking(BaseBrainPicking):
 
         # Update chat history
         chat_answer = update_chat_history(
+            brain_id=self.brain_id,
             chat_id=self.chat_id,
             user_message=question,
             assistant=answer,
@@ -214,14 +230,54 @@ class QABaseBrainPicking(BaseBrainPicking):
         # The Chain that generates the answer to the question
         doc_chain = load_qa_chain(answering_llm, chain_type="stuff", prompt=QA_PROMPT)
 
+        ######################################################################################################################
+        # from langchain.vectorstores import Qdrant
+        # from langchain.embeddings import HuggingFaceEmbeddings
+        # from langchain import VectorDBQA  # OpenAI#
+        # from langchain.chat_models import ChatOpenAI
+        # from langchain.chains import RetrievalQA
+        # import qdrant_client
+        
+        # # llm = ChatOpenAI(temperature=0.0, model_name="gpt-3.5-turbo")
+
+        # embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/msmarco-MiniLM-L-6-v3")
+
+        # client = qdrant_client.QdrantClient(
+        #     host="localhost",
+        #     prefer_grpc=False,
+        # )
+
+        # #
+        # qdrant = Qdrant(
+        #     client=client,
+        #     collection_name="vectors",
+        #     embeddings=embeddings,
+        #     metadata_payload_key="payload",
+        #     content_payload_key="content"
+        # )
+        # # LangChain parts
+        # retriever = qdrant.as_retriever()
+        # qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+        # # question = 'What color is the rabbit and what does it look like?" \
+        # #     "Answer with key value pairs, example: {"color":"red","wearing":" blue trousers"}'
+        # question = "what color is the Cheshire cat?"
+        # answer = qa.run(question)
+        # print(answer)
+        ######################################################################################################################
         # The Chain that combines the question and answer
+        # retriever = qdrant.as_retriever()
         qa = ConversationalRetrievalChain(
-            retriever=self.qdrant_vector_store.as_retriever(), combine_docs_chain=doc_chain, question_generator=standalone_question_generator, memory=memory)
+            # retriever=self.vector_store.as_retriever(),
+            retriever=self.vector_store.as_retriever(),
+            combine_docs_chain=doc_chain, 
+            question_generator=standalone_question_generator)  # , memory=memory)
         
         transformed_history = []
 
         # Format the chat history into a list of tuples (human, ai)
         transformed_history = format_chat_history(history)
+        # r = qa({"question": question, "chat_history": transformed_history})
+        # print(r)
 
         # Initialize a list to hold the tokens
         response_tokens = []

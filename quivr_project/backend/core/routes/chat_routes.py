@@ -207,6 +207,8 @@ async def create_question_handler(
 
         if not brain_id:
             brain_id = get_default_user_brain_or_create_new(current_user).brain_id
+        
+        personality = Personality(extraversion=brain_details.extraversion, neuroticism=brain_details.neuroticism, conscientiousness=brain_details.conscientiousness)
 
         gpt_answer_generator = OpenAIBrainPicking(
             chat_id=str(chat_id),
@@ -214,6 +216,8 @@ async def create_question_handler(
             max_tokens=chat_question.max_tokens,
             temperature=chat_question.temperature,
             brain_id=str(brain_id),
+            personality=personality,
+            memory=memory,
             user_openai_api_key=current_user.user_openai_api_key,  # pyright: ignore reportPrivateUsage=none
         )
 
