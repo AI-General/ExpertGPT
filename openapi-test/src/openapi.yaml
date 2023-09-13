@@ -273,18 +273,18 @@ paths:
       security:
         - AuthBearer: []
         - AuthBearer: []
-  /chat/healthz:
-    get:
-      tags:
-        - Health
-      summary: Healthz
-      operationId: healthz_chat_healthz_get
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
+  # # /chat/healthz:
+  #   get:
+  #     tags:
+  #       - Health
+  #     summary: Healthz
+  #     operationId: healthz_chat_healthz_get
+  #     responses:
+  #       '200':
+  #         description: Successful Response
+  #         content:
+  #           application/json:
+  #             schema: {}
   /chat:
     get:
       tags:
@@ -534,18 +534,18 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
       security:
         - AuthBearer: []
-  /crawl/healthz:
-    get:
-      tags:
-        - Health
-      summary: Healthz
-      operationId: healthz_crawl_healthz_get
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
+  # /crawl/healthz:
+  #   get:
+  #     tags:
+  #       - Health
+  #     summary: Healthz
+  #     operationId: healthz_crawl_healthz_get
+  #     responses:
+  #       '200':
+  #         description: Successful Response
+  #         content:
+  #           application/json:
+  #             schema: {}
   /crawl:
     post:
       tags:
@@ -709,18 +709,18 @@ paths:
           content:
             application/json:
               schema: {}
-  /upload/healthz:
-    get:
-      tags:
-        - Health
-      summary: Healthz
-      operationId: healthz_upload_healthz_get
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema: {}
+  # /upload/healthz:
+  #   get:
+  #     tags:
+  #       - Health
+  #     summary: Healthz
+  #     operationId: healthz_upload_healthz_get
+  #     responses:
+  #       '200':
+  #         description: Successful Response
+  #         content:
+  #           application/json:
+  #             schema: {}
   /upload:
     post:
       tags:

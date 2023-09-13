@@ -4,7 +4,7 @@
   "description": "Swagger test",
   "scripts": {
     "build": "webpack",
-    "start": "HOST='0.0.0.0' PORT=8080 webpack-dev-server --open --host walletgpt.info"
+    "start": "PORT=8080 webpack-dev-server --host 0.0.0.0"
   },
   "author": "HongYu Xiao",
   "license": "Apache-2.0",
