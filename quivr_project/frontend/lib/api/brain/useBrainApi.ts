@@ -9,6 +9,8 @@ import {
   getBrains,
   getBrainUsers,
   getDefaultBrain,
+  getQuestions,
+  endPersonalTest,
   setAsDefaultBrain,
   Subscription,
   updateBrain,
@@ -19,6 +21,7 @@ import {
   SubscriptionUpdatableProperties,
   UpdateBrainInput,
 } from "./types";
+import { Answer } from "@/lib/context/BrainProvider/types";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useBrainApi = () => {
@@ -33,6 +36,8 @@ export const useBrainApi = () => {
     getDefaultBrain: async () => getDefaultBrain(axiosInstance),
     getBrains: async () => getBrains(axiosInstance),
     getBrain: async (id: string) => getBrain(id, axiosInstance),
+    getQuestions: async (num: number) => getQuestions(num, axiosInstance),
+    endPersonalTest: async (answers: Answer[]) => endPersonalTest(answers, axiosInstance),
     addBrainSubscriptions: async (
       brainId: string,
       subscriptions: Subscription[]

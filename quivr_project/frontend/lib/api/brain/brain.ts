@@ -3,9 +3,12 @@ import { AxiosInstance } from "axios";
 
 import { BrainRoleType } from "@/lib/components/NavBar/components/NavItems/components/BrainsDropDown/components/BrainActions/types";
 import {
+  Answer,
   BackendMinimalBrainForUser,
   Brain,
   MinimalBrainForUser,
+  Personality,
+  Question,
 } from "@/lib/context/BrainProvider/types";
 import { Document } from "@/lib/types/Document";
 
@@ -53,6 +56,17 @@ export const getBrain = async (
   return brain;
 };
 
+export const getQuestions = async (
+  num: number,
+  axiosInstance: AxiosInstance
+) : Promise<Question[] | undefined> => {
+  const questions = (
+    await axiosInstance.get<Question[] | undefined>(`/personality/question?question_number=${num}`)
+  ).data;
+
+  return questions;
+}
+
 export const deleteBrain = async (
   brainId: string,
   axiosInstance: AxiosInstance
@@ -92,6 +106,22 @@ export const addBrainSubscriptions = async (
     `/brains/${brainId}/subscription`,
     subscriptions.map(mapSubscriptionToBackendSubscription)
   );
+};
+
+export const endPersonalTest = async (
+  answers: Answer[],
+  axiosInstance: AxiosInstance
+): Promise<Personality | undefined> => {
+  const testResult = (
+    await axiosInstance.post<Personality | undefined>(
+      `/personality/`,
+      answers
+    )
+  ).data;
+
+  console.log(testResult)
+
+  return testResult
 };
 
 export const getBrainUsers = async (

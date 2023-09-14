@@ -19,6 +19,22 @@ export type Brain = {
   prompt_id?: string | null;
 };
 
+export type Question = {
+  trait: string;
+  positive: boolean;
+  question: string;
+};
+
+export type Answer = Question & {
+  answer: number;
+};
+
+export type Personality {
+  extraversion: number;
+  neuroticism: number;
+  conscientiousness: number;
+}
+
 export type MinimalBrainForUser = {
   id: UUID;
   name: string;
