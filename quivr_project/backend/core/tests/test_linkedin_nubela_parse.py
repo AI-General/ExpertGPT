@@ -75,7 +75,7 @@ def linkedin_parse(data):
         for language in data['languages']:
             parse_data = parse_data + language + " "
 
-    parse_data += "\n"
+    parse_data += "\n\n"
     if data['personal_emails']:
         parse_data += f"\nEmail: "
         for mail in data['personal_emails']:

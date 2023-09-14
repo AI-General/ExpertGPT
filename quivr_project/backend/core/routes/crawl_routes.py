@@ -92,14 +92,14 @@ async def crawl_endpoint(
     brain = Brain(id=brain_id)
     brain_details = get_brain_details(brain_id)
     crawl_website = CrawlWebsite(url=brain_details.linkedin)
-    
+
     if crawl_website.checkLinkedIn():
         # zenrows_apikey = os.getenv("ZENROWS_API_KEY")
         proxycurl_apikey = os.getenv("PROXYCURL_API_KEY")
         response = crawl_website.process_linkedin(apikey=proxycurl_apikey)  # pyright: ignore reportPrivateUsage=none
         if response["status_code"] == 200:
             #  check remaining free space here !!
-            data = Data(data=response["json_string"], data_name=response["data_name"])
+            data = Data(data=response["parse_data"], data_name=response["data_name"])
             message = await filter_data(
                 data=data,
                 brain_id=brain.id,
