@@ -273,18 +273,6 @@ paths:
       security:
         - AuthBearer: []
         - AuthBearer: []
-  # # /chat/healthz:
-  #   get:
-  #     tags:
-  #       - Health
-  #     summary: Healthz
-  #     operationId: healthz_chat_healthz_get
-  #     responses:
-  #       '200':
-  #         description: Successful Response
-  #         content:
-  #           application/json:
-  #             schema: {}
   /chat:
     get:
       tags:
@@ -534,18 +522,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
       security:
         - AuthBearer: []
-  # /crawl/healthz:
-  #   get:
-  #     tags:
-  #       - Health
-  #     summary: Healthz
-  #     operationId: healthz_crawl_healthz_get
-  #     responses:
-  #       '200':
-  #         description: Successful Response
-  #         content:
-  #           application/json:
-  #             schema: {}
   /crawl:
     post:
       tags:
@@ -576,6 +552,38 @@ paths:
             schema:
               $ref: '#/components/schemas/CrawlWebsite'
         required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+      security:
+        - AuthBearer: []
+        - AuthBearer: []
+  /crawl/linkedin:
+    post:
+      tags:
+        - Crawl
+      summary: Crawl LinkdIn Endpoint
+      description: Crawl Linkdin site and process the crawled data.
+      operationId: crawl_linkedin_endpoint_crawl_post
+      parameters:
+        - description: The ID of the brain
+          required: true
+          schema:
+            title: Brain Id
+            type: string
+            description: The ID of the brain
+            format: uuid
+          name: brain_id
+          in: query
       responses:
         '200':
           description: Successful Response
@@ -658,70 +666,6 @@ paths:
       security:
         - AuthBearer: []
         - AuthBearer: []
-  # /explore/{file_name}/:
-  #   get:
-  #     tags:
-  #       - Explore
-  #     summary: Download Endpoint
-  #     description: Download a specific user file by file name.
-  #     operationId: download_endpoint_explore__file_name___get
-  #     parameters:
-  #       - required: true
-  #         schema:
-  #           title: File Name
-  #           type: string
-  #         name: file_name
-  #         in: path
-  #     responses:
-  #       '200':
-  #         description: Successful Response
-  #         content:
-  #           application/json:
-  #             schema: {}
-  #       '422':
-  #         description: Validation Error
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/HTTPValidationError'
-  #     security:
-  #       - AuthBearer: []
-  #       - AuthBearer: []
-  #   delete:
-  #     tags:
-  #       - Explore
-  #     summary: Delete Endpoint
-  #     description: Delete a specific user file by file name.
-  #     operationId: delete_endpoint_explore__file_name___delete
-  #     parameters:
-  #       - required: true
-  #         schema:
-  #           title: File Name
-  #           type: string
-  #         name: file_name
-  #         in: path
-  #       - required: true
-  #         schema:
-  #           title: Brain Id
-  #           type: string
-  #           format: uuid
-  #         name: brain_id
-  #         in: query
-  #     responses:
-  #       '200':
-  #         description: Successful Response
-  #         content:
-  #           application/json:
-  #             schema: {}
-  #       '422':
-  #         description: Validation Error
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/HTTPValidationError'
-  #     security:
-  #       - AuthBearer: []
-  #       - AuthBearer: []
   /:
     get:
       summary: Root
@@ -733,30 +677,6 @@ paths:
           content:
             application/json:
               schema: {}
-  # /healthz:
-  #   get:
-  #     tags:
-  #       - Health
-  #     summary: Healthz
-  #     operationId: healthz_healthz_get
-  #     responses:
-  #       '200':
-  #         description: Successful Response
-  #         content:
-  #           application/json:
-  #             schema: {}
-  # /upload/healthz:
-  #   get:
-  #     tags:
-  #       - Health
-  #     summary: Healthz
-  #     operationId: healthz_upload_healthz_get
-  #     responses:
-  #       '200':
-  #         description: Successful Response
-  #         content:
-  #           application/json:
-  #             schema: {}
   /upload:
     post:
       tags:
@@ -1234,117 +1154,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
       security:
         - AuthBearer: []
-  # /prompts:
-  #   get:
-  #     tags:
-  #       - Prompt
-  #     summary: Get Prompts
-  #     description: Retrieve all public prompt
-  #     operationId: get_prompts_prompts_get
-  #     responses:
-  #       '200':
-  #         description: Successful Response
-  #         content:
-  #           application/json:
-  #             schema:
-  #               title: Response Get Prompts Prompts Get
-  #               type: array
-  #               items:
-  #                 $ref: '#/components/schemas/Prompt'
-  #     security:
-  #       - AuthBearer: []
-  #   post:
-  #     tags:
-  #       - Prompt
-  #     summary: Create Prompt Route
-  #     description: Create a prompt by its id
-  #     operationId: create_prompt_route_prompts_post
-  #     requestBody:
-  #       content:
-  #         application/json:
-  #           schema:
-  #             $ref: '#/components/schemas/CreatePromptProperties'
-  #       required: true
-  #     responses:
-  #       '200':
-  #         description: Successful Response
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/Prompt'
-  #       '422':
-  #         description: Validation Error
-  #         content:
-  #           application/json:
-  #             schema:
-  #               $ref: '#/components/schemas/HTTPValidationError'
-  #     security:
-  #       - AuthBearer: []
-  # /prompts/{prompt_id}:
-    get:
-      tags:
-        - Prompt
-      summary: Get Prompt
-      description: Retrieve a prompt by its id
-      operationId: get_prompt_prompts__prompt_id__get
-      parameters:
-        - required: true
-          schema:
-            title: Prompt Id
-            type: string
-            format: uuid
-          name: prompt_id
-          in: path
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Prompt'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-      security:
-        - AuthBearer: []
-    put:
-      tags:
-        - Prompt
-      summary: Update Prompt
-      description: Update a prompt by its id
-      operationId: update_prompt_prompts__prompt_id__put
-      parameters:
-        - required: true
-          schema:
-            title: Prompt Id
-            type: string
-            format: uuid
-          name: prompt_id
-          in: path
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PromptUpdatableProperties'
-        required: true
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Prompt'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-      security:
-        - AuthBearer: []
+
 components:
   schemas:
     ApiKey:

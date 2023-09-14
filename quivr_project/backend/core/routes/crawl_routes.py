@@ -82,11 +82,7 @@ async def crawl_endpoint(
 
 @crawl_router.post("/crawl/linkedin", dependencies=[Depends(AuthBearer())], tags=["Crawl"])
 async def crawl_endpoint(
-    request: Request,
-    # crawl_website: CrawlWebsite,
     brain_id: UUID = Query(..., description="The ID of the brain"),
-    enable_summarization: bool = False,
-    current_user: User = Depends(get_current_user),
 ):
     """
     Crawl linkedin and process the crawled data.
@@ -96,20 +92,7 @@ async def crawl_endpoint(
     brain = Brain(id=brain_id)
     brain_details = get_brain_details(brain_id)
     crawl_website = CrawlWebsite(url=brain_details.linkedin)
-    # if request.headers.get("Openai-Api-Key"):
-    #     brain.max_brain_size = os.getenv(
-    #         "MAX_BRAIN_SIZE_WITH_KEY", 209715200
-    #     )  # pyright: ignore reportPrivateUsage=none
-
-    # file_size = 1000000
-    # remaining_free_space = brain.remaining_brain_size
-
-    # if remaining_free_space - file_size < 0:
-    #     message = {
-    #         "message": f"❌ User's brain will exceed maximum capacity with this upload. Maximum file allowed is : {convert_bytes(remaining_free_space)}",
-    #         "type": "error",
-    #     }
-    # else:
+    
     if crawl_website.checkLinkedIn():
         # zenrows_apikey = os.getenv("ZENROWS_API_KEY")
         proxycurl_apikey = os.getenv("PROXYCURL_API_KEY")
