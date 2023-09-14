@@ -1,11 +1,20 @@
 version: "3"
 
 services:
-  openapi_test:
+  openapi:
+    image: openapi
+    container_name: openapi_test
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: openapi_test
     restart: always
     ports:
       - 8080:8080
+
+    # ports:
+    #   - "8090:80"
+    networks:
+      - admin-network
+networks:
+  admin-network:
+    driver: bridge

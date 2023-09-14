@@ -12,3 +12,6 @@ It includes CSS and OAuth configuration.
     rename `_sample_package.json` to `package.json`
     npm install
     npm start
+
+#### Docker
+    `docker-compose -f docker-compose.yml up`
