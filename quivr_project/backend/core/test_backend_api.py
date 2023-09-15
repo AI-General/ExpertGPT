@@ -11,6 +11,13 @@ ENDPOINT = "http://walletgpt.info:5050"
 
 ########## BRAIN ##########
 # Retrieve all brains for the current user.
+def test_get_brain_information(token, brain_id):
+    headers = {'Authorization': f'Bearer {token}'}
+    response = requests.get(url=ENDPOINT+f'/brains/{brain_id}/', headers=headers)
+    logger.info('test_get_brains')
+    logger.info(f"status_code: {response.status_code}, \ttext: {response.text}")
+
+# Retrieve all brains for the current user.
 def test_get_brains(token):
     headers = {'Authorization': f'Bearer {token}'}
     response = requests.get(url=ENDPOINT+'/brains/', headers=headers)
@@ -310,6 +317,8 @@ if __name__ == "__main__":
     #################### Get All brains ####################
     # test_get_brains(hongyu_token)
 
+    test_get_brain_information(hongyu_token, '7b78d424-4d17-4ef1-bcea-f28de168c5d9')
+
     #################### Linkedin scraping ####################
     brain_ids = [
         "fdcce4d8-fba7-4276-b9f6-53c5e8a3a3b0",
@@ -345,7 +354,7 @@ if __name__ == "__main__":
     # test_delete_data(hongyu_token, brain_ids[5], "4f1ec981a2578811130ab328def0b848c567c306")
 
     #################### Choose nearest experts ####################
-    test_choose_nearest_experts(hongyu_token, query="hello world!")
+    # test_choose_nearest_experts(hongyu_token, query="hello world!")
 
     # andrew_brain_id = "7b78d424-4d17-4ef1-bcea-f28de168c5d9"
     # jeff_brain_id = "18c768d5-6096-447a-b5e5-0f8a267bc09a"
