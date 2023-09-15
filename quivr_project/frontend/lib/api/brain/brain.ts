@@ -6,6 +6,7 @@ import {
   Answer,
   BackendMinimalBrainForUser,
   Brain,
+  BrainResult,
   MinimalBrainForUser,
   Personality,
   Question,
@@ -93,6 +94,37 @@ export const getBrains = async (
   ).data;
 
   return brains.map(mapBackendMinimalBrainToMinimalBrain);
+};
+
+export const getBrainsFromChat = async (
+  chatString: string,
+  axiosInstance: AxiosInstance
+): Promise<BrainResult[]> => {
+  const brains = (
+    await axiosInstance.post<{ brains: BrainResult[] }>(
+      `/chat/choose`,
+      {
+        "question": chatString
+      }
+    )
+  );
+
+// @ts-ignore brains variable has data property but not recognized here
+  return brains.data;
+};
+
+export const getLinkedinScraping = async (
+  id: string,
+  axiosInstance: AxiosInstance
+): Promise<string> => {
+  const brains = (
+    await axiosInstance.post<{ message: string }>(
+      `/crawl/linkedin?brain_id=${id}`
+    )
+  );
+
+// @ts-ignore brains variable has data property but not recognized here
+  return brains.data.message;
 };
 
 export type Subscription = { email: string; role: BrainRoleType };

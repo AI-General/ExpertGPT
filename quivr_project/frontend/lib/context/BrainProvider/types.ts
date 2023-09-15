@@ -17,6 +17,10 @@ export type Brain = {
   openai_api_key?: string;
   description?: string;
   prompt_id?: string | null;
+  linkedin?: string,
+  extraversion?: number,
+  neuroticism?: number,
+  conscientiousness?: number,
 };
 
 export type Question = {
@@ -49,6 +53,12 @@ export type MinimalBrainForUser = {
   name: string;
   role: BrainRoleType;
 };
+
+export type BrainResult = {
+  brain_id: string;
+  name: string;
+  score: number;
+}
 
 //TODO: rename rights to role in Backend and use MinimalBrainForUser instead of BackendMinimalBrainForUser
 export type BackendMinimalBrainForUser = Omit<MinimalBrainForUser, "role"> & {
