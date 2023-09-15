@@ -134,7 +134,12 @@ class Brain(BaseModel):
         Retrieve unique brain data (i.e. uploaded files and crawled websites).
         """
 
-        self.datas = self.supabase_db.get_brain_metadatas(self.id)
+        metadatas = self.supabase_db.get_brain_metadatas(self.id)
+        self.datas = [{
+            'name': metadata['data_name'],
+            'size': metadata['data_size'],
+            'sha1': metadata['data_sha1'],
+        } for metadata in metadatas]
         # self.files = get_unique_files_from_vector_ids(vector_ids)
 
         return self.datas
