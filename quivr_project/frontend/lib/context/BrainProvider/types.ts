@@ -29,11 +29,20 @@ export type Answer = Question & {
   answer: number;
 };
 
-export type Personality {
-  extraversion: number;
-  neuroticism: number;
-  conscientiousness: number;
-}
+export type Personality = {
+  score: {
+    conscientiousness: number,
+    extraversion: number,
+    neuroticism: number,
+    // Include other properties of score if they exist
+  },
+  description: {
+    conscientiousness: string,
+    extraversion: string,
+    neuroticism: string,
+    // Include other properties of score if they exist
+  },
+};
 
 export type MinimalBrainForUser = {
   id: UUID;
