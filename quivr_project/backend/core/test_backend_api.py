@@ -345,7 +345,7 @@ if __name__ == "__main__":
     # test_delete_data(hongyu_token, brain_ids[5], "4f1ec981a2578811130ab328def0b848c567c306")
 
     #################### Choose nearest experts ####################
-    # test_choose_nearest_experts(hongyu_token, query="hello world!")
+    test_choose_nearest_experts(hongyu_token, query="hello world!")
 
     # andrew_brain_id = "7b78d424-4d17-4ef1-bcea-f28de168c5d9"
     # jeff_brain_id = "18c768d5-6096-447a-b5e5-0f8a267bc09a"
@@ -371,7 +371,7 @@ if __name__ == "__main__":
     # test_post_create_chat(token=hongyu_token, name="api test chat")
 
     #################### new question response from chat ####################
-    test_post_chat(token=hongyu_token, chat_id="0b566e14-dc11-4c71-a4ac-34f0daf72970", brain_id=brain_ids[0], question="What is your favorate?")
+    # test_post_chat(token=hongyu_token, chat_id="0b566e14-dc11-4c71-a4ac-34f0daf72970", brain_id=brain_ids[0], question="What is your favorate?")
 
     #################### stream new question response from chat ####################
     # test_post_chat_stream(token=hongyu_token, chat_id="0b566e14-dc11-4c71-a4ac-34f0daf72970", brain_id=brain_ids[0], question="What is your favorate?")
