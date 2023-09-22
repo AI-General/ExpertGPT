@@ -7,6 +7,7 @@ from models.databases.supabase.brains import (
     BrainUpdatableProperties,
     CreateBrainProperties,
 )
+from auth.check_admin import check_admin
 from models.settings import BrainRateLimiting
 from models.users import User
 from repository.brain.create_brain import create_brain
@@ -47,8 +48,11 @@ async def brain_endpoint(current_user: User = Depends(get_current_user)):
     This endpoint retrieves all the brains associated with the current authenticated user. It returns a list of brains objects
     containing the brain ID and brain name for each brain.
     """
-    # brains = get_user_brains(current_user.id)
-    brains = get_all_brains()
+    is_admin = check_admin(current_user)
+    if is_admin:
+        brains = get_all_brains()
+    else:
+        brains = get_user_brains(current_user.id)
     return {"brains": brains}
 
 

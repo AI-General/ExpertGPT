@@ -11,6 +11,8 @@ from langchain.memory import ZepMemory
 from auth import AuthBearer, get_current_user
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import StreamingResponse
+from auth.check_admin import check_admin
+from repository.chat.get_all_chats import get_all_chats
 from llm.openai import OpenAIBrainPicking
 from models.brains import Brain, Personality
 from models.chat import Chat, ChatHistory
@@ -101,6 +103,10 @@ async def get_chats(current_user: User = Depends(get_current_user)):
     This endpoint retrieves all the chats associated with the current authenticated user. It returns a list of chat objects
     containing the chat ID and chat name for each chat.
     """
+    is_admin = check_admin(current_user)
+    if is_admin:
+        chats = get_all_chats()
+        return {"chats": chats}
     chats = get_user_chats(current_user.id)  # pyright: ignore reportPrivateUsage=none
     return {"chats": chats}
 
