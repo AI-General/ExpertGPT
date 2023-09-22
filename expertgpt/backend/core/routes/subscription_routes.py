@@ -127,6 +127,10 @@ async def remove_user_subscription(
     )
     
     is_admin = check_admin(current_user)
+    if is_admin:
+        brain.delete_brain_force()
+        return {"message": f"brain {brain_id} is force removed"}
+    
     user_brain = get_brain_for_user(current_user.id, brain_id)
     if not is_admin and user_brain is None:
         raise HTTPException(

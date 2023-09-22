@@ -100,9 +100,19 @@ class Brain(BaseModel):
         else:
             self.supabase_db.delete_brain_vector(self.id)
             self.supabase_db.delete_brain_user(self.id)
+            self.supabase_db.delete_all_brain_data(self.id)
             self.supabase_db.delete_brain(self.id)
 
             self.qdrant_db.delete_all_vectors_from_brain(self.id)
+    
+    def delete_brain_force(self):
+        self.supabase_db.delete_brain_chat_history(self.id)
+        self.supabase_db.delete_brain_vector(self.id)
+        self.supabase_db.delete_brain_user(self.id)
+        self.supabase_db.delete_all_brain_data(self.id)
+        self.supabase_db.delete_brain(self.id)
+
+        self.qdrant_db.delete_all_vectors_from_brain(self.id)
 
     def create_brain_vector(self, vector_id, file_sha1):
         return self.supabase_db.create_brain_vector(self.id, vector_id, file_sha1)
