@@ -1,0 +1,39 @@
+---
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+      when: always
+
+stages:
+  - build
+  - deploy
+
+docker_build:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: build
+  before_script:
+    - docker login -u $DO_REGISTRY_USER -p $DO_REGISTRY_PASSWORD registry.digitalocean.com
+  script:
+    - docker build -f openapi-test/Dockerfile -t registry.digitalocean.com/walletregistry/openapi:latest openapi-test/
+    - docker push registry.digitalocean.com/walletregistry/openapi:latest
+    - docker build -f quivr_project/frontend/Dockerfile -t registry.digitalocean.com/walletregistry/frontend:latest quivr_project/frontend/
+    - docker push registry.digitalocean.com/walletregistry/frontend:latest
+    - docker build -f quivr_project/backend/Dockerfile -t registry.digitalocean.com/walletregistry/backend:latest quivr_project/backend/
+    - docker push registry.digitalocean.com/walletregistry/backend:latest
+
+docker_deploy:
+  stage: deploy
+  image: gitlab/dind:latest
+  services:
+    - docker:dind
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIV_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa
+    - ssh-keyscan -H $DEV_SERVER_IP >> ~/.ssh/known_hosts
+  script:
+    - ssh root@$DEV_SERVER_IP "docker login -u $DO_REGISTRY_USER -p $DO_REGISTRY_PASSWORD registry.digitalocean.com; docker pull registry.digitalocean.com/walletregistry/openapi:latest; docker pull registry.digitalocean.com/walletregistry/frontend:latest; docker pull registry.digitalocean.com/walletregistry/backend:latest; cd hongyu/customersupportgpt/; docker-compose -f openapi-test/docker-compose.yml up -d; docker-compose -f quivr_project/docker-compose.yml up -d"
