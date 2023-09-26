@@ -33,7 +33,6 @@ from repository.chat.update_chat import ChatUpdatableProperties, update_chat
 from repository.user_identity.get_user_identity import get_user_identity
 
 ZEP_API_URL = os.getenv("ZEP_API_URL")
-print("----------------------------------------------------------------------------------------", ZEP_API_URL)
 
 session_id = str(uuid4())
 memory = ZepMemory(
@@ -85,7 +84,8 @@ def check_user_limit(
         if int(user.requests_count) >= int(max_requests_number):
             raise HTTPException(
                 status_code=429,  # pyright: ignore reportPrivateUsage=none
-                detail="You have reached the maximum number of requests for today.",  # pyright: ignore reportPrivateUsage=none
+                # pyright: ignore reportPrivateUsage=none
+                detail="You have reached the maximum number of requests for today.",
             )
     else:
         pass
@@ -107,7 +107,8 @@ async def get_chats(current_user: User = Depends(get_current_user)):
     if is_admin:
         chats = get_all_chats()
         return {"chats": chats}
-    chats = get_user_chats(current_user.id)  # pyright: ignore reportPrivateUsage=none
+    # pyright: ignore reportPrivateUsage=none
+    chats = get_user_chats(current_user.id)
     return {"chats": chats}
 
 
@@ -141,7 +142,8 @@ async def update_chat_metadata_handler(
     if str(current_user.id) != chat.user_id:
         raise HTTPException(
             status_code=403,  # pyright: ignore reportPrivateUsage=none
-            detail="You should be the owner of the chat to update it.",  # pyright: ignore reportPrivateUsage=none
+            # pyright: ignore reportPrivateUsage=none
+            detail="You should be the owner of the chat to update it.",
         )
     return update_chat(chat_id=chat_id, chat_data=chat_data)
 
@@ -213,9 +215,11 @@ async def create_question_handler(
         LLMSettings()
 
         if not brain_id:
-            brain_id = get_default_user_brain_or_create_new(current_user).brain_id
-        
-        personality = Personality(extraversion=brain_details.extraversion, neuroticism=brain_details.neuroticism, conscientiousness=brain_details.conscientiousness)
+            brain_id = get_default_user_brain_or_create_new(
+                current_user).brain_id
+
+        personality = Personality(extraversion=brain_details.extraversion,
+                                  neuroticism=brain_details.neuroticism, conscientiousness=brain_details.conscientiousness)
 
         gpt_answer_generator = OpenAIBrainPicking(
             chat_id=str(chat_id),
@@ -225,7 +229,8 @@ async def create_question_handler(
             brain_id=str(brain_id),
             personality=personality,
             memory=memory,
-            user_openai_api_key=current_user.user_openai_api_key,  # pyright: ignore reportPrivateUsage=none
+            prompt_id=chat_question.prompt_id,# pyright: ignore reportPrivateUsage=none
+            user_openai_api_key=current_user.user_openai_api_key,
         )
 
         chat_answer = gpt_answer_generator.generate_answer(  # pyright: ignore reportPrivateUsage=none
@@ -290,13 +295,15 @@ async def create_stream_question_handler(
         and brain_details.neuroticism is not None
         and brain_details.conscientiousness is not None
     ):
-        personality = Personality(extraversion=brain_details.extraversion, neuroticism=brain_details.neuroticism, conscientiousness=brain_details.conscientiousness)
+        personality = Personality(extraversion=brain_details.extraversion,
+                                  neuroticism=brain_details.neuroticism, conscientiousness=brain_details.conscientiousness)
 
     try:
         logger.info(f"Streaming request for {chat_question.model}")
         check_user_limit(current_user)
         if not brain_id:
-            brain_id = get_default_user_brain_or_create_new(current_user).brain_id
+            brain_id = get_default_user_brain_or_create_new(
+                current_user).brain_id
 
         gpt_answer_generator = OpenAIBrainPicking(
             chat_id=str(chat_id),
@@ -304,7 +311,8 @@ async def create_stream_question_handler(
             max_tokens=chat_question.max_tokens,
             temperature=chat_question.temperature,
             brain_id=str(brain_id),
-            user_openai_api_key=current_user.user_openai_api_key,  # pyright: ignore reportPrivateUsage=none
+            prompt_id=chat_question.prompt_id,# pyright: ignore reportPrivateUsage=none
+            user_openai_api_key=current_user.user_openai_api_key,
             personality=personality,
             streaming=True,
         )
@@ -377,7 +385,8 @@ async def create_brain_stream_question_handler(
             max_tokens=brain.max_tokens,
             temperature=brain.temperature,
             brain_id=str(brain_id),
-            user_openai_api_key=current_user.user_openai_api_key,  # pyright: ignore reportPrivateUsage=none
+            prompt_id=chat_question.prompt_id, # pyright: ignore reportPrivateUsage=none
+            user_openai_api_key=current_user.user_openai_api_key,
             streaming=True,
         )
 
@@ -404,6 +413,8 @@ async def get_chat_history_handler(
     return get_chat_history(chat_id)  # pyright: ignore reportPrivateUsage=none
 
 # get brain history
+
+
 @chat_router.get(
     "/chat/{brain_id}/brain_history", dependencies=[Depends(AuthBearer())], tags=["Chat"]
 )
@@ -411,9 +422,12 @@ async def get_brain_history_handler(
     brain_id: UUID,
 ) -> List[ChatHistory]:
     # TODO: RBAC with current_user
-    return get_brain_history(brain_id)  # pyright: ignore reportPrivateUsage=none
+    # pyright: ignore reportPrivateUsage=none
+    return get_brain_history(brain_id)
 
 # choose nearest experts
+
+
 @chat_router.post(
     "/chat/choose",
     dependencies=[
@@ -424,12 +438,13 @@ async def get_brain_history_handler(
     tags=["Chat"],
 )
 async def choose_nearest_experts(
-    chat_question: ChatQuestion  
+    chat_question: ChatQuestion
 ) -> []:
     query = chat_question.question
     qdrant_db = get_qdrant_db()
     brain_id_scores = qdrant_db.get_nearest_brain_list(query=query, limit=5)
     print(brain_id_scores)
 
-    recommended_brains = [{'name': get_brain_details(brain_score['brain_id']).name, **brain_score} for brain_score in brain_id_scores]
+    recommended_brains = [{'name': get_brain_details(
+        brain_score['brain_id']).name, **brain_score} for brain_score in brain_id_scores]
     return recommended_brains

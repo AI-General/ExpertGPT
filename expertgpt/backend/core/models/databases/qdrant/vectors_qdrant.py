@@ -22,11 +22,11 @@ class Vector_qdrant():
             ),
         )
         return response
-    
+
     def delete_vectors_from_brain(self, brain_id, data_sha1):
         response = self.db.delete(
             collection_name="vectors",
-                points_selector=models.FilterSelector(
+            points_selector=models.FilterSelector(
                 filter=models.Filter(
                     must=[
                         models.FieldCondition(
@@ -42,24 +42,24 @@ class Vector_qdrant():
             ),
         )
         return response
-    
+
     def delete_all_vectors_from_brain(self, brain_id):
         response = self.db.delete(
             collection_name="vectors",
-                points_selector=models.FilterSelector(
+            points_selector=models.FilterSelector(
                 filter=models.Filter(
                     must=[
-                        models.FieldCondition(
-                            key="brain_id",
-                            match=models.MatchValue(value=str(brain_id)),
-                        ),
+                            models.FieldCondition(
+                                key="brain_id",
+                                match=models.MatchValue(value=str(brain_id)),
+                            ),
                     ],
                 )
             ),
         )
         return response
-    
-    def get_nearest_brain_list(self, query:str, limit:int=5):
+
+    def get_nearest_brain_list(self, query: str, limit: int = 5):
         respond = self.db.search_groups(
             collection_name="vectors",
             query_vector=self.encoder.encode(query).tolist(),
@@ -67,6 +67,6 @@ class Vector_qdrant():
             with_payload=["brain_id"],
             limit=limit
         )
-        brain_id_scores = [{"brain_id": group.hits[0].payload['brain_id'], "score": group.hits[0].score} for group in respond.groups]
+        brain_id_scores = [{"brain_id": group.hits[0].payload['brain_id'],
+                            "score": group.hits[0].score} for group in respond.groups]
         return brain_id_scores
-    

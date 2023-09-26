@@ -21,3 +21,5 @@ class ChatQuestion(BaseModel):
     question: str
     temperature: float = 0.0
     max_tokens: int = 256
+    brain_id: Optional[UUID]
+    prompt_id: Optional[UUID]

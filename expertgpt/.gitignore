@@ -2,6 +2,7 @@ secondbrain/
 .env
 .streamlit/secrets.toml
 **/*.pyc
+temp.json
 toto.txt
 *.ipynb
 log.txt

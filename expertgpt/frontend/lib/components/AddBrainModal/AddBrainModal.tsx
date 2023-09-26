@@ -112,6 +112,15 @@ export const AddBrainModal = (): JSX.Element => {
         />
 
         <Field
+          label="Enter your linkedin"
+          autoFocus
+          placeholder="https://www.linkedin.com/in/"
+          autoComplete="off"
+          className="flex-1"
+          {...register("linkedin")}
+        />
+
+        <Field
           label="OpenAI API Key"
           placeholder="sk-xxx"
           autoComplete="off"
@@ -205,14 +214,6 @@ export const AddBrainModal = (): JSX.Element => {
 
         {personality ? (
           <>
-            <Field
-              label="Enter your linkedin"
-              autoFocus
-              placeholder="https://www.linkedin.com/in/"
-              autoComplete="off"
-              className="flex-1"
-              {...register("linkedin")}
-            />
             {questions.map((question, index) => (
               <>
                 <TextArea

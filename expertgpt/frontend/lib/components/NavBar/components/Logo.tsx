@@ -7,7 +7,7 @@ export const Logo = (): JSX.Element => {
       <Image
         className="rounded-full"
         src={"/logo.png"}
-        alt="MyGPT AI Clone Tester"
+        alt="ExpertGPT logo"
         width={48}
         height={48}
       />
