@@ -2,7 +2,7 @@
 workflow:
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
-      when: always
+      when: never
 
 stages:
   - build
@@ -36,4 +36,4 @@ docker_deploy:
     - ssh-add ~/.ssh/id_rsa
     - ssh-keyscan -H $DEV_SERVER_IP >> ~/.ssh/known_hosts
   script:
-    - ssh root@$DEV_SERVER_IP "docker login -u $DO_REGISTRY_USER -p $DO_REGISTRY_PASSWORD registry.digitalocean.com; docker pull registry.digitalocean.com/walletregistry/openapi:latest; docker pull registry.digitalocean.com/walletregistry/frontend:latest; docker pull registry.digitalocean.com/walletregistry/backend:latest; cd hongyu/customersupportgpt/; docker-compose -f openapi-test/docker-compose.yml up -d; docker-compose -f quivr_project/docker-compose.yml up -d"
+    - ssh root@$DEV_SERVER_IP "docker login -u $DO_REGISTRY_USER -p $DO_REGISTRY_PASSWORD registry.digitalocean.com; docker pull registry.digitalocean.com/walletregistry/openapi:latest; docker pull registry.digitalocean.com/walletregistry/frontend:latest; docker pull registry.digitalocean.com/walletregistry/backend:latest; cd hongyu/ExpertGPT; docker-compose up -d"
