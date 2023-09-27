@@ -1,0 +1,130 @@
+version: "3"
+
+services:
+  frontend:
+    image: registry.digitalocean.com/walletregistry/quivr-frontend:latest
+    env_file:
+      - ./quivr_project/frontend/.env
+    build:
+      context: quivr_project/frontend
+      dockerfile: Dockerfile
+    container_name: web
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - admin-network
+  backend-core:
+    image: registry.digitalocean.com/walletregistry/quivr-backend-core:latest
+    env_file:
+      - ./quivr_project/backend/core/.env
+    build:
+      context: quivr_project/backend/core
+      dockerfile: Dockerfile
+    container_name: backend-core
+    restart: always
+    volumes:
+      - ./quivr_project/backend/core/:/code/
+      - ~/.config/gcloud:/root/.config/gcloud
+    ports:
+      - 5050:5050
+    networks:
+      - admin-network
+
+  openapi:
+    image: registry.digitalocean.com/walletregistry/openapi-test:latest
+    container_name: openapi_test
+    build:
+      context: openapi-test
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - admin-network
+  
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant
+    restart: always
+    ports:
+      - 6333:6333
+    volumes:
+      - ./qdrant_storage:/qdrant/storage:z
+    networks:
+      - admin-network
+
+  db:
+    image: ghcr.io/getzep/postgres:latest
+    container_name: zep-postgres
+    restart: on-failure
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    build:
+      context: zep
+      dockerfile: Dockerfile.postgres
+    networks:
+      - admin-network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "5432:5432"
+
+  nlp:
+    image: ghcr.io/getzep/zep-nlp-server:latest
+    container_name: zep-nlp
+    env_file:
+      - ./zep/.env # You can set your embedding-related variables here
+    restart: on-failure
+    networks:
+      - admin-network
+    healthcheck:
+      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/5557' || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+    ports:
+      - "5557:5557"
+  
+  zep:
+    image: ghcr.io/getzep/zep:latest
+    container_name: zep
+    restart: on-failure
+    depends_on:
+        db:
+          condition: service_healthy
+        nlp:
+          condition: service_healthy
+    ports:
+        - "8000:8000"
+    volumes:
+      - ./zep/config.yaml:/app/config.yaml
+    environment:
+      - ZEP_STORE_POSTGRES_DSN=postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+      - ZEP_NLP_SERVER_URL=http://nlp:5557
+      - ZEP_EXTRACTORS_DOCUMENTS_EMBEDDINGS_SERVICE=openai
+      - ZEP_EXTRACTORS_DOCUMENTS_EMBEDDINGS_DIMENSIONS=1536
+      - ZEP_EXTRACTORS_MESSAGES_EMBEDDINGS_SERVICE=openai
+      - ZEP_EXTRACTORS_MESSAGES_EMBEDDINGS_DIMENSIONS=1536
+    env_file:
+      - ./zep/.env # Store your OpenAI API key here as ZEP_OPENAI_API_KEY
+    build:
+      context: zep
+      dockerfile: Dockerfile
+    healthcheck:
+      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8000' || exit 1
+      interval: 5s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - admin-network
+
+networks:
+  admin-network:
+    driver: bridge
