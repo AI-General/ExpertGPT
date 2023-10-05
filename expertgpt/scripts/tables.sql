@@ -19,92 +19,92 @@ CREATE TABLE IF NOT EXISTS chats(
 -- Create vector extension
 CREATE EXTENSION IF NOT EXISTS vector;
 
--- Create vectors table
-CREATE TABLE IF NOT EXISTS vectors (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    content TEXT,
-    metadata JSONB,
-    embedding VECTOR(1536)
-);
+-- -- Create vectors table
+-- CREATE TABLE IF NOT EXISTS vectors (
+--     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+--     content TEXT,
+--     metadata JSONB,
+--     embedding VECTOR(1536)
+-- );
 
--- Create function to match vectors
-CREATE OR REPLACE FUNCTION match_vectors(query_embedding VECTOR(1536), match_count INT, p_brain_id UUID)
-RETURNS TABLE(
-    id UUID,
-    brain_id UUID,
-    content TEXT,
-    metadata JSONB,
-    embedding VECTOR(1536),
-    similarity FLOAT
-) LANGUAGE plpgsql AS $$
-#variable_conflict use_column
-BEGIN
-    RETURN QUERY
-    SELECT
-        vectors.id,
-        brains_vectors.brain_id,
-        vectors.content,
-        vectors.metadata,
-        vectors.embedding,
-        1 - (vectors.embedding <=> query_embedding) AS similarity
-    FROM
-        vectors
-    INNER JOIN
-        brains_vectors ON vectors.id = brains_vectors.vector_id
-    WHERE brains_vectors.brain_id = p_brain_id
-    ORDER BY
-        vectors.embedding <=> query_embedding
-    LIMIT match_count;
-END;
-$$;
+-- -- Create function to match vectors
+-- CREATE OR REPLACE FUNCTION match_vectors(query_embedding VECTOR(1536), match_count INT, p_brain_id UUID)
+-- RETURNS TABLE(
+--     id UUID,
+--     brain_id UUID,
+--     content TEXT,
+--     metadata JSONB,
+--     embedding VECTOR(1536),
+--     similarity FLOAT
+-- ) LANGUAGE plpgsql AS $$
+-- #variable_conflict use_column
+-- BEGIN
+--     RETURN QUERY
+--     SELECT
+--         vectors.id,
+--         brains_vectors.brain_id,
+--         vectors.content,
+--         vectors.metadata,
+--         vectors.embedding,
+--         1 - (vectors.embedding <=> query_embedding) AS similarity
+--     FROM
+--         vectors
+--     INNER JOIN
+--         brains_vectors ON vectors.id = brains_vectors.vector_id
+--     WHERE brains_vectors.brain_id = p_brain_id
+--     ORDER BY
+--         vectors.embedding <=> query_embedding
+--     LIMIT match_count;
+-- END;
+-- $$;
 
--- Create stats table
-CREATE TABLE IF NOT EXISTS stats (
-    time TIMESTAMP,
-    chat BOOLEAN,
-    embedding BOOLEAN,
-    details TEXT,
-    metadata JSONB,
-    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY
-);
+-- -- Create stats table
+-- CREATE TABLE IF NOT EXISTS stats (
+--     time TIMESTAMP,
+--     chat BOOLEAN,
+--     embedding BOOLEAN,
+--     details TEXT,
+--     metadata JSONB,
+--     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY
+-- );
 
--- Create summaries table
-CREATE TABLE IF NOT EXISTS summaries (
-    id BIGSERIAL PRIMARY KEY,
-    document_id UUID REFERENCES vectors(id),
-    content TEXT,
-    metadata JSONB,
-    embedding VECTOR(1536)
-);
+-- -- Create summaries table
+-- CREATE TABLE IF NOT EXISTS summaries (
+--     id BIGSERIAL PRIMARY KEY,
+--     document_id UUID REFERENCES vectors(id),
+--     content TEXT,
+--     metadata JSONB,
+--     embedding VECTOR(1536)
+-- );
 
--- Create function to match summaries
-CREATE OR REPLACE FUNCTION match_summaries(query_embedding VECTOR(1536), match_count INT, match_threshold FLOAT)
-RETURNS TABLE(
-    id BIGINT,
-    document_id UUID,
-    content TEXT,
-    metadata JSONB,
-    embedding VECTOR(1536),
-    similarity FLOAT
-) LANGUAGE plpgsql AS $$
-#variable_conflict use_column
-BEGIN
-    RETURN QUERY
-    SELECT
-        id,
-        document_id,
-        content,
-        metadata,
-        embedding,
-        1 - (summaries.embedding <=> query_embedding) AS similarity
-    FROM
-        summaries
-    WHERE 1 - (summaries.embedding <=> query_embedding) > match_threshold
-    ORDER BY
-        summaries.embedding <=> query_embedding
-    LIMIT match_count;
-END;
-$$;
+-- -- Create function to match summaries
+-- CREATE OR REPLACE FUNCTION match_summaries(query_embedding VECTOR(1536), match_count INT, match_threshold FLOAT)
+-- RETURNS TABLE(
+--     id BIGINT,
+--     document_id UUID,
+--     content TEXT,
+--     metadata JSONB,
+--     embedding VECTOR(1536),
+--     similarity FLOAT
+-- ) LANGUAGE plpgsql AS $$
+-- #variable_conflict use_column
+-- BEGIN
+--     RETURN QUERY
+--     SELECT
+--         id,
+--         document_id,
+--         content,
+--         metadata,
+--         embedding,
+--         1 - (summaries.embedding <=> query_embedding) AS similarity
+--     FROM
+--         summaries
+--     WHERE 1 - (summaries.embedding <=> query_embedding) > match_threshold
+--     ORDER BY
+--         summaries.embedding <=> query_embedding
+--     LIMIT match_count;
+-- END;
+-- $$;
 
 -- Create api_keys table
 CREATE TABLE IF NOT EXISTS api_keys(
@@ -130,10 +130,6 @@ CREATE TABLE IF NOT EXISTS brains (
   name TEXT NOT NULL,
   status TEXT,
   description TEXT,
-  model TEXT,
-  max_tokens INT,
-  temperature FLOAT,
-  openai_api_key TEXT,
   prompt_id UUID REFERENCES prompts(id),
   linkedin TEXT,
   extraversion INT,
@@ -186,7 +182,7 @@ CREATE TABLE IF NOT EXISTS brain_subscription_invitations (
 --- Create user_identity table
 CREATE TABLE IF NOT EXISTS user_identity (
   user_id UUID PRIMARY KEY,
-  openai_api_key VARCHAR(255)
+--   openai_api_key VARCHAR(255)
 );
 
 

@@ -19,10 +19,10 @@ class Brain(BaseModel):
     name: Optional[str] = "Default brain"
     description: Optional[str] = "This is a description"
     status: Optional[str] = "private"
-    model: Optional[str] = "gpt-3.5-turbo-0613"
-    temperature: Optional[float] = 0.0
-    max_tokens: Optional[int] = 256
-    openai_api_key: Optional[str] = None
+    # model: Optional[str] = "gpt-3.5-turbo-0613"
+    # temperature: Optional[float] = 0.0
+    # max_tokens: Optional[int] = 256
+    # openai_api_key: Optional[str] = None
     files: List[Any] = []
     datas: List[Any] = []
     max_brain_size = BrainRateLimiting().max_brain_size

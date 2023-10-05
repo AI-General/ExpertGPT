@@ -13,7 +13,7 @@ logger = get_logger(__name__)
 class User(BaseModel):
     id: UUID
     email: Optional[str]
-    user_openai_api_key: Optional[str] = None
+    # user_openai_api_key: Optional[str] = None
     requests_count: int = 0
 
     @property

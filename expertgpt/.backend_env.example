@@ -1,10 +1,25 @@
+# Administrator
+ADMIN_EMAIL = <change-me>
+
+#Supabase
 SUPABASE_URL=<change-me>
 SUPABASE_SERVICE_KEY=<change-me>
 PG_DATABASE_URL=notimplementedyet
-OPENAI_API_KEY=<change-me>
 ANTHROPIC_API_KEY=null
-JWT_SECRET_KEY=<change-me>
+JWT_SECRET_KEY="<change-me>
 AUTHENTICATE=true
+
+#OpenAI
+OPENAI_API_KEY=<change-me>
+MODEL="gpt-3.5-turbo-0613"
+TEMPERATURE=0.0
+MAX_TOKENS=256
+
+#Qdrant
+QDRANT_LOCATION=<change-me>
+QDRANT_PORT=6333
+ENCODER_MODEL='all-MiniLM-L6-v2'
+
 GOOGLE_APPLICATION_CREDENTIALS=<change-me>
 GOOGLE_CLOUD_PROJECT=<change-me>
 
@@ -19,3 +34,12 @@ MODEL_PATH=./local_models/ggml-gpt4all-j-v1.3-groovy.bin
 #RESEND
 RESEND_API_KEY=<change-me>
 RESEND_EMAIL_ADDRESS=onboarding@resend.dev
+
+#ZEP
+ZEP_API_URL=<change-me>
+
+#ZENROWS
+ZENROWS_API_KEY=<change-me>
+
+#PROXYCURL
+PROXYCURL_API_KEY=<change-me>

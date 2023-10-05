@@ -6,8 +6,8 @@ import Button from "@/lib/components/ui/Button";
 import { Divider } from "@/lib/components/ui/Divider";
 import Field from "@/lib/components/ui/Field";
 import { TextArea } from "@/lib/components/ui/TextArea";
-import { models, paidModels } from "@/lib/context/BrainConfigProvider/types";
-import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
+// import { models, paidModels } from "@/lib/context/BrainConfigProvider/types";
+// import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
 
 import { useSettingsTab } from "./hooks/useSettingsTab";
 
@@ -19,10 +19,10 @@ export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
   const {
     handleSubmit,
     register,
-    openAiKey,
-    temperature,
-    maxTokens,
-    model,
+    // openAiKey,
+    // temperature,
+    // maxTokens,
+    // model,
     // linkedin,
     // extraversion,
     // neuroticism,
@@ -76,7 +76,7 @@ export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
         className="flex-1 m-3"
         {...register("description")}
       />
-      <Divider text="Model config" />
+      {/* <Divider text="Model config" />
       <Field
         label="OpenAI API Key"
         placeholder="sk-xxx"
@@ -127,57 +127,53 @@ export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
           value={maxTokens}
           {...register("maxTokens")}
         />
-      </fieldset>
-      <div className="flex items-center justify-center">
+      </fieldset> */}
+      {/* <div className="flex items-center justify-center">
         <hr className="border-t border-gray-300 w-12" />
         <p className="px-3 text-center text-gray-500 dark:text-white">
           Personality
         </p>
         <hr className="border-t border-gray-300 w-12" />
-      </div>
+      </div> */}
 
-      
-          <Field
-            label="Linkedin"
-            autoFocus
-            autoComplete="off"
-            className="flex-1"
-            {...register("linkedin")}
-          />
+      <Divider text="Personality" />
+      <Field
+        label="Linkedin"
+        autoFocus
+        autoComplete="off"
+        className="flex-1"
+        {...register("linkedin")}
+      />
 
-      
-          <Field
-            label="Extraversion"
-            autoFocus
-            autoComplete="off"
-            className="flex-1"
-            {...register("extraversion")}
-          />
+      <Field
+        label="Extraversion"
+        autoFocus
+        autoComplete="off"
+        className="flex-1"
+        {...register("extraversion")}
+      />
 
-          <Field
-            label="Conscientiousness"
-            autoFocus
-            autoComplete="off"
-            className="flex-1"
-            {...register("conscientiousness")}
-          />
+      <Field
+        label="Conscientiousness"
+        autoFocus
+        autoComplete="off"
+        className="flex-1"
+        {...register("conscientiousness")}
+      />
 
-          <Field
-            label="Neuroticism"
-            autoFocus
-            autoComplete="off"
-            className="flex-1"
-            {...register("neuroticism")}
-          />
+      <Field
+        label="Neuroticism"
+        autoFocus
+        autoComplete="off"
+        className="flex-1"
+        {...register("neuroticism")}
+      />
 
       {/* {createVisiable ? ( */}
-        <Button
-          className="mt-12 self-end"
-          type="submit"
-        >
-          Update
-          {/* <MdAdd className="text-xl" /> */}
-        </Button>
+      <Button className="mt-12 self-end" type="submit">
+        Update
+        {/* <MdAdd className="text-xl" /> */}
+      </Button>
       {/* ) : (
         <></>
       )} */}

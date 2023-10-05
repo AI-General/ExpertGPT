@@ -3,7 +3,7 @@ import { AxiosError } from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { getChatConfigFromLocalStorage } from "@/lib/api/chat/chat.local";
+// import { getChatConfigFromLocalStorage } from "@/lib/api/chat/chat.local";
 import { useChatApi } from "@/lib/api/chat/useChatApi";
 import { useChatContext } from "@/lib/context/ChatProvider/hooks/useChatContext";
 import { useToast } from "@/lib/hooks";
@@ -58,13 +58,13 @@ export const useChat = () => {
       }
 
       void track("QUESTION_ASKED");
-      const chatConfig = getChatConfigFromLocalStorage(currentChatId);
+      // const chatConfig = getChatConfigFromLocalStorage(currentChatId);
 
       const chatQuestion: ChatQuestion = {
-        model: chatConfig?.model,
+        // model: chatConfig?.model,
         question,
-        temperature: chatConfig?.temperature,
-        max_tokens: chatConfig?.maxTokens,
+        // temperature: chatConfig?.temperature,
+        // max_tokens: chatConfig?.maxTokens,
       };
 
       await addStreamQuestion(currentChatId, chatQuestion);

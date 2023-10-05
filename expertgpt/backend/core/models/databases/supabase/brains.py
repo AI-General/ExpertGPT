@@ -13,10 +13,10 @@ class CreateBrainProperties(BaseModel):
     name: Optional[str] = "Default brain"
     description: Optional[str] = "This is a description"
     status: Optional[str] = "private"
-    model: Optional[str] = "gpt-3.5-turbo-0613"
-    temperature: Optional[float] = 0.0
-    max_tokens: Optional[int] = 256
-    openai_api_key: Optional[str] = None
+    # model: Optional[str] = "gpt-3.5-turbo-0613"
+    # temperature: Optional[float] = 0.0
+    # max_tokens: Optional[int] = 256
+    # openai_api_key: Optional[str] = None
     prompt_id: Optional[UUID] = None
     linkedin: Optional[str] = None
     extraversion: Optional[int] = None
@@ -33,11 +33,11 @@ class CreateBrainProperties(BaseModel):
 class BrainUpdatableProperties(BaseModel):
     name: Optional[str]
     description: Optional[str]
-    temperature: Optional[float]
     linkedin: Optional[str] = None
-    model: Optional[str]
-    max_tokens: Optional[int]
-    openai_api_key: Optional[str]
+    # temperature: Optional[float]
+    # model: Optional[str]
+    # max_tokens: Optional[int]
+    # openai_api_key: Optional[str]
     status: Optional[str]
     prompt_id: Optional[UUID]
     extraversion: Optional[int] = None
