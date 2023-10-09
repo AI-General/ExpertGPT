@@ -1,3 +1,5 @@
+from typing import Optional
+from uuid import UUID
 from langchain.chat_models import ChatOpenAI
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.llms.base import BaseLLM
@@ -24,7 +26,8 @@ class OpenAIBrainPicking(QABaseBrainPicking):
         temperature: float,
         chat_id: str,
         max_tokens: int,
-        user_openai_api_key: str,
+        openai_api_key: str,
+        prompt_id: Optional[UUID] = None,
         personality: Personality = None,
         memory = None,
         streaming: bool = False,
@@ -39,8 +42,9 @@ class OpenAIBrainPicking(QABaseBrainPicking):
             chat_id=chat_id,
             max_tokens=max_tokens,
             temperature=temperature,
-            user_openai_api_key=user_openai_api_key,
+            openai_api_key=openai_api_key,
             personality=personality,
+            prompt_id=prompt_id,
             memory=memory,
             streaming=streaming,
         )

@@ -1,13 +1,13 @@
 /* eslint-disable max-lines */
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";  // useEffect
 import { useForm } from "react-hook-form";
 
 import { useBrainApi } from "@/lib/api/brain/useBrainApi";
 import { usePromptApi } from "@/lib/api/prompt/usePromptApi";
 import { useBrainConfig } from "@/lib/context/BrainConfigProvider";
 import { useBrainContext } from "@/lib/context/BrainProvider/hooks/useBrainContext";
-import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
+// import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
 import { useToast } from "@/lib/hooks";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -29,23 +29,27 @@ export const useAddBrainModal = () => {
       content: "",
     },
     linkedin: "",
+    openAiKey: "",
+    model: "gpt-3.5-turbo-0613",
+    temperature: 0.5,
+    maxTokens: 256,
     conscientiousness: 0,
     neuroticism: 0,
     extraversion: 0
   };
 
-  const { register, getValues, reset, watch, setValue } = useForm({
+  const { register, getValues, reset, setValue } = useForm({
     defaultValues,
-  });
+  }); //watch, 
 
-  const openAiKey = watch("openAiKey");
-  const model = watch("model");
-  const temperature = watch("temperature");
-  const maxTokens = watch("maxTokens");
+  // const openAiKey = watch("openAiKey");
+  // const model = watch("model");
+  // const temperature = watch("temperature");
+  // const maxTokens = watch("maxTokens");
 
-  useEffect(() => {
-    setValue("maxTokens", Math.min(maxTokens, defineMaxTokens(model)));
-  }, [maxTokens, model, setValue]);
+  // useEffect(() => {
+  //   setValue("maxTokens", Math.min(maxTokens, defineMaxTokens(model)));
+  // }, [maxTokens, model, setValue]);
 
   const getCreatingBrainPromptId = async (): Promise<string | undefined> => {
     const { prompt } = getValues();
@@ -58,7 +62,7 @@ export const useAddBrainModal = () => {
   };
 
   const handleSubmit = async () => {
-    const { name, description, linkedin, conscientiousness, neuroticism, extraversion, setDefault } = getValues();
+    const { name, description, linkedin, model, openAiKey, temperature, maxTokens, conscientiousness, neuroticism, extraversion, setDefault } = getValues();
 
     if (name.trim() === "" || isPending) {
       return;
@@ -152,10 +156,10 @@ export const useAddBrainModal = () => {
     handleSubmit,
     setValue,
     register,
-    openAiKey,
-    model,
-    temperature,
-    maxTokens,
+    // openAiKey,
+    // model,
+    // temperature,
+    // maxTokens,
     isPending,
     pickPublicPrompt,
   };

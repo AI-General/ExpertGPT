@@ -49,6 +49,14 @@ class Chats(Repository):
         )
         return response
 
+    def get_all_chats(self):
+        response = (
+            self.db.from_("chats")
+            .select("chat_id,user_id,creation_time,chat_name")
+            .execute()
+        )
+        return response
+
     def update_chat_history(self, chat_id: str, brain_id: str, user_message: str, assistant: str):
         response = (
             self.db.table("chat_history")

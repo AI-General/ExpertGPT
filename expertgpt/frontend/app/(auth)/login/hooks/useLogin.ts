@@ -37,16 +37,22 @@ export const useLogin = () => {
   };
 
   useEffect(() => {
+
+
     if (session?.user !== undefined) {
       void track("SIGNED_IN");
 
-      const previousPage = sessionStorage.getItem("previous-page");
-      if (previousPage === null) {
-        redirect("/upload");
-      } else {
-        sessionStorage.removeItem("previous-page");
-        redirect(previousPage);
+      if (typeof window !== 'undefined') {
+        const previousPage = window.sessionStorage.getItem("previous-page");
+        if (previousPage === null) {
+          redirect("/upload");
+        } else {
+          window.sessionStorage.removeItem("previous-page");
+          redirect(previousPage);
+        }
       }
+
+      
     }
   }, [session?.user]);
 

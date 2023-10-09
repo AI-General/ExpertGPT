@@ -15,13 +15,13 @@ export const BrainConfigContext = createContext<
 >(undefined);
 
 const defaultBrainConfig: BrainConfig = {
-  model: "gpt-3.5-turbo-0613",
-  temperature: 0,
-  maxTokens: 256,
+  // model: "gpt-3.5-turbo-0613",
+  // temperature: 0,
+  // maxTokens: 256,
   keepLocal: true,
   anthropicKey: undefined,
   backendUrl: undefined,
-  openAiKey: undefined,
+  // openAiKey: undefined,
   supabaseKey: undefined,
   supabaseUrl: undefined,
   prompt_id: undefined,

@@ -46,12 +46,12 @@ export const NavItems = ({
         </>
       ) : (
         <>
-          <NavLink setOpen={setOpen} to="https://github.com/StanGirard/quivr">
-            Github
+          <NavLink setOpen={setOpen} to="https://gitlab.com/lambda-vision/expertgpt">
+            Gitlab
           </NavLink>
-          <NavLink setOpen={setOpen} to="https://discord.gg/HUpRgp2HG8">
+          {/* <NavLink setOpen={setOpen} to="Not Implemented">
             Discord
-          </NavLink>
+          </NavLink> */}
         </>
       )}
       <div className="flex sm:flex-1 sm:justify-end flex-col items-center justify-center sm:flex-row gap-5 sm:gap-2">

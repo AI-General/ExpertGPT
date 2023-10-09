@@ -2,6 +2,7 @@ from typing import List
 from uuid import UUID
 
 from auth.auth_bearer import AuthBearer, get_current_user
+from auth.check_admin import check_admin
 from fastapi import APIRouter, Depends, HTTPException
 from models.brains import Brain
 from models.brains_subscription_invitations import BrainSubscription
@@ -124,14 +125,20 @@ async def remove_user_subscription(
     brain = Brain(
         id=brain_id,
     )
+    
+    is_admin = check_admin(current_user)
+    if is_admin:
+        brain.delete_brain_force()
+        return {"message": f"brain {brain_id} is force removed"}
+    
     user_brain = get_brain_for_user(current_user.id, brain_id)
-    if user_brain is None:
+    if not is_admin and user_brain is None:
         raise HTTPException(
             status_code=403,
             detail="You don't have permission for this brain",
         )
 
-    if user_brain.rights != "Owner":
+    if not is_admin and user_brain.rights != "Owner":
         brain.delete_user_from_brain(current_user.id)
     else:
         brain_users = brain.get_brain_users()

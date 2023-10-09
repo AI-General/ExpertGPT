@@ -7,9 +7,9 @@ import { useBrainApi } from "@/lib/api/brain/useBrainApi";
 import Button from "@/lib/components/ui/Button";
 import Field from "@/lib/components/ui/Field";
 import { Modal } from "@/lib/components/ui/Modal";
-import { models, paidModels } from "@/lib/context/BrainConfigProvider/types";
+// import { models, paidModels } from "@/lib/context/BrainConfigProvider/types";
 import { Personality, Question } from "@/lib/context/BrainProvider/types";
-import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
+// import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
 
 import { useAddBrainModal } from "./hooks/useAddBrainModal";
 // import { Divider } from "../ui/Divider";
@@ -22,10 +22,10 @@ export const AddBrainModal = (): JSX.Element => {
     setIsShareModalOpen,
     register,
     setValue,
-    openAiKey,
-    temperature,
-    maxTokens,
-    model,
+    // openAiKey,
+    // temperature,
+    // maxTokens,
+    // model,
     isPending,
     // pickPublicPrompt,
   } = useAddBrainModal();
@@ -112,14 +112,23 @@ export const AddBrainModal = (): JSX.Element => {
         />
 
         <Field
+          label="Enter your linkedin"
+          autoFocus
+          placeholder="https://www.linkedin.com/in/"
+          autoComplete="off"
+          className="flex-1"
+          {...register("linkedin")}
+        />
+
+        {/* <Field
           label="OpenAI API Key"
           placeholder="sk-xxx"
           autoComplete="off"
           className="flex-1"
           {...register("openAiKey")}
-        />
+        /> */}
 
-        <fieldset className="w-full flex flex-col">
+        {/* <fieldset className="w-full flex flex-col">
           <label className="flex-1 text-sm" htmlFor="model">
             Model
           </label>
@@ -136,9 +145,9 @@ export const AddBrainModal = (): JSX.Element => {
               )
             )}
           </select>
-        </fieldset>
+        </fieldset> */}
 
-        <fieldset className="w-full flex mt-4">
+        {/* <fieldset className="w-full flex mt-4">
           <label className="flex-1" htmlFor="temp">
             Temperature: {temperature}
           </label>
@@ -151,8 +160,8 @@ export const AddBrainModal = (): JSX.Element => {
             value={temperature}
             {...register("temperature")}
           />
-        </fieldset>
-        <fieldset className="w-full flex mt-4">
+        </fieldset> */}
+        {/* <fieldset className="w-full flex mt-4">
           <label className="flex-1" htmlFor="tokens">
             Max tokens: {maxTokens}
           </label>
@@ -163,7 +172,7 @@ export const AddBrainModal = (): JSX.Element => {
             value={maxTokens}
             {...register("maxTokens")}
           />
-        </fieldset>
+        </fieldset> */}
         <Field
           label="Prompt title"
           placeholder="My awesome prompt name"
@@ -205,14 +214,6 @@ export const AddBrainModal = (): JSX.Element => {
 
         {personality ? (
           <>
-            <Field
-              label="Enter your linkedin"
-              autoFocus
-              placeholder="https://www.linkedin.com/in/"
-              autoComplete="off"
-              className="flex-1"
-              {...register("linkedin")}
-            />
             {questions.map((question, index) => (
               <>
                 <TextArea

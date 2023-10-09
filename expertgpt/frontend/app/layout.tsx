@@ -14,9 +14,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "MyGPT AI Clone Tester",
+  title: "ExpertGPT",
   description:
-    "Quivr is your second brain in the cloud, designed to easily store and retrieve unstructured information.",
+    "You can meet every expert in the world",
 };
 
 const RootLayout = async ({
