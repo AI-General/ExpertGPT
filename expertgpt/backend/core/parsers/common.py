@@ -15,9 +15,7 @@ from sentence_transformers import SentenceTransformer
 async def process_file(
     file: File,
     loader_class,
-    enable_summarization,
     brain_id,
-    user_openai_api_key,
 ):
     dateshort = time.strftime("%Y%m%d")
 
