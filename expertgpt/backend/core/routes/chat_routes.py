@@ -464,6 +464,5 @@ async def choose_nearest_experts(
     brain_id_scores = qdrant_db.get_nearest_brain_list(query=query, limit=5)
     print(brain_id_scores)
 
-    recommended_brains = [{'name': get_brain_details(
-        brain_score['brain_id']).name, **brain_score} for brain_score in brain_id_scores]
+    recommended_brains = [{'name': get_brain_details(brain_score['brain_id']).name, **brain_score} for brain_score in brain_id_scores]
     return recommended_brains
