@@ -13,5 +13,7 @@ def get_brain_details(brain_id: UUID) -> BrainEntity | None:
         .execute()
     )
     if response.data == []:
+        print("Critical Error: Brain not found")
+        print(f"Brain id: {brain_id}")
         return None
     return BrainEntity(**response.data[0])
