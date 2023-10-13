@@ -8,12 +8,9 @@ export const NewChatButton = (): JSX.Element => {
   const handleButtonClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault()
     console.log(window.location.href);
-    console.log("okay1");
     if (window.location.href.endsWith('/chat')) {
-      console.log("okay2");
       window.location.reload()
     } else {
-      console.log("okay3");
       void router.push('/chat')
     }
   }

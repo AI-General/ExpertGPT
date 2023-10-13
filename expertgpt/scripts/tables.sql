@@ -160,17 +160,7 @@ CREATE TABLE IF NOT EXISTS brains_users (
   FOREIGN KEY (brain_id) REFERENCES brains (brain_id)
 );
 
--- Create brains X vectors table
-CREATE TABLE IF NOT EXISTS brains_vectors (
-  brain_id UUID,
-  vector_id UUID,
-  file_sha1 TEXT,
-  PRIMARY KEY (brain_id, vector_id),
-  FOREIGN KEY (vector_id) REFERENCES vectors (id),
-  FOREIGN KEY (brain_id) REFERENCES brains (brain_id)
-);
-
--- Create brains X vectors table
+-- Create brains subscription invitations table
 CREATE TABLE IF NOT EXISTS brain_subscription_invitations (
   brain_id UUID,
   email VARCHAR(255),
