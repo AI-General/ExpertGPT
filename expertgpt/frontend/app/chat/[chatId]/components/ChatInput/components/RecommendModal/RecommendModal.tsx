@@ -51,7 +51,7 @@ export const RecommendModal = ({
           Recommend
         </Button>
       }
-      title="Recommeded Experts"
+      title="Recommended Experts"
       desc=""
       isOpen={isRecommendModalOpen}
       setOpen={setIsRecommendModalOpen}
