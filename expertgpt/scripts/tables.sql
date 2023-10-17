@@ -106,6 +106,15 @@ CREATE EXTENSION IF NOT EXISTS vector;
 -- END;
 -- $$;
 
+-- Create brains X vectors table
+CREATE TABLE IF NOT EXISTS brains_data (
+  brain_id UUID,
+  data_sha1 TEXT,
+  metadata JSONB,
+  PRIMARY KEY (brain_id, data_sha1),
+  FOREIGN KEY (brain_id) REFERENCES brains (brain_id)
+);
+
 -- Create api_keys table
 CREATE TABLE IF NOT EXISTS api_keys(
     key_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -171,8 +180,7 @@ CREATE TABLE IF NOT EXISTS brain_subscription_invitations (
 
 --- Create user_identity table
 CREATE TABLE IF NOT EXISTS user_identity (
-  user_id UUID PRIMARY KEY,
---   openai_api_key VARCHAR(255)
+  user_id UUID PRIMARY KEY
 );
 
 

@@ -49,10 +49,12 @@ class Brain(BaseModel):
 
     @property
     def brain_size(self):
-        self.get_unique_brain_files()
-        current_brain_size = sum(float(doc["size"]) for doc in self.files)
+        # Not Implemented
+        return 0
+        # self.get_unique_brain_files()
+        # current_brain_size = sum(float(doc["size"]) for doc in self.files)
 
-        return current_brain_size
+        # return current_brain_size
 
     @property
     def remaining_brain_size(self):

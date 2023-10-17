@@ -16,6 +16,7 @@ async def process_file(
     file: File,
     loader_class,
     brain_id,
+    enable_summarization = False,
 ):
     dateshort = time.strftime("%Y%m%d")
 
