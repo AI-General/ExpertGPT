@@ -160,7 +160,10 @@ class QABaseBrainPicking(BaseBrainPicking):
         transformed_history = []
 
         # Get the history from the database
-        history = get_chat_history(self.chat_id)
+        if self.chat_id:
+            history = get_chat_history(self.chat_id)
+        else:
+            history = []
 
         # Format the chat history into a list of tuples (human, ai)
         transformed_history = format_chat_history(history)
@@ -228,7 +231,10 @@ class QABaseBrainPicking(BaseBrainPicking):
         :return: An async iterable which generates the answer.
         """
         transformed_history = []
-        history = get_chat_history(self.chat_id)
+        if self.chat_id:
+            history = get_chat_history(self.chat_id)
+        else:
+            history = []
         transformed_history = format_chat_history(history)
 
         callback = AsyncIteratorCallbackHandler()
