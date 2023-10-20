@@ -24,8 +24,8 @@ COPY . .
 # Build the Next.js application
 RUN yarn build
 
-# Ensure port 3000 is accessible to our system
-EXPOSE 3000
+# Ensure port 4000 is accessible to our system
+EXPOSE 4000
 
 # Run yarn start, as we would via the command line 
 CMD ["yarn", "start"]
