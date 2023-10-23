@@ -1,13 +1,33 @@
-version: "3"
+# version: "3"
+
+# services:
+#   frontend:
+#     env_file:
+#       - ./frontend/.env.dev
+#     build:
+#       context: frontend
+#       dockerfile: Dockerfile
+#     container_name: web
+#     restart: always
+#     ports:
+#       - 4000:4000
+
+version: "3.8"
+
+networks:
+  proxy:
+    external: true
 
 services:
-  frontend:
+  frontend-dev:
     env_file:
-      - ./frontend/.env
+      - ./frontend/.env.dev
     build:
       context: frontend
-      dockerfile: Dockerfile
-    container_name: web
+      dockerfile: Dockerfile.dev
+    container_name: expergpt-frontend-dev
     restart: always
     ports:
-      - 3000:3000
+      - 4001:4001
+    networks:
+      - proxy

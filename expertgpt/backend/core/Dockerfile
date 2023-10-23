@@ -16,6 +16,9 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /code
 
+# Upgrade pip
+RUN pip install --upgrade pip
+
 COPY ./requirements.txt /code/requirements.txt
 
 RUN pip install zep-python

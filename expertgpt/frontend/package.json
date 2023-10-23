@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p 4000",
+    "start-dev": "next start -p 4001",
     "start:https": "NODE_ENV=production node server.js",
     "lint": "next lint",
     "lint-fix": "eslint --fix .",

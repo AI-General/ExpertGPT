@@ -1,4 +1,25 @@
-version: "3"
+# version: "3"
+
+# services:
+#   backend-core:
+#     env_file:
+#       - ./backend/core/.env
+#     build:
+#       context: backend/core
+#       dockerfile: Dockerfile
+#     container_name: backend-core
+#     restart: always
+#     volumes:
+#       - ./backend/core/:/code/
+#       - ~/.config/gcloud:/root/.config/gcloud
+#     ports:
+#       - 5050:5050
+
+version: "3.8"
+
+networks:
+  proxy:
+    external: true
 
 services:
   backend-core:
@@ -7,10 +28,12 @@ services:
     build:
       context: backend/core
       dockerfile: Dockerfile
-    container_name: backend-core
+    container_name: expertgpt-backend
     restart: always
     volumes:
       - ./backend/core/:/code/
       - ~/.config/gcloud:/root/.config/gcloud
     ports:
       - 5050:5050
+    networks:
+      - proxy

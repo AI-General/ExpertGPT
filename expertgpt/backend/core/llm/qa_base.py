@@ -1,6 +1,6 @@
 import asyncio
 from abc import abstractmethod, abstractproperty
-from typing import AsyncIterable, Awaitable, Optional
+from typing import AsyncIterable, Awaitable, Callable, Optional
 from uuid import UUID
 from langchain.callbacks.streaming_aiter import AsyncIteratorCallbackHandler
 from langchain.chains import ConversationalRetrievalChain, LLMChain
@@ -271,13 +271,29 @@ class QABaseBrainPicking(BaseBrainPicking):
         # Initialize a list to hold the tokens
         response_tokens = []
 
-        # Wrap an awaitable with a event to signal when it's done or an exception is raised.
+        streamed_chat_history = update_chat_history(
+            chat_id=self.chat_id,
+            brain_id=self.brain_id,
+            user_message=question,
+            assistant="",
+        )
 
-        async def wrap_done(fn: Awaitable, event: asyncio.Event):
+        # def handle_exception(e: Exception):
+        #     yield e
+
+        # Instantiate the queue
+        queue = asyncio.Queue()
+
+        # Wrap an awaitable with a event to signal when it's done or an exception is raised.
+        async def wrap_done(fn: Awaitable, event: asyncio.Event, queue: asyncio.Queue):
             try:
                 await fn
             except Exception as e:
                 logger.error(f"Caught exception: {e}")
+                await queue.put(f"ERROR: {e}")
+                # error_callback(e)
+                # streamed_chat_history.assistant = str(e)
+                # yield f"ERROR: {e}"
             finally:
                 event.set()
         # Begin a task that runs in the background.
@@ -285,14 +301,8 @@ class QABaseBrainPicking(BaseBrainPicking):
         run = asyncio.create_task(wrap_done(
             qa.acall({"question": question, "chat_history": transformed_history}),
             callback.done,
+            queue
         ))
-
-        streamed_chat_history = update_chat_history(
-            chat_id=self.chat_id,
-            brain_id=self.brain_id,
-            user_message=question,
-            assistant="",
-        )
 
         # Use the aiter method of the callback to stream the response with server-sent-events
         async for token in callback.aiter():  # pyright: ignore reportPrivateUsage=none
@@ -305,6 +315,12 @@ class QABaseBrainPicking(BaseBrainPicking):
             yield f"data: {json.dumps(streamed_chat_history.to_dict())}"
 
         await run
+
+        if not queue.empty():
+            error_token = await queue.get()
+            streamed_chat_history.assistant = error_token
+            yield f"data: {json.dumps(streamed_chat_history.to_dict())}"
+
         # Join the tokens to create the assistant's response
         assistant = "".join(response_tokens)
 

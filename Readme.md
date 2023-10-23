@@ -72,7 +72,7 @@ Additionally, you'll need a [Supabase](https://supabase.com/) account for:
   - Qdrant
   ```bash
   docker pull qdrant/qdrant  # Download qdrant
-  docker run -p 6333:6333 \
+  docker run -p 6335:6333 \
       -v $(pwd)/qdrant_storage:/qdrant/storage:z \
       qdrant/qdrant
   ```

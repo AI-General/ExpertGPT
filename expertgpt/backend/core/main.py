@@ -124,4 +124,4 @@ handle_request_validation_error(app)
 
 if __name__ == '__main__':
     # load_dotenv()
-    uvicorn.run(app, host="0.0.0.0", port=5050)
+    uvicorn.run(app, host="0.0.0.0", port=5051)
