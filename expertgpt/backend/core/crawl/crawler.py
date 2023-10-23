@@ -17,7 +17,13 @@ class CrawlWebsite(BaseModel):
     max_time: int = 60
 
     def _crawl(self, url):
-        response = requests.get(url)
+        if '://' not in url:
+            url = 'https://' + url
+        try: 
+            response = requests.get(url)
+        except requests.exceptions.RequestException as e:
+            print(f"An error occurred: {e}")
+            return None
         if response.status_code == 200:
             return response.text
         else:

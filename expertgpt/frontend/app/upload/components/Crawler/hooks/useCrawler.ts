@@ -26,16 +26,16 @@ export const useCrawler = () => {
       // Validate URL
       const url = urlInputRef.current ? urlInputRef.current.value : null;
 
-      if (!url || !isValidUrl(url)) {
-        void track("URL_INVALID");
+      // if (!url || !isValidUrl(url)) {
+      //   void track("URL_INVALID");
 
-        publish({
-          variant: "danger",
-          text: "Invalid URL",
-        });
+      //   publish({
+      //     variant: "danger",
+      //     text: "Invalid URL",
+      //   });
 
-        return;
-      }
+      //   return;
+      // }
 
       // Configure parameters
       const config = {
