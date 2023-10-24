@@ -9,6 +9,7 @@ class BrainEntity(BaseModel):
     brain_id: UUID
     name: str
     description: Optional[str]
+    # overview: Optional[str]
     # temperature: Optional[float]
     # model: Optional[str]
     # max_tokens: Optional[int]

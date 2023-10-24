@@ -121,7 +121,13 @@ class Brain(Repository):
             .filter("brain_id", "eq", brain_id)
             .execute()
         )
-        return response.data
+        # return response.data
+        
+        if response.data == []:
+            print("Critical Error: Brain not found")
+            print(f"Brain id: {brain_id}")
+            return None
+        return BrainEntity(**response.data[0])
 
     def delete_brain_user_by_id(self, user_id, brain_id):
         results = (

@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 import pypandoc
@@ -10,6 +11,7 @@ from fastapi.responses import JSONResponse
 from logger import get_logger
 # from middlewares.cors import add_cors_middleware
 from fastapi.middleware.cors import CORSMiddleware
+from routes.annotation_routes import annotation_router
 from routes.api_key_routes import api_key_router
 from routes.brain_routes import brain_router
 from routes.chat_routes import chat_router
@@ -81,6 +83,7 @@ async def startup_event():
         pypandoc.download_pandoc()
 
 
+app.include_router(annotation_router)
 app.include_router(brain_router)
 app.include_router(chat_router)
 app.include_router(crawl_router)
