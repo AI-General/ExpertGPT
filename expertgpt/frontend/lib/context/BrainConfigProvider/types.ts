@@ -1,12 +1,12 @@
 import { UUID } from "crypto";
 
 export type BrainConfig = {
-  model: Model;
-  temperature: number;
-  maxTokens: number;
+  // model: Model;
+  // temperature: number;
+  // maxTokens: number;
   keepLocal: boolean;
   backendUrl?: string;
-  openAiKey?: string;
+  // openAiKey?: string;
   anthropicKey?: string;
   supabaseUrl?: string;
   supabaseKey?: string;
@@ -24,15 +24,15 @@ export type BrainConfigContextType = {
 // export const openAiModels = ["gpt-3.5-turbo", "gpt-4"] as const; ## TODO activate GPT4 when not in demo mode
 
 export const openAiModels = [
-  "gpt-3.5-turbo",
-  "gpt-3.5-turbo-0613",
-  "gpt-3.5-turbo-16k",
+  // "gpt-3.5-turbo",
+  // "gpt-3.5-turbo-0613",
+  // "gpt-3.5-turbo-16k",
 ] as const;
 export const openAiPaidModels = [
-  "gpt-3.5-turbo-0613",
-  "gpt-3.5-turbo-16k",
-  "gpt-4",
-  "gpt-4-0613",
+  // "gpt-3.5-turbo-0613",
+  // "gpt-3.5-turbo-16k",
+  // "gpt-4",
+  // "gpt-4-0613",
 ] as const;
 
 export const anthropicModels = [

@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 import pypandoc
@@ -8,7 +9,9 @@ from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from logger import get_logger
-from middlewares.cors import add_cors_middleware
+# from middlewares.cors import add_cors_middleware
+from fastapi.middleware.cors import CORSMiddleware
+from routes.annotation_routes import annotation_router
 from routes.api_key_routes import api_key_router
 from routes.brain_routes import brain_router
 from routes.chat_routes import chat_router
@@ -62,7 +65,16 @@ if sentry_dsn:
 
 app = FastAPI()
 
-add_cors_middleware(app)
+# add_cors_middleware(app)
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")
@@ -71,6 +83,7 @@ async def startup_event():
         pypandoc.download_pandoc()
 
 
+app.include_router(annotation_router)
 app.include_router(brain_router)
 app.include_router(chat_router)
 app.include_router(crawl_router)
@@ -114,4 +127,4 @@ handle_request_validation_error(app)
 
 if __name__ == '__main__':
     # load_dotenv()
-    uvicorn.run(app, host="0.0.0.0", port=5050)
+    uvicorn.run(app, host="0.0.0.0", port=5051)

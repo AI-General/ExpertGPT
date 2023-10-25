@@ -12,13 +12,13 @@ const axiosInstance = axios.create({
 export const useAxios = (): { axiosInstance: AxiosInstance } => {
   const { session } = useSupabase();
   const {
-    config: { backendUrl, openAiKey },
+    config: { backendUrl},
   } = useBrainConfig();
   axiosInstance.interceptors.request.clear();
   axiosInstance.interceptors.request.use(
     (config) => {
       config.headers["Authorization"] = `Bearer ${session?.access_token ?? ""}`;
-      config.headers["Openai-Api-Key"] = openAiKey;
+      // config.headers["Openai-Api-Key"] = openAiKey;
       config.baseURL = backendUrl ?? config.baseURL;
 
       return config;

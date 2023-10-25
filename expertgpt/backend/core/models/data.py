@@ -1,4 +1,5 @@
 import os
+import sys
 import tempfile
 from typing import Any, Optional
 import uuid
@@ -43,7 +44,7 @@ class Data(BaseModel):
         super().__init__(**kwargs)
 
         if self.data:
-            self.data_size = len(self.data)  # pyright: ignore reportPrivateUsage=none
+            self.data_size = sys.getsizeof(self.data)  # pyright: ignore reportPrivateUsage=none
             # self.file_extension = os.path.splitext(
             #     self.file.filename  # pyright: ignore reportPrivateUsage=none
             # )[-1].lower()

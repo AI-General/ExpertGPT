@@ -14,7 +14,6 @@ async def process_audio(
     file: File,
     enable_summarization: bool,
     user,
-    user_openai_api_key,
 ):
     temp_filename = None
     file_sha = ""
@@ -23,10 +22,7 @@ async def process_audio(
     documents_vector_store = get_documents_vector_store()
 
     # use this for whisper
-    os.environ.get("OPENAI_API_KEY")
-    if user_openai_api_key:
-        pass
-
+    
     try:
         upload_file = file.file
         with tempfile.NamedTemporaryFile(

@@ -58,20 +58,10 @@ async def upload_file(
             "type": "error",
         }
     else:
-        openai_api_key = request.headers.get("Openai-Api-Key", None)
-        if openai_api_key is None:
-            brain_details = get_brain_details(brain_id)
-            if brain_details:
-                openai_api_key = brain_details.openai_api_key
-
-        if openai_api_key is None:
-            openai_api_key = get_user_identity(current_user.id).openai_api_key
-
         message = await filter_file(
             file=file,
             enable_summarization=enable_summarization,
             brain_id=brain_id,
-            openai_api_key=openai_api_key,
         )
 
     return message

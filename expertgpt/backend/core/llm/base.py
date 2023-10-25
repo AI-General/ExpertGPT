@@ -29,22 +29,22 @@ class BaseBrainPicking(BaseModel):
     chat_id: str = None  # pyright: ignore reportPrivateUsage=none
     brain_id: str = None  # pyright: ignore reportPrivateUsage=none
     max_tokens: int = 256
-    user_openai_api_key: str = None  # pyright: ignore reportPrivateUsage=none
+    openai_api_key: str = None  # pyright: ignore reportPrivateUsage=none
     personality: Personality = None
     memory:ConversationBufferMemory = None
     streaming: bool = False
 
-    openai_api_key: str = None  # pyright: ignore reportPrivateUsage=none
+    # openai_api_key: str = None  # pyright: ignore reportPrivateUsage=none
     callbacks: List[
         AsyncIteratorCallbackHandler
     ] = None  # pyright: ignore reportPrivateUsage=none
 
-    def _determine_api_key(self, openai_api_key, user_openai_api_key):
-        """If user provided an API key, use it."""
-        if user_openai_api_key is not None:
-            return user_openai_api_key
-        else:
-            return openai_api_key
+    # def _determine_api_key(self, openai_api_key, openai_api_key):
+    #     """If user provided an API key, use it."""
+    #     if openai_api_key is not None:
+    #         return openai_api_key
+    #     else:
+    #         return openai_api_key
 
     def _determine_streaming(self, model: str, streaming: bool) -> bool:
         """If the model name allows for streaming and streaming is declared, set streaming to True."""
@@ -61,9 +61,9 @@ class BaseBrainPicking(BaseModel):
     def __init__(self, **data):
         super().__init__(**data)
 
-        self.openai_api_key = self._determine_api_key(
-            self.brain_settings.openai_api_key, self.user_openai_api_key
-        )
+        # self.openai_api_key = self._determine_api_key(
+        #     self.brain_settings.openai_api_key, self.openai_api_key
+        # )
         self.streaming = self._determine_streaming(
             self.model, self.streaming
         )  # pyright: ignore reportPrivateUsage=none

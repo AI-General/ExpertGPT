@@ -4,7 +4,7 @@ import Button from "@/lib/components/ui/Button";
 
 import { useChat } from "@/app/chat/[chatId]/hooks/useChat";
 import { useState } from "react";
-import { ConfigModal } from "./components/ConfigModal";
+// import { ConfigModal } from "./components/ConfigModal";
 import { MicButton } from "./components/MicButton/MicButton";
 import { RecommendModal } from "./components/RecommendModal";
 
@@ -53,7 +53,7 @@ export const ChatInput = (): JSX.Element => {
       </Button>
       <div className="flex items-center">
         <MicButton setMessage={setMessage} />
-        <ConfigModal chatId={chatId} />
+        {/* <ConfigModal chatId={chatId} /> */}
       </div>
       <RecommendModal message = {message} />
     </form>

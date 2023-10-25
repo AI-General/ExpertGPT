@@ -31,7 +31,7 @@ const fetchInstance: FetchInstance = {
 export const useFetch = (): { fetchInstance: FetchInstance } => {
   const { session } = useSupabase();
   const {
-    config: { backendUrl: configBackendUrl, openAiKey },
+    config: { backendUrl: configBackendUrl },
   } = useBrainConfig();
 
   const [instance, setInstance] = useState(fetchInstance);
@@ -45,29 +45,25 @@ export const useFetch = (): { fetchInstance: FetchInstance } => {
       get: async (url, headers) =>
         fetchInstance.get(`${backendUrl}${url}`, {
           Authorization: `Bearer ${session?.access_token ?? ""}`,
-          "Openai-Api-Key": openAiKey ?? "",
           ...headers,
         }),
       post: async (url, body, headers) =>
         fetchInstance.post(`${backendUrl}${url}`, body, {
           Authorization: `Bearer ${session?.access_token ?? ""}`,
-          "Openai-Api-Key": openAiKey ?? "",
           ...headers,
         }),
       put: async (url, body, headers) =>
         fetchInstance.put(`${backendUrl}${url}`, body, {
           Authorization: `Bearer ${session?.access_token ?? ""}`,
-          "Openai-Api-Key": openAiKey ?? "",
           ...headers,
         }),
       delete: async (url, headers) =>
         fetchInstance.delete(`${backendUrl}${url}`, {
           Authorization: `Bearer ${session?.access_token ?? ""}`,
-          "Openai-Api-Key": openAiKey ?? "",
           ...headers,
         }),
     });
-  }, [session, backendUrl, openAiKey]);
+  }, [session, backendUrl]);
 
   return { fetchInstance: instance };
 };

@@ -13,9 +13,9 @@ export const BrainConfigProviderMock = ({
     <BrainConfigContextMock.Provider
       value={{
         config: {
-          model: "gpt-3.5-turbo-0613",
-          temperature: 0,
-          maxTokens: 256,
+          // model: "gpt-3.5-turbo-0613",
+          // temperature: 0,
+          // maxTokens: 256,
           keepLocal: true,
         },
         updateConfig: () => void 0,

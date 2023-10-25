@@ -8,13 +8,14 @@ import { useSupabase } from "../../../lib/context/SupabaseProvider";
 
 interface DocumentDataProps {
   documentName: string;
+  documentSha1: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type DocumentDetails = any;
 //TODO: review this component logic, types and purposes
 
-const DocumentData = ({ documentName }: DocumentDataProps): JSX.Element => {
+const DocumentData = ({ documentName, documentSha1 }: DocumentDataProps): JSX.Element => {
   const { session } = useSupabase();
   const { axiosInstance } = useAxios();
   const { track } = useEventTracking();
@@ -29,7 +30,7 @@ const DocumentData = ({ documentName }: DocumentDataProps): JSX.Element => {
     const fetchDocuments = async () => {
       void track("GET_DOCUMENT_DETAILS");
       const res = await axiosInstance.get<{ documents: DocumentDetails[] }>(
-        `/explore/${documentName}/`
+        `/explore/${documentSha1}/`
       );
       setDocuments(res.data.documents);
     };
@@ -39,7 +40,7 @@ const DocumentData = ({ documentName }: DocumentDataProps): JSX.Element => {
   return (
     <div className="prose dark:prose-invert">
       <h1 className="text-bold text-3xl break-words">{documentName}</h1>
-      <p>No. of chunks: {documents.length}</p>
+      {/* <p>No. of chunks: {documents[0].}</p> */}
 
       <div className="flex flex-col">
         {documents[0] &&
@@ -51,7 +52,7 @@ const DocumentData = ({ documentName }: DocumentDataProps): JSX.Element => {
                   {key.replaceAll("_", " ")}
                 </p>
                 <span className="break-words my-auto">
-                  {String(value || "Not Available")}
+                  {String(value) || "Not Available"}
                 </span>
               </div>
             );

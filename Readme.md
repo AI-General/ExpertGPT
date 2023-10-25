@@ -41,7 +41,7 @@ Additionally, you'll need a [Supabase](https://supabase.com/) account for:
 
   ```bash
   cd expertgpt
-  cp .backend_env.example backend/.env
+  cp .backend_env.example backend/core/.env
   cp .frontend_env.example frontend/.env
   ```
 
@@ -63,7 +63,25 @@ Additionally, you'll need a [Supabase](https://supabase.com/) account for:
 
 - **Step 4**: Use the `migration.sh` script to run the migration scripts
 
-  ⚠️Not completed
+  ```bash
+  chmod +x migration.sh
+  ./migration.sh
+  ```
+
+- **Step 5**: Qdrant Database Install
+  - Qdrant
+  ```bash
+  docker pull qdrant/qdrant  # Download qdrant
+  docker run -p 6335:6333 \
+      -v $(pwd)/qdrant_storage:/qdrant/storage:z \
+      qdrant/qdrant
+  ```
+
+  - Collection Install
+  ```bash
+  cd expertgpt/backend/core
+  python3 setup_qdrant.py
+  ```
 
 - **Step 5**: Launch the app
 
@@ -82,14 +100,6 @@ Additionally, you'll need a [Supabase](https://supabase.com/) account for:
   ```bash
   cd openapi-test
   docker compose up
-  ```
-
-  - Qdrant
-  ```bash
-  docker pull qdrant/qdrant  # Download qdrant
-  docker run -p 6333:6333 \
-      -v $(pwd)/qdrant_storage:/qdrant/storage:z \
-      qdrant/qdrant
   ```
 
   - Zep

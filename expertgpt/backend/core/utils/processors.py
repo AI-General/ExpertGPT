@@ -46,7 +46,6 @@ async def filter_file(
     file: File,
     enable_summarization: bool,
     brain_id,
-    openai_api_key,
 ):
     await file.compute_file_sha1()
 
@@ -77,7 +76,6 @@ async def filter_file(
                 file=file,
                 enable_summarization=enable_summarization,
                 brain_id=brain_id,
-                user_openai_api_key=openai_api_key,
             )
             return create_response(
                 f"✅ {file.file.filename} has been uploaded to brain {brain_id}.",  # pyright: ignore reportPrivateUsage=none

@@ -63,7 +63,7 @@ describe("useBrainApi", () => {
     } = renderHook(() => useBrainApi());
 
     const brain: CreateBrainInput = {
-      name: "Test Brain",
+      name: "Test Clone",
       description: "This is a description",
       status: "public",
       model: "gpt-3.5-turbo-0613",

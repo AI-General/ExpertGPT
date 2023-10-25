@@ -13,8 +13,7 @@ from utils.vectors import Neurons
 async def process_github(
     repo,
     enable_summarization,
-    brain_id,
-    user_openai_api_key,
+    brain_id
 ):
     random_dir_name = os.urandom(16).hex()
     dateshort = time.strftime("%Y%m%d")
@@ -70,7 +69,7 @@ async def process_github(
             print(f"Creating entry for file {file.file_sha1} in vectors...")
             neurons = Neurons()
             created_vector = neurons.create_vector(
-                doc_with_metadata, user_openai_api_key
+                doc_with_metadata
             )
             print("Created vector sids ", created_vector)
             print("Created vector for ", doc.metadata["file_name"])

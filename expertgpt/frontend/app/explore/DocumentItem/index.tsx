@@ -74,7 +74,7 @@ const DocumentItem = forwardRef(
         </Ellipsis>
         <div className="flex gap-2 self-end">
           <Modal Trigger={<Button className="">View</Button>}>
-            <DocumentData documentName={document.name} />
+            <DocumentData documentName={document.name} documentSha1={document.sha1} />
           </Modal>
 
           {canDeleteFile && (

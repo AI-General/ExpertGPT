@@ -42,9 +42,9 @@ class File(BaseModel):
 
         if self.file:
             self.file_name = self.file.filename
-            self.file_size = (
-                self.file.file._file.tell()  # pyright: ignore reportPrivateUsage=none
-            )
+            # self.file_size = (
+            #     self.file.file._file.tell()  # pyright: ignore reportPrivateUsage=none
+            # )
             self.file_extension = os.path.splitext(
                 self.file.filename  # pyright: ignore reportPrivateUsage=none
             )[-1].lower()
@@ -83,6 +83,8 @@ class File(BaseModel):
         ) as tmp_file:
             tmp_file.write(self.content)  # pyright: ignore reportPrivateUsage=none
             tmp_file.flush()
+
+            self.file_size = os.path.getsize(tmp_file.name)
             loader = loader_class(tmp_file.name)
             documents = loader.load()
 

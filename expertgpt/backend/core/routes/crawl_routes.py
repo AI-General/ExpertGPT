@@ -75,7 +75,7 @@ async def crawl_endpoint(
                 file=file,
                 enable_summarization=enable_summarization,
                 brain_id=brain.id,
-                openai_api_key=request.headers.get("Openai-Api-Key", None),
+                # openai_api_key=request.headers.get("Openai-Api-Key", None),
             )
             return message
         else:

@@ -10,7 +10,7 @@ import { usePromptApi } from "@/lib/api/prompt/usePromptApi";
 import { useBrainConfig } from "@/lib/context/BrainConfigProvider";
 import { useBrainContext } from "@/lib/context/BrainProvider/hooks/useBrainContext";
 import { Brain } from "@/lib/context/BrainProvider/types";
-import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
+// import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
 import { useToast } from "@/lib/hooks";
 
 type UseSettingsTabProps = {
@@ -58,10 +58,10 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
 
   const isDefaultBrain = defaultBrainId === brainId;
   const promptId = watch("prompt_id");
-  const openAiKey = watch("openAiKey");
-  const model = watch("model");
-  const temperature = watch("temperature");
-  const maxTokens = watch("maxTokens");
+  // const openAiKey = watch("openAiKey");
+  // const model = watch("model");
+  // const temperature = watch("temperature");
+  // const maxTokens = watch("maxTokens");
   const linkedin = watch("linkedin");
   const extraversion = watch("extraversion");
   const neuroticism = watch("neuroticism");
@@ -79,18 +79,18 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
         return;
       }
 
-      if (brainKey === "max_tokens" && brain["max_tokens"] !== undefined) {
-        setValue("maxTokens", brain["max_tokens"]);
-        continue;
-      }
+      // if (brainKey === "max_tokens" && brain["max_tokens"] !== undefined) {
+      //   setValue("maxTokens", brain["max_tokens"]);
+      //   continue;
+      // }
 
-      if (
-        brainKey === "openai_api_key" &&
-        brain["openai_api_key"] !== undefined
-      ) {
-        setValue("openAiKey", brain["openai_api_key"]);
-        continue;
-      }
+      // if (
+      //   brainKey === "openai_api_key" &&
+      //   brain["openai_api_key"] !== undefined
+      // ) {
+      //   setValue("openAiKey", brain["openai_api_key"]);
+      //   continue;
+      // }
 
       if (brainKey === "linkedin" && brain["linkedin"] !== undefined) {
         setValue("linkedin", brain["linkedin"]);
@@ -121,9 +121,9 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
     void fetchBrain();
   }, []);
 
-  useEffect(() => {
-    setValue("maxTokens", Math.min(maxTokens, defineMaxTokens(model)));
-  }, [maxTokens, model, setValue]);
+  // useEffect(() => {
+  //   setValue("maxTokens", Math.min(maxTokens, defineMaxTokens(model)));
+  // }, [maxTokens, model, setValue]);
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -243,8 +243,8 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
       setIsUpdating(true);
 
       const {
-        maxTokens: max_tokens,
-        openAiKey: openai_api_key,
+        // maxTokens: max_tokens,
+        // openAiKey: openai_api_key,
         prompt,
         ...otherConfigs
       } = getValues();
@@ -271,16 +271,16 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
           ).id;
           await updateBrain(brainId, {
             ...otherConfigs,
-            max_tokens,
-            openai_api_key,
+            // max_tokens,
+            // openai_api_key,
           });
           void fetchBrain();
         } else {
           await Promise.all([
             updateBrain(brainId, {
               ...otherConfigs,
-              max_tokens,
-              openai_api_key,
+              // max_tokens,
+              // openai_api_key,
             }),
             promptHandler(),
           ]);
@@ -288,8 +288,8 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
       } else {
         await updateBrain(brainId, {
           ...otherConfigs,
-          max_tokens,
-          openai_api_key,
+          // max_tokens,
+          // openai_api_key,
           prompt_id:
             otherConfigs["prompt_id"] !== ""
               ? otherConfigs["prompt_id"]
@@ -343,10 +343,10 @@ export const useSettingsTab = ({ brainId }: UseSettingsTabProps) => {
   return {
     handleSubmit,
     register,
-    openAiKey,
-    model,
-    temperature,
-    maxTokens,
+    // openAiKey,
+    // model,
+    // temperature,
+    // maxTokens,
     linkedin,
     extraversion,
     neuroticism,

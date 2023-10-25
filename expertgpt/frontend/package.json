@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next -p 3001",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 4000",
+    "start-dev": "next start -p 4001",
+    "start:https": "NODE_ENV=production node server.js",
     "lint": "next lint",
     "lint-fix": "eslint --fix .",
     "test-unit": "vitest run",

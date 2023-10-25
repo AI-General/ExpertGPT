@@ -15,9 +15,8 @@ from sentence_transformers import SentenceTransformer
 async def process_file(
     file: File,
     loader_class,
-    enable_summarization,
     brain_id,
-    user_openai_api_key,
+    enable_summarization = False,
 ):
     dateshort = time.strftime("%Y%m%d")
 
@@ -29,6 +28,7 @@ async def process_file(
         "data_sha1": file.file_sha1,
         "data_size": file.file_size,
         "data_name": file.file_name,
+        "chunk_num": len(file.documents),
         "chunk_size": file.chunk_size,
         "chunk_overlap": file.chunk_overlap,
         "date": dateshort,
@@ -77,6 +77,7 @@ async def process_data(
         "data_sha1": data.data_sha1,
         "data_size": data.data_size,
         "data_name": data.data_name,
+        "chunk_num": len(data.documents),
         "chunk_size": data.chunk_size,
         "chunk_overlap": data.chunk_overlap,
         "date": dateshort,

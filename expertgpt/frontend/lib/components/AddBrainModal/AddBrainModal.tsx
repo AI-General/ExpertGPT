@@ -7,9 +7,9 @@ import { useBrainApi } from "@/lib/api/brain/useBrainApi";
 import Button from "@/lib/components/ui/Button";
 import Field from "@/lib/components/ui/Field";
 import { Modal } from "@/lib/components/ui/Modal";
-import { models, paidModels } from "@/lib/context/BrainConfigProvider/types";
+// import { models, paidModels } from "@/lib/context/BrainConfigProvider/types";
 import { Personality, Question } from "@/lib/context/BrainProvider/types";
-import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
+// import { defineMaxTokens } from "@/lib/helpers/defineMexTokens";
 
 import { useAddBrainModal } from "./hooks/useAddBrainModal";
 // import { Divider } from "../ui/Divider";
@@ -22,10 +22,10 @@ export const AddBrainModal = (): JSX.Element => {
     setIsShareModalOpen,
     register,
     setValue,
-    openAiKey,
-    temperature,
-    maxTokens,
-    model,
+    // openAiKey,
+    // temperature,
+    // maxTokens,
+    // model,
     isPending,
     // pickPublicPrompt,
   } = useAddBrainModal();
@@ -77,12 +77,12 @@ export const AddBrainModal = (): JSX.Element => {
     <Modal
       Trigger={
         <Button variant={"secondary"}>
-          Add New Brain
+          Add New AI Clone
           <MdAdd className="text-xl" />
         </Button>
       }
-      title="Add Brain"
-      desc="Create a new brain to start aggregating content"
+      title="Add AI Clone"
+      desc="Create a new AI Clone to start aggregating content"
       isOpen={isShareModalOpen}
       setOpen={setIsShareModalOpen}
       CloseTrigger={<div />}
@@ -95,7 +95,7 @@ export const AddBrainModal = (): JSX.Element => {
         className="my-10 flex flex-col items-center gap-2"
       >
         <Field
-          label="Enter a brain name"
+          label="Enter a clone name"
           autoFocus
           placeholder="E.g. History notes"
           autoComplete="off"
@@ -104,8 +104,8 @@ export const AddBrainModal = (): JSX.Element => {
         />
 
         <TextArea
-          label="Enter a brain description"
-          placeholder="My new brain is about..."
+          label="Enter a clone description"
+          placeholder="My new clone is about..."
           autoComplete="off"
           className="flex-1 m-3"
           {...register("description")}
@@ -120,15 +120,15 @@ export const AddBrainModal = (): JSX.Element => {
           {...register("linkedin")}
         />
 
-        <Field
+        {/* <Field
           label="OpenAI API Key"
           placeholder="sk-xxx"
           autoComplete="off"
           className="flex-1"
           {...register("openAiKey")}
-        />
+        /> */}
 
-        <fieldset className="w-full flex flex-col">
+        {/* <fieldset className="w-full flex flex-col">
           <label className="flex-1 text-sm" htmlFor="model">
             Model
           </label>
@@ -145,9 +145,9 @@ export const AddBrainModal = (): JSX.Element => {
               )
             )}
           </select>
-        </fieldset>
+        </fieldset> */}
 
-        <fieldset className="w-full flex mt-4">
+        {/* <fieldset className="w-full flex mt-4">
           <label className="flex-1" htmlFor="temp">
             Temperature: {temperature}
           </label>
@@ -160,8 +160,8 @@ export const AddBrainModal = (): JSX.Element => {
             value={temperature}
             {...register("temperature")}
           />
-        </fieldset>
-        <fieldset className="w-full flex mt-4">
+        </fieldset> */}
+        {/* <fieldset className="w-full flex mt-4">
           <label className="flex-1" htmlFor="tokens">
             Max tokens: {maxTokens}
           </label>
@@ -172,7 +172,7 @@ export const AddBrainModal = (): JSX.Element => {
             value={maxTokens}
             {...register("maxTokens")}
           />
-        </fieldset>
+        </fieldset> */}
         <Field
           label="Prompt title"
           placeholder="My awesome prompt name"
@@ -189,7 +189,7 @@ export const AddBrainModal = (): JSX.Element => {
         />
         <div className="flex flex-row justify-start w-full mt-4">
           <label className="flex items-center">
-            <span className="mr-2 text-gray-700">Set as default brain</span>
+            <span className="mr-2 text-gray-700">Set as default clone</span>
             <input
               type="checkbox"
               {...register("setDefault")}

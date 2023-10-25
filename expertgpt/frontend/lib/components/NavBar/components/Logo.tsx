@@ -5,13 +5,13 @@ export const Logo = (): JSX.Element => {
   return (
     <Link href={"/"} className="flex items-center gap-4">
       <Image
-        className="rounded-full"
-        src={"/logo.png"}
+        className="full"
+        src={"/logo.svg"}
         alt="ExpertGPT logo"
         width={48}
         height={48}
       />
-      <h1 className="font-bold">MyGPT AI Clone Tester</h1>
+      <h1 className="font-bold">ExpertGPT</h1>
     </Link>
   );
 };

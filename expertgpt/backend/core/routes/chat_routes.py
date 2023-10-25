@@ -35,12 +35,17 @@ from repository.user_identity.get_user_identity import get_user_identity
 ZEP_API_URL = os.getenv("ZEP_API_URL")
 
 session_id = str(uuid4())
-memory = ZepMemory(
-    session_id=session_id,
-    url=ZEP_API_URL,
-    memory_key="chat_history",
-    return_messages=True
-)
+
+try:
+    memory = ZepMemory(
+        session_id=session_id,
+        url=ZEP_API_URL,
+        memory_key="chat_history",
+        return_messages=True
+    )
+except Exception as e:
+    memory = None
+    logger.error(e)
 
 chat_router = APIRouter()
 
@@ -76,19 +81,17 @@ def delete_chat_from_db(supabase_db: SupabaseDB, chat_id):
 def check_user_limit(
     user: User,
 ):
-    if user.user_openai_api_key is None:
-        date = time.strftime("%Y%m%d")
-        max_requests_number = int(os.getenv("MAX_REQUESTS_NUMBER", 1000))
+    # if user.user_openai_api_key is None:
+    date = time.strftime("%Y%m%d")
+    max_requests_number = int(os.getenv("MAX_REQUESTS_NUMBER", 1000))
 
-        user.increment_user_request_count(date)
-        if int(user.requests_count) >= int(max_requests_number):
-            raise HTTPException(
-                status_code=429,  # pyright: ignore reportPrivateUsage=none
-                # pyright: ignore reportPrivateUsage=none
-                detail="You have reached the maximum number of requests for today.",
-            )
-    else:
-        pass
+    user.increment_user_request_count(date)
+    if int(user.requests_count) >= int(max_requests_number):
+        raise HTTPException(
+            status_code=429,  # pyright: ignore reportPrivateUsage=none
+            # pyright: ignore reportPrivateUsage=none
+            detail="You have reached the maximum number of requests for today.",
+        )
 
 
 # get all chats
@@ -183,32 +186,8 @@ async def create_question_handler(
     """
     Add a new question to the chat.
     """
-    # Retrieve user's OpenAI API key
-    current_user.user_openai_api_key = request.headers.get("Openai-Api-Key")
-    brain = Brain(id=brain_id)
 
-    if not current_user.user_openai_api_key:
-        if brain_id:
-            brain_details = get_brain_details(brain_id)
-            if brain_details:
-                current_user.user_openai_api_key = brain_details.openai_api_key
-
-    if not current_user.user_openai_api_key:
-        user_identity = get_user_identity(current_user.id)
-
-        if user_identity is not None:
-            current_user.user_openai_api_key = user_identity.openai_api_key
-
-    # Retrieve chat model (temperature, max_tokens, model)
-    if (
-        not chat_question.model
-        or not chat_question.temperature
-        or not chat_question.max_tokens
-    ):
-        # TODO: create ChatConfig class (pick config from brain or user or chat) and use it here
-        chat_question.model = chat_question.model or brain.model or "gpt-3.5-turbo-0613"
-        chat_question.temperature = chat_question.temperature or brain.temperature or 0
-        chat_question.max_tokens = chat_question.max_tokens or brain.max_tokens or 256
+    brain_details = get_brain_details(brain_id)
 
     try:
         check_user_limit(current_user)
@@ -220,17 +199,22 @@ async def create_question_handler(
 
         personality = Personality(extraversion=brain_details.extraversion,
                                   neuroticism=brain_details.neuroticism, conscientiousness=brain_details.conscientiousness)
+        
+        model = os.getenv('MODEL', 'gpt-4')
+        max_tokens = os.getenv('MAX_TOKENS', 512)
+        temperature = os.getenv('TEMPERATURE', 0.9)
+        openai_api_key = os.getenv('OPENAI_API_KEY', None)
 
         gpt_answer_generator = OpenAIBrainPicking(
             chat_id=str(chat_id),
-            model=chat_question.model,
-            max_tokens=chat_question.max_tokens,
-            temperature=chat_question.temperature,
+            model=model,
+            max_tokens=max_tokens,
+            temperature=temperature,
             brain_id=str(brain_id),
             personality=personality,
             memory=memory,
             prompt_id=chat_question.prompt_id,# pyright: ignore reportPrivateUsage=none
-            user_openai_api_key=current_user.user_openai_api_key,
+            openai_api_key=openai_api_key
         )
 
         chat_answer = gpt_answer_generator.generate_answer(  # pyright: ignore reportPrivateUsage=none
@@ -261,33 +245,8 @@ async def create_stream_question_handler(
     | None = Query(..., description="The ID of the brain"),
     current_user: User = Depends(get_current_user),
 ) -> StreamingResponse:
-    # TODO: check if the user has access to the brain
 
-    # Retrieve user's OpenAI API key
-    current_user.user_openai_api_key = request.headers.get("Openai-Api-Key")
-    brain = Brain(id=brain_id)
-
-    if not current_user.user_openai_api_key and brain_id:
-        brain_details = get_brain_details(brain_id)
-        if brain_details:
-            current_user.user_openai_api_key = brain_details.openai_api_key
-
-    if not current_user.user_openai_api_key:
-        user_identity = get_user_identity(current_user.id)
-
-        if user_identity is not None:
-            current_user.user_openai_api_key = user_identity.openai_api_key
-
-    # Retrieve chat model (temperature, max_tokens, model)
-    if (
-        not chat_question.model
-        or not chat_question.temperature
-        or not chat_question.max_tokens
-    ):
-        # TODO: create ChatConfig class (pick config from brain or user or chat) and use it here
-        chat_question.model = chat_question.model or brain.model or "gpt-3.5-turbo-0613"
-        chat_question.temperature = chat_question.temperature or brain.temperature or 0
-        chat_question.max_tokens = chat_question.max_tokens or brain.max_tokens or 256
+    brain_details = get_brain_details(brain_id)
 
     personality = None
     if (
@@ -305,14 +264,19 @@ async def create_stream_question_handler(
             brain_id = get_default_user_brain_or_create_new(
                 current_user).brain_id
 
+        model = os.getenv('MODEL', 'gpt-4')
+        max_tokens = os.getenv('MAX_TOKENS', 512)
+        temperature = os.getenv('TEMPERATURE', 0.9)
+        openai_api_key = os.getenv('OPENAI_API_KEY', None)
+
         gpt_answer_generator = OpenAIBrainPicking(
             chat_id=str(chat_id),
-            model=chat_question.model,
-            max_tokens=chat_question.max_tokens,
-            temperature=chat_question.temperature,
+            model=model,
+            max_tokens=max_tokens,
+            temperature=temperature,
             brain_id=str(brain_id),
             prompt_id=chat_question.prompt_id,# pyright: ignore reportPrivateUsage=none
-            user_openai_api_key=current_user.user_openai_api_key,
+            openai_api_key=openai_api_key,
             personality=personality,
             streaming=True,
         )
@@ -345,48 +309,25 @@ async def create_brain_stream_question_handler(
     brain_id: UUID,
     current_user: User = Depends(get_current_user),
 ) -> StreamingResponse:
-    # TODO: check if the user has access to the brain
 
-    # Retrieve user's OpenAI API key
-    current_user.user_openai_api_key = request.headers.get("Openai-Api-Key")
     brain = Brain(id=brain_id)
-
-    # if not current_user.user_openai_api_key and brain_id:
-    #     brain_details = get_brain_details(brain_id)
-    #     if brain_details:
-    #         current_user.user_openai_api_key = brain_details.openai_api_key
-
-    # if not current_user.user_openai_api_key:
-    #     user_identity = get_user_identity(current_user.id)
-
-    #     if user_identity is not None:
-    #         current_user.user_openai_api_key = user_identity.openai_api_key
-
-    # # Retrieve chat model (temperature, max_tokens, model)
-    # if (
-    #     not chat_question.model
-    #     or not chat_question.temperature
-    #     or not chat_question.max_tokens
-    # ):
-    #     # TODO: create ChatConfig class (pick config from brain or user or chat) and use it here
-    #     chat_question.model = chat_question.model or brain.model or "gpt-3.5-turbo-0613"
-    #     chat_question.temperature = chat_question.temperature or brain.temperature or 0
-    #     chat_question.max_tokens = chat_question.max_tokens or brain.max_tokens or 256
 
     try:
         logger.info(f"Streaming request for {chat_question.model}")
-        # check_user_limit(current_user)
-        # if not brain_id:
-        #     brain_id = get_default_user_brain_or_create_new(current_user).brain_id
+
+        model = os.getenv('MODEL', 'gpt-4')
+        max_tokens = os.getenv('MAX_TOKENS', 512)
+        temperature = os.getenv('TEMPERATURE', 0.9)
+        openai_api_key = os.getenv('OPENAI_API_KEY', None)
 
         gpt_answer_generator = OpenAIBrainPicking(
             chat_id=None,
-            model=brain.model,
-            max_tokens=brain.max_tokens,
-            temperature=brain.temperature,
+            model=model,
+            max_tokens=max_tokens,
+            temperature=temperature,
             brain_id=str(brain_id),
             prompt_id=chat_question.prompt_id, # pyright: ignore reportPrivateUsage=none
-            user_openai_api_key=current_user.user_openai_api_key,
+            openai_api_key=openai_api_key,
             streaming=True,
         )
 
@@ -412,22 +353,18 @@ async def get_chat_history_handler(
     # TODO: RBAC with current_user
     return get_chat_history(chat_id)  # pyright: ignore reportPrivateUsage=none
 
+
 # get brain history
-
-
 @chat_router.get(
     "/chat/{brain_id}/brain_history", dependencies=[Depends(AuthBearer())], tags=["Chat"]
 )
 async def get_brain_history_handler(
     brain_id: UUID,
 ) -> List[ChatHistory]:
-    # TODO: RBAC with current_user
-    # pyright: ignore reportPrivateUsage=none
     return get_brain_history(brain_id)
 
+
 # choose nearest experts
-
-
 @chat_router.post(
     "/chat/choose",
     dependencies=[
@@ -445,6 +382,88 @@ async def choose_nearest_experts(
     brain_id_scores = qdrant_db.get_nearest_brain_list(query=query, limit=5)
     print(brain_id_scores)
 
-    recommended_brains = [{'name': get_brain_details(
-        brain_score['brain_id']).name, **brain_score} for brain_score in brain_id_scores]
+    recommended_brains = [{'name': get_brain_details(brain_score['brain_id']).name, **brain_score} for brain_score in brain_id_scores]
     return recommended_brains
+
+# ChatWithNoAuthenticationNoHistory
+@chat_router.post(
+    "/chat/unauth/{brain_id}/question",
+    tags=["Chat"]
+)
+async def chat_unauthorized(
+    brain_id: NullableUUID,
+    chat_question: ChatQuestion
+):
+    brain_details = get_brain_details(brain_id)
+
+    try:
+        personality = Personality(extraversion=brain_details.extraversion,
+                                  neuroticism=brain_details.neuroticism, conscientiousness=brain_details.conscientiousness)
+        
+        model = os.getenv('MODEL', 'gpt-4')
+        max_tokens = os.getenv('MAX_TOKENS', 512)
+        temperature = os.getenv('TEMPERATURE', 0.9)
+        openai_api_key = os.getenv('OPENAI_API_KEY', None)
+
+        gpt_answer_generator = OpenAIBrainPicking(
+            chat_id=None,
+            model=model,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            brain_id=str(brain_id),
+            personality=personality,
+            memory=memory,
+            prompt_id=chat_question.prompt_id,# pyright: ignore reportPrivateUsage=none
+            openai_api_key=openai_api_key
+        )
+
+        chat_answer = gpt_answer_generator.generate_answer(  # pyright: ignore reportPrivateUsage=none
+            chat_question.question
+        )
+
+        return chat_answer
+    except HTTPException as e:
+        raise e
+
+# ChatWithNoAuthenticationNoHistory
+@chat_router.post(
+    "/chat/unauth/{brain_id}/question/stream",
+    tags=["Chat"]
+)
+async def chat_unauthorized(
+    brain_id: NullableUUID,
+    chat_question: ChatQuestion
+):
+    brain_details = get_brain_details(brain_id)
+
+    try:
+        personality = Personality(extraversion=brain_details.extraversion,
+                                  neuroticism=brain_details.neuroticism, conscientiousness=brain_details.conscientiousness)
+        
+        model = os.getenv('MODEL', 'gpt-4')
+        max_tokens = os.getenv('MAX_TOKENS', 512)
+        temperature = os.getenv('TEMPERATURE', 0.9)
+        openai_api_key = os.getenv('OPENAI_API_KEY', None)
+
+        gpt_answer_generator = OpenAIBrainPicking(
+            chat_id=None,
+            model=model,
+            max_tokens=max_tokens,
+            temperature=temperature,
+            brain_id=str(brain_id),
+            personality=personality,
+            memory=memory,
+            prompt_id=chat_question.prompt_id,# pyright: ignore reportPrivateUsage=none
+            openai_api_key=openai_api_key,
+            streaming=True
+        )
+
+        print("streaming")
+        return StreamingResponse(
+            gpt_answer_generator.generate_brain_stream(  # pyright: ignore reportPrivateUsage=none
+                chat_question.question
+            ),
+            media_type="text/event-stream",
+        )
+    except HTTPException as e:
+        raise e

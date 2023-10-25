@@ -36,7 +36,7 @@ const ExplorePage = (): JSX.Element => {
             Explore uploaded data in {currentBrain.name}
           </h1>
           <h2 className="opacity-50">
-            View or delete stored data used by your brain
+            View or delete stored data used by your clone
           </h2>
         </div>
         {isPending ? (
@@ -55,7 +55,7 @@ const ExplorePage = (): JSX.Element => {
               </AnimatePresence>
             ) : (
               <div className="flex flex-col items-center justify-center mt-10 gap-1">
-                <p className="text-center">Oh No, Your Brain is empty.</p>
+                <p className="text-center">Oh No, Your Clone is empty.</p>
                 <Link href="/upload">
                   <Button>Upload</Button>
                 </Link>

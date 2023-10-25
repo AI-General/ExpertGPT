@@ -113,9 +113,6 @@ async def create_brain_endpoint(
     Create a new brain with given
         name
         status
-        model
-        max_tokens
-        temperature
         extraversion
         neuroticism
         conscientiousness

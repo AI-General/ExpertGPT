@@ -52,7 +52,7 @@ export const useBrainProvider = () => {
     void track("DELETE_BRAIN");
     publish({
       variant: "success",
-      text: "Brain deleted",
+      text: "AI Clone deleted",
     });
   };
 
