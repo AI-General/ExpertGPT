@@ -72,11 +72,41 @@ async def delete_data_endpoint(
     brain.delete_data_from_brain(data_sha1)
 
 
+# @explore_router.get(
+#     "/explore/{file_name}/", dependencies=[Depends(AuthBearer())], tags=["Explore"]
+# )
+# async def download_endpoint(
+#     file_name: str, current_user: User = Depends(get_current_user)
+# ):
+#     """
+#     Download a specific user file by file name.
+#     """
+#     # check if user has the right to get the file: add brain_id to the query
+
+#     supabase_db = get_supabase_db()
+#     response = supabase_db.get_vectors_by_file_name(file_name)
+#     documents = response.data
+
+#     if len(documents) == 0:
+#         return {"documents": []}
+
+#     related_brain_id = (
+#         documents[0]["brains_vectors"][0]["brain_id"]
+#         if len(documents[0]["brains_vectors"]) != 0
+#         else None
+#     )
+#     if related_brain_id is None:
+#         raise Exception(f"File {file_name} has no brain_id associated with it")
+
+#     validate_brain_authorization(brain_id=related_brain_id, user_id=current_user.id)
+
+#     return {"documents": documents}
+
 @explore_router.get(
-    "/explore/{file_name}/", dependencies=[Depends(AuthBearer())], tags=["Explore"]
+    "/explore/{data_sha1}/", dependencies=[Depends(AuthBearer())], tags=["Explore"]
 )
 async def download_endpoint(
-    file_name: str, current_user: User = Depends(get_current_user)
+    data_sha1: str, current_user: User = Depends(get_current_user)
 ):
     """
     Download a specific user file by file name.
@@ -84,20 +114,10 @@ async def download_endpoint(
     # check if user has the right to get the file: add brain_id to the query
 
     supabase_db = get_supabase_db()
-    response = supabase_db.get_vectors_by_file_name(file_name)
+    response = supabase_db.get_brain_data_by_data_sha1(data_sha1)
     documents = response.data
 
     if len(documents) == 0:
         return {"documents": []}
 
-    related_brain_id = (
-        documents[0]["brains_vectors"][0]["brain_id"]
-        if len(documents[0]["brains_vectors"]) != 0
-        else None
-    )
-    if related_brain_id is None:
-        raise Exception(f"File {file_name} has no brain_id associated with it")
-
-    validate_brain_authorization(brain_id=related_brain_id, user_id=current_user.id)
-
-    return {"documents": documents}
+    return {"documents": [documents[0]['metadata']]}

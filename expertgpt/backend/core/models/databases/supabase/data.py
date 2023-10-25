@@ -25,3 +25,12 @@ class Data(Repository):
         )
 
         return response
+
+    def get_brain_data_by_data_sha1(self, data_sha1):
+        response = (
+            self.db.table("brains_data")
+            .select("metadata")
+            .filter("data_sha1", "eq", data_sha1)
+            .execute()
+        )
+        return response
