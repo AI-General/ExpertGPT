@@ -1,6 +1,9 @@
 from typing import List, Optional
 from pydantic import BaseModel
 
+class AnnotationQuery(BaseModel):
+    text: str
+
 class Annotation(BaseModel):
     origin: str
     type: str

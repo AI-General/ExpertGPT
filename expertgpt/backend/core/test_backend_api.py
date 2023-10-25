@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 logger = logger.get_logger(__name__)
 
-ENDPOINT = "http://walletgpt.info:5050"
+ENDPOINT = "http://localhost:5051"
 
 ########## BRAIN ##########
 # Retrieve all brains for the current user.
@@ -315,7 +315,7 @@ if __name__ == "__main__":
     # test_post_brains(hongyu_token, jeffBezos_data)
     
     #################### Get All brains ####################
-    # test_get_brains(hongyu_token)
+    test_get_brains(hongyu_token)
 
     # test_get_brain_information(hongyu_token, '7b78d424-4d17-4ef1-bcea-f28de168c5d9')
 
@@ -383,6 +383,6 @@ if __name__ == "__main__":
     # test_post_chat(token=hongyu_token, chat_id="0b566e14-dc11-4c71-a4ac-34f0daf72970", brain_id=brain_ids[0], question="What is your favorate?")
 
     #################### stream new question response from chat ####################
-    test_post_chat(token=hongyu_token, chat_id="6d570d92-cce9-4ede-a431-9e0d85a069cd", brain_id='e13a4134-0e15-4cc3-9876-7ee2c37002a5', question="What is your favorite?")
+    # test_post_chat(token=hongyu_token, chat_id="6d570d92-cce9-4ede-a431-9e0d85a069cd", brain_id='e13a4134-0e15-4cc3-9876-7ee2c37002a5', question="What is your favorite?")
     # test_post_chat_stream(token=hongyu_token, chat_id="0b566e14-dc11-4c71-a4ac-34f0daf72970", brain_id=brain_ids[0], question="What is your favorate?")
     

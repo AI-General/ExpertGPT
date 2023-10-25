@@ -181,7 +181,7 @@ class Brain(BaseModel):
 
     def generate_annotation(self, user_text: str) -> AnnotationMessage:
         model = os.getenv("ANNOTATION_MODEL", "gpt-4")
-        max_tokens = os.getenv("ANNOTATION_MAX_TOKENS", 4096)
+        max_tokens = int(os.getenv("ANNOTATION_MAX_TOKENS", 4096))
         # brain_details = self.supabase_db.get_brain_details(self.id)
         # brain_overview = brain_details.overview
         brain_overview = None
@@ -198,7 +198,7 @@ class Brain(BaseModel):
             "stop": ["\n20", "20.", "20."],
         }
 
-        logit_bias={"50256": -100}
+        # logit_bias={"50256": -100}
 
         messages = [
             {"role": "system", "content": system_prompt},
@@ -208,7 +208,7 @@ class Brain(BaseModel):
         shared_kwargs = dict(
             model=model,
             **decoding_args,
-            **logit_bias,
+            # **logit_bias,
         )
         sleep_time = 2
 
@@ -216,7 +216,7 @@ class Brain(BaseModel):
             try:
                 response = openai.ChatCompletion.create(messages=messages, **shared_kwargs)
                 content = response.choices[0]["message"]["content"]
-                status = 200
+                status_code = 200
                 break
             except openai.error.OpenAIError as e:
                 logger.warning(f"OpenAIError: {e}.")
@@ -229,15 +229,15 @@ class Brain(BaseModel):
                     break
                 # TODO: handle other errors(OpenAI billing error)
                 else:
-                    status = 500
+                    status_code = 500
                     content = str(e)
                     logger.error(f"Unexpected error: {e}")
                     break    
         
-        if status == 200:
+        if status_code == 200:
             annotation_message = self.annotation_parser(content)
         else:
-            annotation_message = {"status": status, "content": content}
+            annotation_message = AnnotationMessage(status_code=status_code, message=content)
         return annotation_message
 
     def annotation_system_prompt(self, overview: str | None) -> str:
@@ -276,6 +276,7 @@ Example 2:
 Example 3:
 Chronic stress not only takes a toll on your mental health, but it can also manifest physically in the form of health conditions like heart disease and diabetes. It's crucial, therefore, to prioritize [[[stress management]]](((Type::Good Comment::'stress management' is a very important phrase that makes the text more valuable. Analysis::It highlights the need for intentional practices and strategies to handle stress, as opposed to treating it as an unavoidable part of life. The term brings in the element of personal control and empowerment over one's mental health. and indirectly gives a nod to the field of behavioral health and therapeutic interventions. It also hints at the importance of preventative measures to avoid the onset of stress-induced health conditions, contributing towards promoting a healthier and more balanced lifestyle.))) practices for overall well-being. Staying active, practicing mindfulness, and maintaining a healthy diet are valuable steps to mitigate the effects of stress."
 """
+        return system_prompt
 
     def annotation_parser(self, content: str) -> AnnotationMessage:
         logger.info(f"Parsing started: {content}")
@@ -285,14 +286,17 @@ Chronic stress not only takes a toll on your mental health, but it can also mani
             if i%2 == 0:
                 annotations.append(Annotation(origin=word, type="origin"))
             else:
-                pair = re.split(r'\[\[\[\(\(\(', word)
+                pair = re.split(r'\]\]\]\(\(\(', word)
+                if len(pair) != 2:
+                    logger.error(f"Parsing error: {word}")
+                    return AnnotationMessage(status_code=501, message=f"Parsing error: {word}")
                 annotation_detail = re.split(r'Type::|Comments::|Analysis::', pair[1])
                 if len(annotation_detail) != 4:
                     logger.error(f"Parsing error: {word}")
-                    return AnnotationMessage(status=500, message=f"Parsing error: {word}")
+                    return AnnotationMessage(status_code=501, message=f"Parsing error: {word}")
                 else:
                     annotations.append(Annotation(origin=pair[0], type=annotation_detail[1], comments=annotation_detail[2], analysis=annotation_detail[3]))
-        return AnnotationMessage(status=200, message="Annotation successed", annotations=annotations)
+        return AnnotationMessage(status_code=200, message="Annotation successed", annotations=annotations)
 
 
 
