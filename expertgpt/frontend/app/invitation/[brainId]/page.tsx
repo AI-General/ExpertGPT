@@ -38,7 +38,7 @@ const InvitationPage = (): JSX.Element => {
     <main className="pt-10">
       <PageHeading
         title={`Welcome to ${brainName}!`}
-        subtitle={`You have been invited to join this brain as a ${role} and start exploring. Do you accept this exciting journey?`}
+        subtitle={`You have been invited to join this AI Clone as a ${role} and start exploring. Do you accept this exciting journey?`}
       />
       {isProcessingRequest ? (
         <div className="flex flex-col items-center justify-center mt-5">

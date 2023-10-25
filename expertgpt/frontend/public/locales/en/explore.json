@@ -1,7 +1,7 @@
 {
     "title": "Explore uploaded data",
-    "subtitle": "View or delete stored data used by your brain",
-    "empty": "Oh No, Your Brain is empty.",
+    "subtitle": "View or delete stored data used by your clone",
+    "empty": "Oh No, Your AI clone is empty.",
     "noBrain": "Brain id not found",
     "sessionNotFound": "User session not found",
     "deleted": "{{fileName}} deleted from brain {{brain}}",

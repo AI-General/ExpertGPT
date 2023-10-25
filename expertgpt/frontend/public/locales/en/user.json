@@ -1,8 +1,8 @@
 {
-    "title": "{{user}}'s Brain Usage",
+    "title": "{{user}}'s Memory Usage",
     "fetching": "Fetching your data...",
     "requestsCount": "Today's Requests: {{count}}",
-    "brainSize": "Remaining Brain size",
+    "brainSize": "Remaining Memory size",
     "empty": "Empty",
     "Used": "Used",
     "Unused": "Unused"

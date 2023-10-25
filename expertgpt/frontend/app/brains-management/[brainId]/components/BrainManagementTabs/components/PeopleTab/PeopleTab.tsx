@@ -60,7 +60,7 @@ export const PeopleTab = ({ brainId }: ShareBrainModalProps): JSX.Element => {
               </div>
               <div className="flex flex-row flex-1 items-center justify-center">
                 <span className="color-gray">
-                  Click to copy link to share your brain
+                  Click to copy link to share your clone
                 </span>
               </div>
               <Button type="button">

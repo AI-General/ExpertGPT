@@ -20,23 +20,23 @@ const Features = (): JSX.Element => {
       <div className="flex flex-wrap gap-5 justify-center">
         <Feature
           icon={<GiBrain className="text-7xl w-full" />}
-          title="Two brains is better than one"
-          desc="Quivr is your second brain in the cloud, designed to easily store and retrieve unstructured information."
+          title="You can meet every Expert in the world"
+          desc="Create and Chat with your AI clone"
         />
         <Feature
           icon={<GiDatabase className="text-7xl w-full" />}
           title="Store any kind of data"
-          desc="Quivr can handle almost any type of data you throw at it. Text, images, code snippets, we've got you covered."
+          desc="ExpertGPT can handle almost any type of data you throw at it. Text, images, code snippets, we've got you covered."
         />
         <Feature
           icon={<GiArtificialIntelligence className="text-7xl w-full" />}
-          title="Get a Fast and Consistent Brain"
-          desc="Quivr is your second brain in the cloud, designed to easily store and retrieve unstructured information."
+          title="Get a Fast and Consistent You"
+          desc="ExperGPT is your AI clone in the cloud, designed to easily store and retrieve unstructured information."
         />
         <Feature
           icon={<GiFastArrow className="text-7xl w-full" />}
           title="Fast and Efficient"
-          desc="Designed with speed and efficiency at its core. Quivr ensures rapid access to your data."
+          desc="Designed with speed and efficiency at its core. ExperGPT ensures rapid access to your data."
         />
         <Feature
           icon={<GiLockedDoor className="text-7xl w-full" />}

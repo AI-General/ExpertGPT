@@ -72,7 +72,7 @@ export const useQuestion = (): UseChatService => {
     chatQuestion: ChatQuestion
   ): Promise<void> => {
     if (currentBrain?.id === undefined) {
-      throw new Error("No current brain");
+      throw new Error("No current AI Clone");
     }
     const headers = {
       "Content-Type": "application/json",

@@ -51,7 +51,7 @@ export const UserStatistics = (userStats: UserStats): JSX.Element => {
 
         <UserStatisticsCard>
           <div>
-            <h1 className="text-2xl font-semibold">Remaining Brain size</h1>
+            <h1 className="text-2xl font-semibold">Remaining Memory size</h1>
             <p>
               {/* How much brain space is left */}
               {prettyBytes(max_brain_size - current_brain_size, {

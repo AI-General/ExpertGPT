@@ -55,7 +55,7 @@ export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
         <div className="mt-4">
           {isDefaultBrain ? (
             <div className="border rounded-lg border-dashed border-black dark:border-white bg-white dark:bg-black text-black dark:text-white focus:bg-black dark:focus:bg-white dark dark focus:text-white dark:focus:text-black transition-colors py-2 px-4 shadow-none">
-              Default brain
+              Default clone
             </div>
           ) : (
             <Button
@@ -64,14 +64,14 @@ export const SettingsTab = ({ brainId }: SettingsTabProps): JSX.Element => {
               onClick={() => void setAsDefaultBrainHandler()}
               type="button"
             >
-              Set as default brain
+              Set as default clone
             </Button>
           )}
         </div>
       </div>
       <TextArea
         label="Description"
-        placeholder="My new brain is about..."
+        placeholder="My new clone is about..."
         autoComplete="off"
         className="flex-1 m-3"
         {...register("description")}
