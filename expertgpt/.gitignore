@@ -1,5 +1,6 @@
 secondbrain/
 .env
+.env.dev
 .streamlit/secrets.toml
 **/*.pyc
 temp.json
