@@ -5,7 +5,7 @@ from pydantic import BaseSettings
 from supabase.client import Client, create_client
 from qdrant_client import QdrantClient
 from vectorstore.supabase import SupabaseVectorStore
-
+import psycopg2
 
 class BrainRateLimiting(BaseSettings):
     max_brain_size: int = 52428800
@@ -17,7 +17,12 @@ class BrainSettings(BaseSettings):
     anthropic_api_key: str
     supabase_url: str
     supabase_service_key: str
-    pg_database_url: str = "not implemented"
+    pg_database_url: str
+    pg_database_name: str
+    pg_host: str
+    pg_user: str
+    pg_password: str
+    pg_port: int
     resend_api_key: str = "null"
     resend_email_address: str = "brain@mail.quivr.app"
 
@@ -30,6 +35,14 @@ class LLMSettings(BaseSettings):
     private: bool = False
     model_path: str = "./local_models/ggml-gpt4all-j-v1.3-groovy.bin"
 
+def get_postgres_conn():
+    settings = BrainSettings()  # pyright: ignore reportPrivateUsage=none
+    conn = psycopg2.connect(database=settings.pg_database_name,
+                        host=settings.pg_host,
+                        user=settings.pg_user,
+                        password=settings.pg_password,
+                        port="db_port")
+    return conn
 
 def get_supabase_client() -> Client:
     settings = BrainSettings()  # pyright: ignore reportPrivateUsage=none

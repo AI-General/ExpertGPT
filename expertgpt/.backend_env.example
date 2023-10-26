@@ -1,18 +1,25 @@
 # Administrator
 ADMIN_EMAIL = <change-me>
 
+# Authentication
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
 #Supabase
 SUPABASE_URL=<change-me>
 SUPABASE_SERVICE_KEY=<change-me>
-PG_DATABASE_URL=notimplementedyet
 ANTHROPIC_API_KEY=null
 JWT_SECRET_KEY="<change-me>
 AUTHENTICATE=true
+
+#Postgres
+PG_DATABASE_URL=notimplementedyet
 
 #OpenAI
 OPENAI_API_KEY=<change-me>
 MODEL="gpt-3.5-turbo-0613"
 ANNOTATION_MODEL="gpt-4"
+QA_GEN_MODEL="gpt-4"
 TEMPERATURE=0.0
 MAX_TOKENS=256
 ANNOTATION_MAX_TOKENS=4096
