@@ -1,32 +1,25 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Create users table
 CREATE TABLE IF NOT EXISTS users(
-    user_id UUID,
+    user_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     email TEXT,
     date TEXT,
-    requests_count INT,
-    PRIMARY KEY (user_id, date)
+    requests_count INT
 );
 
 -- Create chats table
 CREATE TABLE IF NOT EXISTS chats(
     chat_id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    user_id UUID REFERENCES users (user_id),
+    user_id UUID REFERENCES users(user_id),
     creation_time TIMESTAMP DEFAULT current_timestamp,
     chat_name TEXT
-);
-
-CREATE TABLE IF NOT EXISTS brains_data (
-  brain_id UUID,
-  data_sha1 TEXT,
-  metadata JSONB,
-  PRIMARY KEY (brain_id, data_sha1),
-  FOREIGN KEY (brain_id) REFERENCES brains (brain_id)
 );
 
 -- Create api_keys table
 CREATE TABLE IF NOT EXISTS api_keys(
     key_id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID REFERENCES users (id),
+    user_id UUID REFERENCES users(user_id),
     api_key TEXT UNIQUE,
     creation_time TIMESTAMP DEFAULT current_timestamp,
     deleted_time TIMESTAMP,
@@ -52,6 +45,15 @@ CREATE TABLE IF NOT EXISTS brains (
   extraversion INT,
   neuroticism INT,
   conscientiousness INT
+);
+
+-- Create brains_data table
+CREATE TABLE IF NOT EXISTS brains_data (
+  brain_id UUID,
+  data_sha1 TEXT,
+  metadata JSONB,
+  PRIMARY KEY (brain_id, data_sha1),
+  FOREIGN KEY (brain_id) REFERENCES brains (brain_id)
 );
 
 -- Create chat_history table
