@@ -6,6 +6,7 @@ from asyncpg.exceptions import UniqueViolationError
 from auth import AuthBearer, get_current_user
 from fastapi import APIRouter, Depends
 from logger import get_logger
+from pg.api_key import create_api_key, delete_api_key, get_api_keys_by_user_id
 from models.api_key import ApiKey, ApiKeyInfo
 from models.settings import get_supabase_db
 from models.users import User
@@ -20,7 +21,7 @@ api_key_router = APIRouter()
     dependencies=[Depends(AuthBearer())],
     tags=["API Key"],
 )
-async def create_api_key(current_user: User = Depends(get_current_user)):
+async def create_api_key_route(current_user: User = Depends(get_current_user)):
     """
     Create new API key for the current user.
 
@@ -30,33 +31,13 @@ async def create_api_key(current_user: User = Depends(get_current_user)):
     This endpoint generates a new API key for the current user. The API key is stored in the database and associated with
     the user. It returns the newly created API key.
     """
-
-    new_key_id = uuid4()
-    new_api_key = token_hex(16)
-    api_key_inserted = False
-    supabase_db = get_supabase_db()
-
-    while not api_key_inserted:
-        try:
-            # Attempt to insert new API key into database
-            supabase_db.create_api_key(new_key_id, new_api_key, current_user.id)
-            api_key_inserted = True
-
-        except UniqueViolationError:
-            # Generate a new API key if the current one is already in use
-            new_api_key = token_hex(16)
-        except Exception as e:
-            logger.error(f"Error creating new API key: {e}")
-            return {"api_key": "Error creating new API key."}
-    logger.info(f"Created new API key for user {current_user.email}.")
-
-    return {"api_key": new_api_key, "key_id": str(new_key_id)}
+    create_api_key(current_user)
 
 
 @api_key_router.delete(
     "/api-key/{key_id}", dependencies=[Depends(AuthBearer())], tags=["API Key"]
 )
-async def delete_api_key(key_id: str, current_user: User = Depends(get_current_user)):
+async def delete_api_key_route(key_id: str, current_user: User = Depends(get_current_user)):
     """
     Delete (deactivate) an API key for the current user.
 
@@ -66,8 +47,7 @@ async def delete_api_key(key_id: str, current_user: User = Depends(get_current_u
     as inactive in the database.
 
     """
-    supabase_db = get_supabase_db()
-    supabase_db.delete_api_key(key_id, current_user.id)
+    delete_api_key(key_id, current_user.id)
 
     return {"message": "API key deleted."}
 
@@ -88,6 +68,4 @@ async def get_api_keys(current_user: User = Depends(get_current_user)):
     This endpoint retrieves all the active API keys associated with the current user. It returns a list of API key objects
     containing the key ID and creation time for each API key.
     """
-    supabase_db = get_supabase_db()
-    response = supabase_db.get_user_api_keys(current_user.id)
-    return response.data
+    return get_api_keys_by_user_id(current_user.id)
