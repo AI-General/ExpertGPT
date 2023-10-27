@@ -6,25 +6,13 @@ from asyncpg.exceptions import UniqueViolationError
 from auth import AuthBearer, get_current_user
 from fastapi import APIRouter, Depends
 from logger import get_logger
+from models.api_key import ApiKey, ApiKeyInfo
 from models.settings import get_supabase_db
 from models.users import User
-from pydantic import BaseModel
 
 logger = get_logger(__name__)
 
-
-class ApiKeyInfo(BaseModel):
-    key_id: str
-    creation_time: str
-
-
-class ApiKey(BaseModel):
-    api_key: str
-    key_id: str
-
-
 api_key_router = APIRouter()
-
 
 @api_key_router.post(
     "/api-key",
