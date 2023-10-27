@@ -41,7 +41,8 @@ def get_postgres_conn():
                         host=settings.pg_host,
                         user=settings.pg_user,
                         password=settings.pg_password,
-                        port="db_port")
+                        port=settings.pg_port)
+    print("Connection successful")
     return conn
 
 def get_supabase_client() -> Client:

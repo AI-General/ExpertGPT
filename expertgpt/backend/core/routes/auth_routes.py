@@ -20,7 +20,7 @@ def verify_password(plain_password, hashed_password):
 # Token settings
 SECRET_KEY = secrets.token_urlsafe(32)
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
-ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
 auth_router = APIRouter()
 
@@ -59,7 +59,7 @@ async def sign_up(
     # add your logic to save the user to your database
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": hashed_password, "user_id": user_id, "email": email}, expires_delta=access_token_expires
+        data={"sub": hashed_password, "user_id": str(user_id), "email": email}, expires_delta=access_token_expires
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
