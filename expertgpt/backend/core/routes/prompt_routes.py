@@ -2,15 +2,11 @@ from uuid import UUID
 
 from auth import AuthBearer
 from fastapi import APIRouter, Depends
-from models.databases.supabase.prompts import (
-    CreatePromptProperties,
-    PromptUpdatableProperties,
-)
-from models.prompt import Prompt
-from repository.prompt.create_prompt import create_prompt
-from repository.prompt.get_prompt_by_id import get_prompt_by_id
-from repository.prompt.get_public_prompts import get_public_prompts
-from repository.prompt.update_prompt_by_id import update_prompt_by_id
+from models.prompt import Prompt, CreatePromptProperties, PromptUpdatableProperties
+from pg.prompt import create_prompt
+from pg.prompt import get_prompt_by_id
+from pg.prompt import get_public_prompts
+from pg.prompt import update_prompt_by_id
 
 prompt_router = APIRouter()
 
