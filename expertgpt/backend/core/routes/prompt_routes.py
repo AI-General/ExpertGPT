@@ -7,7 +7,8 @@ from models.databases.supabase.prompts import (
     PromptUpdatableProperties,
 )
 from models.prompt import Prompt
-from repository.prompt.create_prompt import create_prompt
+# from repository.prompt.create_prompt import create_prompt
+from pg.prompt import create_prompt
 from repository.prompt.get_prompt_by_id import get_prompt_by_id
 from repository.prompt.get_public_prompts import get_public_prompts
 from repository.prompt.update_prompt_by_id import update_prompt_by_id
