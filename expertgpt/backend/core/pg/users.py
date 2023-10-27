@@ -24,14 +24,14 @@ def is_user_in_db (email: str):
     else:
         return False
 
-def add_user_in_db (email: str):
+def add_user_in_db (email: str, hashed_password: str):
     user_id = uuid.uuid4()
     conn = None
     try:
         conn = get_postgres_conn()
         cur = conn.cursor()
 
-        cur.execute("INSERT INTO users(user_id, email, date, requests_count) VALUES(%s, %s, %s, %s)", (str(user_id), email, str(datetime.now()), 0))
+        cur.execute("INSERT INTO users(user_id, email, password, date, requests_count) VALUES(%s, %s, %s, %s, %s)", (str(user_id), email, hashed_password, str(datetime.now()), 0))
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print("Error while executing PostgreSQL", error)

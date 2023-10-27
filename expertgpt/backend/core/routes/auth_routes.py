@@ -36,11 +36,6 @@ def create_access_token(data: dict, expires_delta=None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-# Add your database model
-class UserInDB:
-    def __init__(self, hashed_password):
-        self.hashed_password = hashed_password
-
 # Sign 
 @auth_router.post(
     "/signup",
@@ -55,7 +50,7 @@ async def sign_up(
     if is_user_in_db(email=email):
         return {"message": "You are already signed up", "type": "Error"}
 
-    user_id = add_user_in_db(email=email)
+    user_id = add_user_in_db(email=email, hashed_password=hashed_password)
     # add your logic to save the user to your database
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
