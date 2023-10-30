@@ -1,8 +1,8 @@
 version: "3.8"
 
-volumes:
-  database-data:
-  pgadmin:
+# volumes:
+#   database-data:
+#   pgadmin:
 
 networks:
   proxy:
@@ -13,7 +13,7 @@ services:
     image: postgres
     restart: always
     volumes:
-      - database-data:/var/lib/postgresql/data/
+      - ./postgresql/database-data:/var/lib/postgresql/data/
       - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
     env_file:
       - ./postgresql/.env.dev
@@ -24,13 +24,14 @@ services:
       - proxy
 
   expertgpt-pgadmin:
+    user: "root"
     container_name: pgadmin_container
     image: dpage/pgadmin4
     restart: always
     env_file:
       - ./postgresql/.env.dev
     volumes:
-      - pgadmin:/var/lib/pgadmin
+      - ./postgresql/pgadmin:/var/lib/pgadmin
     ports:
       - 6543:80
     networks:

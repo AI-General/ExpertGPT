@@ -25,10 +25,13 @@ def create_api_key(current_user: User):
 
         except UniqueViolationError:
             # Generate a new API key if the current one is already in use
+            conn.rollback()
             new_api_key = token_hex(16)
         except Exception as e:
             print(f"Error creating new API key: {e}")
             return {"api_key": "Error creating new API key."}
+    if conn is not None:
+        conn.close()
     print(f"Created new API key for user {current_user.email}.")
 
     return {"api_key": new_api_key, "key_id": str(new_key_id)}

@@ -19,6 +19,21 @@ from utils.vectors import get_unique_files_from_vector_ids
 
 logger = get_logger(__name__)
 
+class CreateBrainProperties(BaseModel):
+    name: Optional[str] = "Default brain"
+    description: Optional[str] = "This is a description"
+    status: Optional[str] = "private"
+    prompt_id: Optional[UUID] = None
+    linkedin: Optional[str] = None
+    extraversion: Optional[int] = None
+    neuroticism: Optional[int] = None
+    conscientiousness: Optional[int] = None
+
+    def dict(self, *args, **kwargs):
+        brain_dict = super().dict(*args, **kwargs)
+        if brain_dict.get("prompt_id"):
+            brain_dict["prompt_id"] = str(brain_dict.get("prompt_id"))
+        return brain_dict
 
 class Brain(BaseModel):
     id: Optional[UUID] = None

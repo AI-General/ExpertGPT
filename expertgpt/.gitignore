@@ -59,3 +59,7 @@ backend/core/local_models/*
 
 ## scripts
 .migration_info
+
+## database
+postgresql/database-data/
+postgresql/pgadmin

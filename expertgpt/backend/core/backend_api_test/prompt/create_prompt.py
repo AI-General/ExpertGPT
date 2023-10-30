@@ -9,7 +9,7 @@ def test_create_prompt(token, create_prompt_properties):
     print(response.text)
 
 if __name__ == '__main__':
-    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjZGY0MmNlNC1lZWIwLTQ5MWMtOWUwZS00MDRjNzg1ZDE1ZGEiLCJlbWFpbCI6InRlc3QzQGdtYWlsLmNvbSIsImV4cCI6MTY5ODgwOTk2M30.cmLl1xo0mssI9gZgxr-QzkZaVfBxPlx-GARfUqF2mTA'
+    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjOGRlYTU0Yy0wN2JlLTQ4ZjAtYTcwMS1iMGQ0OTliMGZiZmEiLCJlbWFpbCI6InRlc3QzQGdtYWlsLmNvbSIsImV4cCI6MTY5ODg1NTQ4OH0.555AXrAyoOsXq57Q9ofSeFV2fVTEI8ArXBR_rIPgP7M'
     create_prompt_properties = {
         'title': 'pg test prompt2',
         'content': 'This is pg test prompt content2',
