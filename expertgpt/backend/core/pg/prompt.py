@@ -14,7 +14,7 @@ def get_public_prompts() -> list[Prompt]:
         conn = get_postgres_conn()
         cur = conn.cursor()
 
-        cur.execute("SELECT * FROM prompts WHERE status = public")
+        cur.execute("SELECT * FROM prompts WHERE status = 'public'")
         rows = cur.fetchall()
     except (Exception, psycopg2.DatabaseError) as error:
         print("Error while executing PostgreSQL", error)
@@ -67,10 +67,10 @@ def create_prompt(prompt: CreatePromptProperties) -> Prompt:
     finally:
         if conn is not None:
             conn.close()
-    return Prompt(id=id, **prompt)
+    return Prompt(id=id, **prompt.dict())
 
 def update_prompt_by_id(
-    self, prompt_id: UUID, prompt: PromptUpdatableProperties
+    prompt_id: UUID, prompt: PromptUpdatableProperties
 ) -> Prompt:
     conn = None
     try:
