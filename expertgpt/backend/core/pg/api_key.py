@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from secrets import token_hex
 from uuid import uuid4
 
@@ -40,18 +40,21 @@ def delete_api_key(key_id, user_id):
         cur = conn.cursor()
 
         cur.execute("""UPDATE api_keys 
-                SET is_active = %s deleted_time = %s
+                SET is_active = %s, deleted_time = %s
                 WHERE key_id = %s AND user_id = %s""",
                 (False, datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S"), str(key_id), str(user_id)))
         conn.commit()
-        print(f"API key with id {key_id} for user {user_id} has been deactivated.") 
+        print(f"API key with id {key_id} for user {user_id} has been deactivated.")
+        message = {"message": "API key deleted."}
 
     except (Exception, psycopg2.DatabaseError) as error:
         print("Error while executing PostgreSQL", error)
         conn.rollback()
+        message = {"message": "Error deleting API key."}
     finally:
         if conn is not None:
             conn.close()
+    return message
 
 def get_api_keys_by_user_id(userid):
     conn = None
@@ -59,7 +62,7 @@ def get_api_keys_by_user_id(userid):
     try:
         conn = get_postgres_conn()
         cur = conn.cursor()
-        cur.execute("SELECT * FROM api_keys WHERE user_id = %s", (str(userid), ))
+        cur.execute("SELECT * FROM api_keys WHERE user_id = %s AND is_active = true", (str(userid), ))
         rows = cur.fetchall()
     except (Exception, psycopg2.DatabaseError) as error:
         print("Error while executing PostgreSQL", error)
@@ -67,4 +70,4 @@ def get_api_keys_by_user_id(userid):
     finally:
         if conn is not None:
             conn.close()
-    return rows
+    return [{"key_id": row[0], "creation_time": str(row[3])} for row in rows]

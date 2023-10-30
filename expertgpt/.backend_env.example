@@ -9,11 +9,16 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30
 SUPABASE_URL=<change-me>
 SUPABASE_SERVICE_KEY=<change-me>
 ANTHROPIC_API_KEY=null
-JWT_SECRET_KEY="<change-me>
+JWT_SECRET_KEY=<change-me>
 AUTHENTICATE=true
 
 #Postgres
 PG_DATABASE_URL=notimplementedyet
+PG_DATABASE_NAME=<change-me>
+PG_HOST=<change-me>
+PG_USER=<change-me>
+PG_PASSWORD=<change-me>
+PG_PORT=<change-me>
 
 #OpenAI
 OPENAI_API_KEY=<change-me>

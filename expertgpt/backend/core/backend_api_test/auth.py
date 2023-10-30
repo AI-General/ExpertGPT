@@ -10,4 +10,4 @@ def test_sign_up(email, password):
     print(response.text)
 
 if __name__ == '__main__':
-    test_sign_up('robertdrivard89@gmail.com', 'pass')
+    test_sign_up('test3@gmail.com', 'password')

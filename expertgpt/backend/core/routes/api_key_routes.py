@@ -31,7 +31,7 @@ async def create_api_key_route(current_user: User = Depends(get_current_user)):
     This endpoint generates a new API key for the current user. The API key is stored in the database and associated with
     the user. It returns the newly created API key.
     """
-    create_api_key(current_user)
+    return create_api_key(current_user)
 
 
 @api_key_router.delete(
@@ -47,9 +47,7 @@ async def delete_api_key_route(key_id: str, current_user: User = Depends(get_cur
     as inactive in the database.
 
     """
-    delete_api_key(key_id, current_user.id)
-
-    return {"message": "API key deleted."}
+    return delete_api_key(key_id, current_user.id)
 
 
 @api_key_router.get(

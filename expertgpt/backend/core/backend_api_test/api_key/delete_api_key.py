@@ -9,7 +9,7 @@ def test_delete_api_key(token, key_id):
     print(response.text)
 
 if __name__ == '__main__':
-    token = '123qweasd'
-    key_id = ''
+    token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjZGY0MmNlNC1lZWIwLTQ5MWMtOWUwZS00MDRjNzg1ZDE1ZGEiLCJlbWFpbCI6InRlc3QzQGdtYWlsLmNvbSIsImV4cCI6MTY5ODgwOTk2M30.cmLl1xo0mssI9gZgxr-QzkZaVfBxPlx-GARfUqF2mTA'
+    key_id = '831c5858-ee6b-4b72-b485-88613ba7a969'
     test_delete_api_key(token, key_id)
     
