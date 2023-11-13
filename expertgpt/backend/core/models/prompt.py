@@ -25,3 +25,9 @@ class PromptUpdatableProperties(BaseModel):
     title: Optional[str]
     content: Optional[str]
     status: Optional[PromptStatusEnum]
+
+class DeletePromptResponse(BaseModel):
+    """Response when deleting a prompt"""
+
+    status: str = "delete"
+    prompt_id: UUID

@@ -1,9 +1,10 @@
 import uuid
 from uuid import UUID
+from fastapi import HTTPException
 
 import psycopg2
 from models.settings import get_postgres_conn
-from models.prompt import CreatePromptProperties, Prompt, PromptUpdatableProperties
+from models.prompt import CreatePromptProperties, DeletePromptResponse, Prompt, PromptUpdatableProperties
 
 def get_public_prompts() -> list[Prompt]:
     """
@@ -95,3 +96,33 @@ def update_prompt_by_id(
             conn.close()
 
     return get_prompt_by_id(prompt_id)
+
+
+def delete_prompt_by_id(self, prompt_id: UUID) -> DeletePromptResponse:
+    """
+    Delete a prompt by id
+    Args:
+        prompt_id (UUID): The id of the prompt
+
+    Returns:
+    A dictionary containing the status of the delete and prompt_id of the deleted prompt
+    """
+    try:
+        conn = get_postgres_conn()
+        cur = conn.cursor()
+        cur.execute("DELETE FROM prompts WHERE id = %s", (str(prompt_id), ))
+        res = cur.fetchall()
+        conn.commit()
+    
+    except Exception as error:
+        print("Error while executing PostgreSQL", error)
+        conn.rollback()
+    
+    finally:
+        if conn is not None:
+            conn.close()
+
+    if len(res) == 0:
+        raise HTTPException(404, "Prompt not found")
+
+    return DeletePromptResponse(status="deleted", prompt_id=prompt_id)

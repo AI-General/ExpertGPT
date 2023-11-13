@@ -5,6 +5,7 @@ from typing import Any, List, Optional
 from uuid import UUID
 
 import openai
+from enum import Enum
 from logger import get_logger
 from pydantic import BaseModel
 from qdrant_client import QdrantClient
@@ -18,6 +19,11 @@ from utils.vectors import get_unique_files_from_vector_ids
 
 
 logger = get_logger(__name__)
+
+class RoleEnum(str, Enum):
+    Viewer = "Viewer"
+    Editor = "Editor"
+    Owner = "Owner"
 
 class CreateBrainProperties(BaseModel):
     name: Optional[str] = "Default brain"
@@ -34,6 +40,24 @@ class CreateBrainProperties(BaseModel):
         if brain_dict.get("prompt_id"):
             brain_dict["prompt_id"] = str(brain_dict.get("prompt_id"))
         return brain_dict
+
+
+class BrainUpdatableProperties(BaseModel):
+    name: Optional[str]
+    description: Optional[str]
+    linkedin: Optional[str] = None
+    status: Optional[str]
+    prompt_id: Optional[UUID]
+    extraversion: Optional[int] = None
+    neuroticism: Optional[int] = None
+    conscientiousness: Optional[int] = None
+
+    def dict(self, *args, **kwargs):
+        brain_dict = super().dict(*args, **kwargs)
+        if brain_dict.get("prompt_id"):
+            brain_dict["prompt_id"] = str(brain_dict.get("prompt_id"))
+        return brain_dict
+
 
 class Brain(BaseModel):
     id: Optional[UUID] = None
